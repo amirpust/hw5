@@ -10,7 +10,8 @@ using namespace std;
 
 class BaseObj{
 public:
-    BaseObj() = default;
+    string regName;
+    BaseObj() : regName(getNewRegister()) {};
 };
 
 class IDtype : public BaseObj{

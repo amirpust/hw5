@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include "Exp_t.hpp"
 
 using namespace std;
 
@@ -11,6 +12,7 @@ using namespace std;
 enum BranchLabelIndex {FIRST, SECOND};
 
 class CodeBuffer{
+    int nextRegister;
 	CodeBuffer();
 	CodeBuffer(CodeBuffer const&);
     void operator=(CodeBuffer const&);
@@ -58,6 +60,9 @@ public:
 	//print the content of the global buffer to stdout
 	void printGlobalBuffer();
 
+    int emitOp(Exp_t* E, Exp_t* E1, const string op, Exp_t* E2){
+        return emit(E->regName + " = " + op + " i32 " + E1->regName + ", " + E2->regName);
+    }
 };
 
 #endif

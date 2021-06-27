@@ -4,6 +4,7 @@
 #include <string>
 
 extern int yylineno;
+using namespace std;
 
 enum TYPE {
     E_def,
@@ -40,5 +41,10 @@ enum SCOPE_REASON{
     FUNC_SCOPE
 };
 
+
+string getNewRegister(){
+    static int nextRegister = 0;
+    return "%reg" + to_string(nextRegister++);
+}
 
 #endif //HW3_ENUMS_HPP

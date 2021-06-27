@@ -6,6 +6,7 @@
     #include "Exp_t.hpp"
     #include "Table.hpp"
     #include "BaseObj.hpp"
+    #include "bp.hpp"
     #define castType(toCast) (*(static_cast<Type*>(toCast)))
     #define castID(toCast) (*(static_cast<IDtype*>(toCast)))
     #define castSymList(toCast) (*(static_cast<SymList*>(toCast)))
@@ -13,7 +14,7 @@
     #define castExp(toCast) (*(static_cast<Exp_t*>(toCast)))
     #define castExpList(toCast) (*(static_cast<ExpList*>(toCast)))
     #define castNum(toCast) (*(static_cast<Num*>(toCast)))
-    
+    #define codeBuffer (CodeBuffer.instance());
 
     int yylex();
     void output::printProductionRule(int ruleno);
@@ -92,8 +93,14 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                         Statements
                         RBRACE {symbolTable.closeCurrentScope();}           {output::printProductionRule(14);}
                 | Type ID SC                                                {symbolTable.addSymbol(castType($1), castID($2)) ; output::printProductionRule(15);}
-                | Type ID ASSIGN Exp SC                                     {symbolTable.addSymbol(castType($1), castID($2)); symbolTable.assign(castID($2), castExp($4)); output::printProductionRule(16);}
-                | ID ASSIGN Exp SC                                          {symbolTable.getExpByID(castID($1)) = castExp($3) ; output::printProductionRule(17);}
+                | Type ID ASSIGN Exp SC                                     {symbolTable.addSymbol(castType($1), castID($2)); symbolTable.assign(castID($2), castExp($4));
+                                                                                Exp_t* id = symbolTable.getExpByID(castID($1));
+                                                                                codeBuffer.emit(id.regName + " = add i32 0, " +  castExp($3).regName);
+                                                                                output::printProductionRule(16);}
+                | ID ASSIGN Exp SC                                          {Exp_t* id = symbolTable.getExpByID(castID($1));
+                                                                             codeBuffer.emit(id.regName + " = add i32 0, " +  castExp($3).regName);
+                                                                             id = castExp($3) ; output::printProductionRule(17);
+                                                                            }
                 | Call SC                                                   {output::printProductionRule(18);}
                 | RETURN SC                                                 {symbolTable.checkReturnType() ; output::printProductionRule(19);}
                 | RETURN Exp SC                                             {symbolTable.checkReturnType(castExp($2)) ; output::printProductionRule(20);}
@@ -129,16 +136,22 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                                         output::errorMismatch(yylineno);
                                                                                         exit(12);
                                                                                     };
-                                                                                $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3))));delete $1; delete $3; output::printProductionRule(35);}
+                                                                                $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3))));
+                                                                                delete $1; delete $3; output::printProductionRule(35);}
                 | Exp BINOP_PM Exp                                          {
                                                                                 if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
                                                                                     output::errorMismatch(yylineno);
                                                                                     exit(12);
                                                                                 };
-                                                                                $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3)))) ;delete $1; delete $3;output::printProductionRule(35);}
+                                                                                $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3)))) ;
+                                                                                codeBuffer.emitOp($$, $1, "add", $2);
+                                                                                delete $1; delete $3;output::printProductionRule(35);
+                                                                                }
                 | ID                                                        {$$ = new Exp_t(symbolTable.getExpByID(castID($1))) ; output::printProductionRule(36);}
                 | Call                                                      {$$ = $1 ; output::printProductionRule(37);}
-                | NUM                                                       {$$ = new Exp_t(Type(E_int)); output::printProductionRule(38);}
+                | NUM                                                       {$$ = new Exp_t(Type(E_int));
+                                                                                codeBuffer.emit($$.regName " = add i32 " + yylval + ", 0");
+                                                                                output::printProductionRule(38);}
                 | NUM B                                                     {if(castNum($1).val > 255) {output::errorByteTooLarge(yylineno, castNum($1).val); exit(1); } ; $$ = new Exp_t(Type(E_byte)); output::printProductionRule(39);}
                 | STRING                                                    {$$ = new Exp_t(Type(E_string)); ; output::printProductionRule(40);}
                 | TRUE                                                      {$$ = new Exp_t(Type(E_bool)); output::printProductionRule(41);}
@@ -190,6 +203,6 @@ int main(){
 
     output::printLog("End");
     output::close();
-
+    codeBuffer.printCodeBuffer();
     return res;
 }
