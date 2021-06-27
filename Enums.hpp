@@ -42,9 +42,6 @@ enum SCOPE_REASON{
 };
 
 
-string getNewRegister(){
-    static int nextRegister = 0;
-    return "%reg" + to_string(nextRegister++);
-}
+string getNewRegister();
 
 #endif //HW3_ENUMS_HPP
