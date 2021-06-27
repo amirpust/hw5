@@ -14,7 +14,7 @@
     #define castExp(toCast) (*(static_cast<Exp_t*>(toCast)))
     #define castExpList(toCast) (*(static_cast<ExpList*>(toCast)))
     #define castNum(toCast) (*(static_cast<Num*>(toCast)))
-    #define codeBuffer (CodeBuffer.instance());
+    #define codeBuffer (CodeBuffer::instance());
 
     int yylex();
     void output::printProductionRule(int ruleno);
