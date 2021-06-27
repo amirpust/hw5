@@ -24,7 +24,6 @@
 
     SymbolTable symbolTable = SymbolTable();
 
-    typedef CodeBuffer::instance() codeBuffer;
 
 %}
 
@@ -97,7 +96,7 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                 | Type ID SC                                                {symbolTable.addSymbol(castType($1), castID($2)) ; output::printProductionRule(15);}
                 | Type ID ASSIGN Exp SC                                     {symbolTable.addSymbol(castType($1), castID($2)); symbolTable.assign(castID($2), castExp($4));
                                                                                 Exp_t id = symbolTable.getExpByID(castID($1));
-                                                                                codeBuffer.emit(id.regName + " = add i32 0, " +  castExp($3).regName);
+                                                                                CodeBuffer::instance().emit(id.regName + " = add i32 0, " +  castExp($3).regName);
                                                                                 output::printProductionRule(16);}
                 | ID ASSIGN Exp SC                                          {Exp_t id = symbolTable.getExpByID(castID($1));
                                                                              codeBuffer.emit(id.regName + " = add i32 0, " +  castExp($3).regName);
