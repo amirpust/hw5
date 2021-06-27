@@ -246,6 +246,7 @@ public:
             output::errorDef(yylineno, id.id);
             exit(-1);
         }
+        output::printLog(id.id + " " + exp.t.getStr());
 
         scopeList.back().symList.insert(Symbol(id, t, exp));
         offsets.top()++;
@@ -262,6 +263,7 @@ public:
 
     Exp_t getExpByID(IDtype _id){
         Symbol* sym = findSym(_id);
+        output::printLog(_id.id + " " + sym->exp.t.getStr());
         if(!sym){
             output::errorUndef(yylineno, _id.id);
             exit(-46);
