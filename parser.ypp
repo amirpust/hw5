@@ -98,8 +98,9 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                                                                                 symbolTable.addSymbol(castType($1), castID($2));
                                                                                 symbolTable.assign(castID($2), castExp($4));
                                                                                 output::printLog("Before id");
+                                                                                Exp_t id = symbolTable.getExpByID(castID($2));
                                                                                 output::printLog("Before emit");
-                                                                                codeBuffer.emit(symbolTable.getExpByID(castID($1)).regName + " = add i32 0, " +  castExp($3).regName);
+                                                                                codeBuffer.emit(id.regName + " = add i32 0, " +  castExp($3).regName);
                                                                                 output::printProductionRule(16);
                                                                             }
                 | ID ASSIGN Exp SC                                          {Exp_t id = symbolTable.getExpByID(castID($1));
