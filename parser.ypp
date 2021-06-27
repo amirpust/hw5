@@ -101,7 +101,7 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                                                                                 Exp_t newExp(castType($1));
                                                                                 symbolTable.addSymbol(castType($1), castID($2), newExp);
                                                                                 symbolTable.assign(castID($2), castExp($4));
-                                                                                codeBuffer.emit(newExp.regName + " = add i32 0, " +  castExp($3).regName);
+                                                                                codeBuffer.emit(newExp.regName + " = add i32 0, " +  castExp($4).regName);
                                                                                 output::printProductionRule(16);
                                                                             }
                 | ID ASSIGN Exp SC                                          {Exp_t id = symbolTable.getExpByID(castID($1));
@@ -181,7 +181,7 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
 
                 | ID                                                        {$$ = new Exp_t(symbolTable.getExpByID(castID($1))) ; output::printProductionRule(36);}
                 | Call                                                      {$$ = $1 ; output::printProductionRule(37);}
-                | NUM                                                       {$$ = new Exp_t(Type(E_int));
+                | NUM                                                       {$$ = new Exp_t(Type(E_int)); // TODO: i think this is where shit gets fucked up
                                                                                 codeBuffer.emit($$->regName + " = add i32 " + to_string(castNum($1).val) + ", 0");
                                                                                 output::printProductionRule(38);}
                 | NUM B                                                     {if(castNum($1).val > 255) {output::errorByteTooLarge(yylineno, castNum($1).val); exit(1); } ; $$ = new Exp_t(Type(E_byte)); output::printProductionRule(39);}
