@@ -249,6 +249,7 @@ public:
         output::printLog("add symbol"+ id.id + " " + exp.t.getStr());
 
         scopeList.back().symList.insert(Symbol(id, t, exp));
+        output::printLog("add symbol after insert "+ id.id + " " + scopeList.back().symList.symList.back().exp.t.getStr());
         offsets.top()++;
     }
 
@@ -263,11 +264,11 @@ public:
 
     Exp_t getExpByID(IDtype _id){
         Symbol* sym = findSym(_id);
-        output::printLog(_id.id + " " + sym->exp.t.getStr());
         if(!sym){
             output::errorUndef(yylineno, _id.id);
             exit(-46);
         }
+        output::printLog("getExpByID: " + _id.id + " " + sym->exp.t.getStr());
         return sym->exp;
     }
 
