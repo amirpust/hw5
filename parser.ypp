@@ -6,6 +6,7 @@
     #include "Exp_t.hpp"
     #include "Table.hpp"
     #include "BaseObj.hpp"
+    #include "Symbol.hpp"
     #include "bp.hpp"
     #define castType(toCast) (*(static_cast<Type*>(toCast)))
     #define castID(toCast) (*(static_cast<IDtype*>(toCast)))
@@ -93,14 +94,12 @@ Statements:     Statement                                                   {out
 Statement:      LBRACE {symbolTable.openNewScope(); }
                         Statements
                         RBRACE {symbolTable.closeCurrentScope();}           {output::printProductionRule(14);}
-                | Type ID SC                                                {symbolTable.addSymbol(castType($1), castID($2)) ; output::printProductionRule(15);}
+                | Type ID SC                                                {symbolTable.addSymbol(castType($1), castID($2), Exp_t()) ; output::printProductionRule(15);}
                 | Type ID ASSIGN Exp SC                                     {
-                                                                                symbolTable.addSymbol(castType($1), castID($2));
+                                                                                Exp_t newExp(castType($1));
+                                                                                symbolTable.addSymbol(castType($1), castID($2), newExp);
                                                                                 symbolTable.assign(castID($2), castExp($4));
-                                                                                output::printLog("Before id");
-                                                                                Exp_t id = symbolTable.getExpByID(castID($2));
-                                                                                output::printLog("Before emit");
-                                                                                codeBuffer.emit(id.regName + " = add i32 0, " +  castExp($3).regName);
+                                                                                codeBuffer.emit(newExp.regName + " = add i32 0, " +  castExp($3).regName);
                                                                                 output::printProductionRule(16);
                                                                             }
                 | ID ASSIGN Exp SC                                          {Exp_t id = symbolTable.getExpByID(castID($1));

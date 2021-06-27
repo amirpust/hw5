@@ -4,6 +4,7 @@
 #include "Enums.hpp"
 #include "Exp_t.hpp"
 #include "BaseObj.hpp"
+#include "Symbol.hpp"
 #include <string>
 #include <vector>
 #include "hw3_output.hpp"
@@ -237,13 +238,13 @@ public:
             exit(1);
         }
     }
-    void addSymbol(Type t, IDtype id){
+    void addSymbol(Type t, IDtype id, Exp_t exp){
         if(isId(id)) {
             output::errorDef(yylineno, id.id);
             exit(-1);
         }
 
-        scopeList.back().symList.insert(Symbol(id, t));
+        scopeList.back().symList.insert(Symbol(id, t, exp));
         offsets.top()++;
     }
 
@@ -256,14 +257,15 @@ public:
         return sym->t;
     }
 
-// TODO: return the correct reg
     Exp_t getExpByID(IDtype _id){
-        output::printLog("getExp id:" + _id.id);
-        Exp_t tmp = Exp_t(getTypeByID(_id));
-        output::printLog("getExp res:" + tmp.t.getStr());
-
-        return Exp_t(getTypeByID(_id));
+        Symbol* sym = findSym(_id);
+        if(!sym){
+            output::errorUndef(yylineno, _id.id);
+            exit(-46);
+        }
+        return sym->exp;
     }
+
     void assign(IDtype _id, Exp_t e){
         Symbol* sym = findSym(_id);
         if(!sym){
