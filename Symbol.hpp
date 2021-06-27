@@ -1,3 +1,6 @@
+#ifndef HW5_SYMBOL_HPP
+#define HW5_SYMBOL_HPP
+
 #include "BaseObj.hpp"
 #include "Exp_t.hpp"
 
@@ -44,3 +47,6 @@ public:
 
     typedef vector<FuncSymbol>::iterator iterator;
 };
+
+
+#endif
