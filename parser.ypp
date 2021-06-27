@@ -121,7 +121,7 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                                                                             {output::printProductionRule(26);}
 ;
 
-BOOLEXP:        Exp                                                         {if (castExp($1).t != Type(E_bool)) {output::errorMismatch(yylineno); exit(1);} $$ = $1;}
+BOOLEXP:        Exp                                                         {if (castExp($1).t != Type(E_bool)) {output::errorMismatch(yylineno); output::printLog("BOOLEXP"); exit(1);} $$ = $1;}
 
 STARTSCOPE:     /*epsilon*/                                                 {symbolTable.openNewScope();}
 
@@ -139,6 +139,7 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                 | Exp BINOP_MD Exp                                          {
                                                                                 if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
                                                                                         output::errorMismatch(yylineno);
+                                                                                        output::printLog("isNumerical");
                                                                                         exit(12);
                                                                                     };
                                                                                 $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3))));
@@ -146,6 +147,7 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                 | Exp BINOP_PM Exp                                          {
                                                                                 if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
                                                                                     output::errorMismatch(yylineno);
+                                                                                    output::printLog("isNumerical");
                                                                                     exit(12);
                                                                                 };
                                                                                 $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3)))) ;

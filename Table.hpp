@@ -68,6 +68,7 @@ public:
     void openSwitchScope(Exp_t e) {
         if (e.t != E_byte && e.t != E_int) {
             output::errorMismatch(yylineno);
+            output::printLog("openSwitchScope");
             exit(1);
         }
 
@@ -228,6 +229,7 @@ public:
     void checkReturnType(Exp_t exp){
         if(!exp.castType(funcList.funcList.back().retType)){
             output::errorMismatch(yylineno);
+            output::printLog("checkReturnType");
             exit(1);
         }
     }
@@ -235,6 +237,7 @@ public:
     void checkReturnType(){
         if(funcList.funcList.back().retType != E_void){
             output::errorMismatch(yylineno);
+            output::printLog("checkReturnType");
             exit(1);
         }
     }
