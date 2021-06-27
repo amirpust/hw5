@@ -56,8 +56,10 @@
 %right ASSIGN
 %left EQUALITY
 %nonassoc RELOP
-%left BINOP_PM
-%left BINOP_MD
+%left BINOP_PLUS
+%left BINOP_MINUS
+%left BINOP_MUL
+%left BINOP_DIV
 %token ID
 %nonassoc NUM
 %nonassoc STRING
@@ -136,15 +138,27 @@ Type :          INT                                                         {$$ 
                 | BOOL                                                      {$$ = new Type(E_bool) ;output::printProductionRule(33);}
 ;
 Exp:            LPAREN Exp RPAREN                                           {$$ = $2 ; output::printProductionRule(34);}
-                | Exp BINOP_MD Exp                                          {
+                | Exp BINOP_MUL Exp                                          {
                                                                                 if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
                                                                                         output::errorMismatch(yylineno);
                                                                                         output::printLog("isNumerical");
                                                                                         exit(12);
                                                                                     };
                                                                                 $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3))));
+                                                                                codeBuffer.emitOp($$, $1, "mul", $3);
                                                                                 delete $1; delete $3; output::printProductionRule(35);}
-                | Exp BINOP_PM Exp                                          {
+                | Exp BINOP_DIV Exp                                          {
+                                                                                if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
+                                                                                        output::errorMismatch(yylineno);
+                                                                                        output::printLog("isNumerical");
+                                                                                        exit(12);
+                                                                                    };
+                                                                                $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3))));
+                                                                                //TODO : check div by zero and signed and unsigned div
+                                                                                codeBuffer.emitOp($$, $1, "div", $3);
+                                                                                delete $1; delete $3; output::printProductionRule(35);}
+
+                | Exp BINOP_PLUS Exp                                          {
                                                                                 if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
                                                                                     output::errorMismatch(yylineno);
                                                                                     output::printLog("isNumerical");
@@ -154,6 +168,17 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                                 codeBuffer.emitOp($$, $1, "add", $3);
                                                                                 delete $1; delete $3;output::printProductionRule(35);
                                                                                 }
+                | Exp BINOP_MINUS Exp                                          {
+                                                                                if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
+                                                                                    output::errorMismatch(yylineno);
+                                                                                    output::printLog("isNumerical");
+                                                                                    exit(12);
+                                                                                };
+                                                                                $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3)))) ;
+                                                                                codeBuffer.emitOp($$, $1, "sub", $3);
+                                                                                delete $1; delete $3;output::printProductionRule(35);
+                                                                                }
+
                 | ID                                                        {$$ = new Exp_t(symbolTable.getExpByID(castID($1))) ; output::printProductionRule(36);}
                 | Call                                                      {$$ = $1 ; output::printProductionRule(37);}
                 | NUM                                                       {$$ = new Exp_t(Type(E_int));

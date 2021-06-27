@@ -53,8 +53,10 @@ default                                             return DEFAULT;
 =                                                   return ASSIGN;
 "<"|">"|"<="|">="                                   {return RELOP;}
 "=="|"!="                                           return EQUALITY;
-"*"|"/"                                             {return BINOP_MD;}
-"+"|"-"                                             {return BINOP_PM;}
+"*"                                                 {return BINOP_MUL;}
+"/"                                                 {return BINOP_DIV;}
+"+"                                                 {return BINOP_PLUS;}
+"-"                                                 {return BINOP_MINUS;}
 [a-zA-Z][a-zA-Z0-9]*                                {yylval = new IDtype(string(yytext));  return ID;}
 {noZeroDigit}{digit}*                               {yylval = new Num(stoi(yytext)); return NUM;}
 0                                                   {yylval = new Num(0); return NUM;}
