@@ -94,10 +94,10 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                         RBRACE {symbolTable.closeCurrentScope();}           {output::printProductionRule(14);}
                 | Type ID SC                                                {symbolTable.addSymbol(castType($1), castID($2)) ; output::printProductionRule(15);}
                 | Type ID ASSIGN Exp SC                                     {symbolTable.addSymbol(castType($1), castID($2)); symbolTable.assign(castID($2), castExp($4));
-                                                                                Exp_t* id = symbolTable.getExpByID(castID($1));
+                                                                                Exp_t id = symbolTable.getExpByID(castID($1));
                                                                                 codeBuffer.emit(id.regName + " = add i32 0, " +  castExp($3).regName);
                                                                                 output::printProductionRule(16);}
-                | ID ASSIGN Exp SC                                          {Exp_t* id = symbolTable.getExpByID(castID($1));
+                | ID ASSIGN Exp SC                                          {Exp_t id = symbolTable.getExpByID(castID($1));
                                                                              codeBuffer.emit(id.regName + " = add i32 0, " +  castExp($3).regName);
                                                                              id = castExp($3) ; output::printProductionRule(17);
                                                                             }
