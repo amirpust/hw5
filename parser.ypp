@@ -145,7 +145,7 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                                     exit(12);
                                                                                 };
                                                                                 $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3)))) ;
-                                                                                codeBuffer.emitOp($$, $1, "add", $2);
+                                                                                codeBuffer.emitOp(&castExp($$), $1, "add", $2);
                                                                                 delete $1; delete $3;output::printProductionRule(35);
                                                                                 }
                 | ID                                                        {$$ = new Exp_t(symbolTable.getExpByID(castID($1))) ; output::printProductionRule(36);}
