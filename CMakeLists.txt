@@ -2,5 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(hw5)
 
 set(CMAKE_CXX_STANDARD 14)
+FILE(GLOB MySources *.cpp)
+FILE(GLOB MyHeaders *.hpp)
 
-add_executable(hw5 main.cpp)
+ADD_EXECUTABLE(MyExecutable ${MySources} ${MyHeaders})
