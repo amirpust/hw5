@@ -3,7 +3,9 @@
 
 //Symbol
 Symbol::Symbol(const IDtype id, const Type t) : id(id), t(t) {}
-Symbol::Symbol(const IDtype id, const Type t, Exp_t exp) : id(id), t(t) , exp(exp) {}
+Symbol::Symbol(const IDtype id, const Type t, Exp_t exp) : id(id), t(t) , exp(exp) {
+    output::printLog("symbol ctor: " + this->exp.t.getStr());
+}
 Symbol::Symbol(const Symbol& _sym) : id(_sym.id), t(_sym.t) {}
 
 SymList::SymList(const vector<Symbol> &symList) : symList(symList) {}

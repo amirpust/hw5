@@ -246,7 +246,7 @@ public:
             output::errorDef(yylineno, id.id);
             exit(-1);
         }
-        output::printLog(id.id + " " + exp.t.getStr());
+        output::printLog("add symbol"+ id.id + " " + exp.t.getStr());
 
         scopeList.back().symList.insert(Symbol(id, t, exp));
         offsets.top()++;
