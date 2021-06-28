@@ -109,10 +109,10 @@ public:
         return newRbp;
     }
 
-    void emitStore(Exp_t* E, string regToStore, string rbpReg){
+    void emitStore(Exp_t* E, string rbpReg){
         string ptr = getNewRegister("ptr");
         emit(ptr + " = getelementptr i32, i32* " + rbpReg + ", i32 " + to_string(E->offset));
-        emit("store i32, i32* " + regToStore + ", i32 " + ptr); //TODO: test
+        emit("store i32, i32* " + E->regName + ", i32 " + ptr); //TODO: test
 
     }
 

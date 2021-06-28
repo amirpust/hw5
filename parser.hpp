@@ -81,8 +81,17 @@ public:
     }
 
     void ruleAddSymbol(IDtype id, Exp_t exp){
-        symbolTable->addSymbol(id, &exp);
-        codeBuffer.emitStore(&exp, exp.regName,symbolTable->getCurrentRbp());
+        symbolTable->assign(id, exp);
+        Exp_t newExp(exp.t);
+        symbolTable->addSymbol(id, &newExp);
+        codeBuffer.emit(newExp.regName + " = add i32 0, " + exp.regName);
+        codeBuffer.emitStore(&newExp, symbolTable->getCurrentRbp());
+    }
+
+    Exp_t* ruleLoadExpById(IDtype id){
+        Exp_t* exp = new Exp_t(symbolTable->getExpByID(id));
+        codeBuffer.emitLoad(exp, symbolTable->getCurrentRbp());
+        return exp;
     }
 };
 

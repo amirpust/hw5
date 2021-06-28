@@ -107,12 +107,9 @@ Statements:     Statement                                                   {out
 Statement:      LBRACE {symbolTable.openNewScope(); }
                         Statements
                         RBRACE {symbolTable.closeCurrentScope();}           {output::printProductionRule(14);}
-                | Type ID SC                                                {symbolTable.addSymbol(castID($2), Exp_t(castType($1))) ; output::printProductionRule(15);}
+                | Type ID SC                                                {parser.ruleAddSymbol(castID($2), Exp_t(castType($1))); ; output::printProductionRule(15);}
                 | Type ID ASSIGN Exp SC                                     {
-                                                                                Exp_t newExp(castType($1));
-                                                                                symbolTable.addSymbol(castID($2), newExp);
-                                                                                symbolTable.assign(castID($2), castExp($4));
-                                                                                codeBuffer.emit(newExp.regName + " = add i32 0, " +  castExp($4).regName);
+                                                                                parser.ruleAddSymbol(castID($2), castExp($4));
                                                                                 output::printProductionRule(16);
                                                                             }
                 | ID ASSIGN Exp SC                                          {Exp_t id = symbolTable.getExpByID(castID($1));
@@ -173,9 +170,10 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                                 output::printLog("end minus");
                                                                                 }
 
-                | ID                                                        {
-                                                                                $$ = new Exp_t(symbolTable.getExpByID(castID($1)));
-                                                                                output::printProductionRule(36);}
+                | ID                                                            {
+                                                                                $$ = parser.ruleLoadExpById(castID($1));
+                                                                                output::printProductionRule(36);
+                                                                                }
                 | Call                                                      {$$ = $1 ; output::printProductionRule(37);}
                 | NUM                                                       {
                                                                             output::printLog("NUM");
