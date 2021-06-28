@@ -20,6 +20,26 @@ class CodeBuffer{
 	std::vector<std::string> globalDefs;
 public:
 	static CodeBuffer &instance();
+	void firstEmit(){
+        declareExterns();
+	    definePrints();
+	    defineDivideByZero();
+	};
+    void declareExterns(){
+        emit("@.intFormat = internal constant [4 x i8] c\"%d\\0A\\00\"");
+        emit("%format_ptr = getelementptr [4 x i8], [4 x i8]* @.intFormat, i32 0, i32 0");
+        emit("declare i32 @printf(i8*, …)");
+        emit("declare void @exit(i32)");
+    }
+    void definePrints(){
+
+    }
+	void defineDivideByZero(){
+        emit("DIVIDE_BY_ZERO:");
+        emit("%DIVIDE_BY_ZERO.str = call i32 (i8*, ...) @printf(\"Error division by zero\\n\")");
+        emit("%printf_retval = call i32 (i8*, ...) @printf(\"Error division by zero\\n\")");
+        emit("@exit(0)");
+    }
 
 	// ******** Methods to handle the code section ******** //
 
