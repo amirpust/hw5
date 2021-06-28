@@ -2,8 +2,9 @@ void main(){
 	int c = 2;
 	int a = c + 4;
 	int d = 3 / a;
+	printi(100);
 	printi(d);
-	print("yay");
+	//print("yay");
 
 	int f = 5 / 0;
 	return;
