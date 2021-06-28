@@ -81,6 +81,7 @@ public:
     }
 
     void ruleAddSymbol(IDtype id, Exp_t exp){
+        output::printLog("Add Symbol Rule | id: " + id.id + " | exp: " + exp.regName);
         symbolTable->assign(id, exp);
         Exp_t newExp(exp.t);
         symbolTable->addSymbol(id, &newExp);
