@@ -39,8 +39,14 @@ public:
 
     SymbolTable() : scopeList(), funcList(), seenMainFunc(false) , offsets() , cases(0){
         scopeList.emplace_back(0, GLOBAL_SCOPE);
-        funcList.insert(FuncSymbol(Type(E_void),IDtype("print"),SymList(vector<Symbol>(1, Symbol(IDtype(""), Type(E_string))))));
-        funcList.insert(FuncSymbol(Type(E_void),IDtype("printi"),SymList(vector<Symbol>(1, Symbol(IDtype(""), Type(E_int))))));
+        SymList pSymList = SymList(vector<Symbol>(1, Symbol(IDtype(""), Type(E_string))));
+        FuncSymbol p = FuncSymbol(Type(E_void),IDtype("print"), pSymList);
+
+        SymList piSymList = SymList(vector<Symbol>(1, Symbol(IDtype(""), Type(E_int))));
+        FuncSymbol pi = FuncSymbol(Type(E_void),IDtype("printi"), piSymList);
+
+        funcList.insert(p);
+        funcList.insert(pi);
 
         offsets.push(0);
     };
