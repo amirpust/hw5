@@ -23,7 +23,7 @@
     void output::errorSyn(int lineno);
     void yyerror(const char*);
 
-    SymbolTable symbolTable = SymbolTable();
+    SymbolTable symbolTable;
 
 
 %}
@@ -237,6 +237,8 @@ int main(){
 
     output::init();
     output::printLog("Start");
+    symbolTable = SymbolTable();
+
     int res = yyparse();
     symbolTable.gg();
 
