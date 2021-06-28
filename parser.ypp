@@ -1,17 +1,14 @@
 %{
     #include <iostream>
-
+    
     #include "hw3_output.hpp"
-    output::printID("Includes", 1, "");
     #include "Enums.hpp"
     #include "RelopAUX.hpp"
     #include "Exp_t.hpp"
-    output::printID("Includes", 2, "");
     #include "Table.hpp"
     #include "BaseObj.hpp"
     #include "Symbol.hpp"
     #include "bp.hpp"
-    output::printID("Includes", 3, "");
     #define castType(toCast) (*(static_cast<Type*>(toCast)))
     #define castID(toCast) (*(static_cast<IDtype*>(toCast)))
     #define castSymList(toCast) (*(static_cast<SymList*>(toCast)))

@@ -1,6 +1,8 @@
 #ifndef HW5_SYMBOL_HPP
 #define HW5_SYMBOL_HPP
 
+#include <iostream>
+#include "hw3_output.hpp"
 #include "BaseObj.hpp"
 #include "Exp_t.hpp"
 
