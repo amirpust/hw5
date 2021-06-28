@@ -7,13 +7,17 @@
 class Symbol : public BaseObj {
 public:
     IDtype id;
-    Type t;
     Exp_t exp;
 
-    Symbol(const IDtype id, const Type t);
-    Symbol(const IDtype id, const Type t, Exp_t exp);
+    explicit Symbol(IDtype id);
+    Symbol(IDtype id, Exp_t exp);
+    Symbol(IDtype id, Type t);
 
     Symbol(const Symbol& _sym);
+
+    Type getType();
+    string getReg();
+    string getId();
 };
 
 class SymList : public BaseObj {

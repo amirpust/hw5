@@ -2,11 +2,26 @@
 
 
 //Symbol
-Symbol::Symbol(const IDtype id, const Type t) : id(id), t(t) {}
-Symbol::Symbol(const IDtype id, const Type t, Exp_t exp) : id(id), t(t) , exp(exp) {
-    output::printLog("symbol ctor: " + this->exp.t.getStr());
+Symbol::Symbol(IDtype id) : id(id) {}
+Symbol::Symbol(IDtype id, Exp_t exp) : id(id), exp(exp) {
+    output::printLog("Symbol ctor: " + this->exp.t.getStr());
 }
-Symbol::Symbol(const Symbol& _sym) : id(_sym.id), t(_sym.t) ,exp(_sym.exp){}
+Symbol::Symbol(IDtype id, Type t) : id(id), exp(Exp_t(t)) {
+    output::printLog("Symbol ctor(type): " + this->exp.t.getStr());
+}
+Symbol::Symbol(const Symbol& _sym) : id(_sym.id), exp(_sym.exp){}
+
+Type Symbol::getType() {
+    return exp.t;
+}
+
+string Symbol::getReg() {
+    return exp.regName;
+}
+
+string Symbol::getId() {
+    return id.id;
+}
 
 SymList::SymList(const vector<Symbol> &symList) : symList(symList) {}
 SymList::SymList() : symList() {}

@@ -89,17 +89,17 @@ public:
         funcList.insert(FuncSymbol(retType, id, args));
         for(SymList::iterator sym = args.symList.begin(); sym != args.symList.end(); sym++){
             if(findFunc((*sym).id) != funcList.funcList.end()){
-                output::printLog("isId:" + (*sym).id.id);
-                output::errorDef(yylineno, (*sym).id.id);
+                output::printLog("isId:" + (*sym).getId());
+                output::errorDef(yylineno, (*sym).getId());
                 exit(444);
             }
             for(SymList::iterator sym2 = sym; sym2 != args.symList.end(); sym2++){
                 if (sym == sym2)
                     continue;
-                if ((*sym).id.id == (*sym2).id.id){
-                    output::printLog("isId2:" + (*sym).id.id);
-                    output::errorDef(yylineno, (*sym).id.id);
-                    exit(444);
+                if ((*sym).getId() == (*sym2).getId()){
+                    output::printLog("isId2:" + (*sym).getId());
+                    output::errorDef(yylineno, (*sym).getId());
+                    exit(445);
                 }
             }
         }
@@ -143,6 +143,7 @@ public:
             exit(1);
         }
 
+        //TODO: pass arguments to function
         SymList sArgs = SymList();
         for (ExpList::iterator a = arguments.expList.begin(); a != arguments.expList.end(); a++){
             sArgs.insert(Symbol(IDtype(""),(*a).t));
@@ -158,7 +159,7 @@ public:
 
         std::vector<string> strTypes = std::vector<string>();
         for (SymList::iterator i = func.symList.symList.begin(); i != func.symList.symList.end(); i++){
-            strTypes.push_back((*i).t.getStr());
+            strTypes.push_back((*i).getType().getStr());
         }
 
         if(sArgs.symList.size() != func.symList.symList.size()){
@@ -169,10 +170,10 @@ public:
 
         for (unsigned int i = 0; i < sArgs.symList.size(); ++i) {
             if(
-                    (sArgs.symList[i].t.t != func.symList.symList[i].t.t) &&
-                    !(sArgs.symList[i].t.t == E_byte && func.symList.symList[i].t.t == E_int)){
-                output::printLog("Got: " + sArgs.symList[i].t.getStr());
-                output::printLog("Expected: " + func.symList.symList[i].t.getStr());
+                    (sArgs.symList[i].getType() != func.symList.symList[i].getType()) &&
+                    !(sArgs.symList[i].getType() == E_byte && func.symList.symList[i].getType() == E_int)){
+                output::printLog("Got: " + sArgs.symList[i].getType().getStr());
+                output::printLog("Expected: " + func.symList.symList[i].getType().getStr());
                 output::errorPrototypeMismatch(yylineno, funcName.id, strTypes);
                 exit(-1);
             }
@@ -196,7 +197,7 @@ public:
                 std::vector<string> argTypes;
                 string funcType = (*func).retType.getStr();
                 for(SymList::iterator sym = (*func).symList.symList.begin(); sym != (*func).symList.symList.end(); ++sym){
-                    argTypes.push_back((*sym).t.getStr());
+                    argTypes.push_back((*sym).getType().getStr());
                 }
                 output::printID((*func).id.id, 0, output::makeFunctionType(funcType, argTypes));
             }
@@ -206,8 +207,8 @@ public:
                 FuncSymbol func = funcList.funcList.back();
 
                 for (unsigned int i = 0; i < func.symList.symList.size(); ++i) {
-                    string typeForPrinting = func.symList.symList[i].t.getStr();
-                    output::printID(func.symList.symList[i].id.id, -1 - i,
+                    string typeForPrinting = func.symList.symList[i].getType().getStr();
+                    output::printID(func.symList.symList[i].getId(), -1 - i,
                                     typeForPrinting);
                 }
             }
@@ -215,8 +216,8 @@ public:
             Scope closingScope = scopeList.back();
             offsets.pop();
             for (unsigned int i = 0; i < closingScope.symList.symList.size(); ++i) {
-                string typeForPrinting = closingScope.symList.symList[i].t.getStr();
-                output::printID(closingScope.symList.symList[i].id.id,
+                string typeForPrinting = closingScope.symList.symList[i].getType().getStr();
+                output::printID(closingScope.symList.symList[i].getId(),
                                 offsets.top() + i, typeForPrinting);
             }
         }
@@ -241,14 +242,14 @@ public:
             exit(1);
         }
     }
-    void addSymbol(Type t, IDtype id, Exp_t exp){
+    void addSymbol(IDtype id, Exp_t exp){
         if(isId(id)) {
             output::errorDef(yylineno, id.id);
             exit(-1);
         }
         output::printLog("add symbol"+ id.id + " " + exp.t.getStr());
 
-        scopeList.back().symList.insert(Symbol(id, t, exp));
+        scopeList.back().symList.insert(Symbol(id, exp));
         output::printLog("add symbol after insert "+ id.id + " " + scopeList.back().symList.symList.back().exp.t.getStr());
         offsets.top()++;
     }
@@ -259,7 +260,7 @@ public:
             output::errorUndef(yylineno, _id.id);
             exit(-46);
         }
-        return sym->t;
+        return sym->getType();
     }
 
     Exp_t getExpByID(IDtype _id){
@@ -272,13 +273,14 @@ public:
         return sym->exp;
     }
 
+    //TODO: assign properly
     void assign(IDtype _id, Exp_t e){
         Symbol* sym = findSym(_id);
         if(!sym){
             output::errorUndef(yylineno, _id.id);
             exit(-463);
         }
-        Exp_t newE = Exp_t(sym->t);
+        Exp_t newE = Exp_t(sym->exp);
         newE = e;
     }
 
@@ -294,14 +296,14 @@ private:
     Symbol* findSym(IDtype _id){
         for(ScopeList::iterator scope = scopeList.begin(); scope != scopeList.end(); scope++){
             for(SymList::iterator sym = (*scope).symList.symList.begin(); sym != (*scope).symList.symList.end() ; sym++){
-                if ((*sym).id.id == _id.id){
+                if ((*sym).getId() == _id.id){
                     return &(*sym);
                 }
             }
         }
 
         for(SymList::iterator sym = funcList.funcList.back().symList.symList.begin(); sym != funcList.funcList.back().symList.symList.end() ; sym++){
-            if ((*sym).id.id == _id.id){
+            if ((*sym).getId() == _id.id){
                 return &(*sym);
             }
         }
