@@ -27,7 +27,6 @@ public:
 	};
     void declareExterns(){
         emit("@.intFormat = internal constant [4 x i8] c\"%d\\0A\\00\"");
-        emit("@.format_ptr = getelementptr [4 x i8], [4 x i8]* @.intFormat, i32 0, i32 0");
         emit("declare i32 @printf(i8*, …)");
         emit("declare void @exit(i32)");
     }
@@ -38,6 +37,7 @@ public:
         emit("}");
 
         emit("define void @printi(i8*){");
+        emit("%format_ptr = getelementptr [4 x i8], [4 x i8]* @.intFormat, i32 0, i32 0");
         emit("call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.str_specifier, i32 0, i32 0), i8* %0)");
         emit("ret void");
         emit("}");
