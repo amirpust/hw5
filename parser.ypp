@@ -223,7 +223,6 @@ void yyerror(const char* e){
 }
 
 int main(){
-    std::cout << "Main" << endl;
     output::init();
     output::printLog("Start");
     symbolTablePtr = new SymbolTable();

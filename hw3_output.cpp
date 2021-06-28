@@ -7,11 +7,11 @@ using namespace std;
 ofstream* logFile;
 
 void output::endScope(){
-    cout << "---end scope---" << endl;
+    //cout << "---end scope---" << endl;
 }
 
 void output::printID(const string& id, int offset, const string& type) {
-    cout << id << " " << type <<  " " << offset <<  endl;
+    //cout << id << " " << type <<  " " << offset <<  endl;
 }
 
 string typeListToString(const std::vector<string>& argTypes) {
@@ -94,7 +94,7 @@ void output::printProductionRule(int rule){
 }
 
 void output::printInt(int i){
-    cout << "printInt " << i << endl;
+    //cout << "printInt " << i << endl;
 }
 
 void output::init() {
