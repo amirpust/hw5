@@ -27,6 +27,8 @@ public:
 	};
     void declareExterns(){
         emit("@.intFormat = internal constant [4 x i8] c\"%d\\0A\\00\"");
+        emit("@.DIVIDE_BY_ZERO.str = internal constant [23 x i8] c\"Error division by zero\\00\"");
+
         emit("declare i32 @printf(i8*, ...)");
         emit("declare void @exit(i32)");
     }
@@ -38,7 +40,7 @@ public:
 
         emit("define void @printi(i32){");
         emit("%format_ptr = getelementptr [4 x i8], [4 x i8]* @.intFormat, i32 0, i32 0");
-        emit("call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.str_specifier, i32 0, i32 0), i8* %0)");
+        emit("call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.str_specifier, i32 0, i32 0), i32 %0)");
         emit("ret void");
         emit("}");
     }
@@ -50,8 +52,7 @@ public:
         emit("ret void");
 
         emit("DIVIDE_BY_ZERO:");
-        emit("%DIVIDE_BY_ZERO.str = constant [23 x i8] c\"Error division by zero\\00\"");
-        emit("call void @print(i8* getelementptr([23 x i8], [23 x i8]* %DIVIDE_BY_ZERO.str, i32 0, i32 0)");
+        emit("call void @print(i8* getelementptr([23 x i8], [23 x i8]* @.DIVIDE_BY_ZERO.str, i32 0, i32 0)");
         emit("@exit(0)");
         
         emit("}");
