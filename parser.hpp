@@ -39,11 +39,7 @@ public:
         if(op != "div"){
             codeBuffer.emitOp(res, exp1, op ,exp2);
         }else{
-            string nextLabel = getNewLabel("GOOD_DIV");
-            Exp_t ifZero(E_bool);
-            codeBuffer.emit(ifZero.regName + " = icmp eq i32 " + exp2->regName + ", 0");
-            codeBuffer.emit("br i1 " + ifZero.regName + ", label %DIVIDE_BY_ZERO, label %" + nextLabel);
-            codeBuffer.emit(nextLabel + ":");
+            codeBuffer.emit("call void @checkDivideByZero(i32 " + exp2->regName + ")");
             if(exp1->getDualType((*exp2)) == E_int){
                 codeBuffer.emitOp(res, exp1, "sdiv" ,exp2);
             }else{
