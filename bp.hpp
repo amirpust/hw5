@@ -36,17 +36,25 @@ public:
         emit("ret void");
         emit("}");
 
-        emit("define void @printi(i8*){");
+        emit("define void @printi(i32){");
         emit("%format_ptr = getelementptr [4 x i8], [4 x i8]* @.intFormat, i32 0, i32 0");
         emit("call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.str_specifier, i32 0, i32 0), i8* %0)");
         emit("ret void");
         emit("}");
     }
 	void defineDivideByZero(){
+        emit("define void @checkDivideByZero(i32){");
+        emit("%checkIfZero = icmp eq i32 %0 , 0");
+        emit("br i1 %checkIfZero, label %DIVIDE_BY_ZERO, label %DONE");
+        emit("DONE:");
+        emit("ret void");
+
         emit("DIVIDE_BY_ZERO:");
         emit("%DIVIDE_BY_ZERO.str = constant [23 x i8] c\"Error division by zero\\00\"");
         emit("call void @print(i8* getelementptr([23 x i8], [23 x i8]* %DIVIDE_BY_ZERO.str, i32 0, i32 0)");
         emit("@exit(0)");
+        
+        emit("}");
     }
 
 	// ******** Methods to handle the code section ******** //
