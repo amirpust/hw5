@@ -22,8 +22,4 @@ typedef struct objects_pool_t{
 }objects_pool;
 
 
-
-
-
-
 #endif
