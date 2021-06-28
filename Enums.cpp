@@ -3,9 +3,9 @@
 //
 #include "Enums.hpp"
 
-string getNewRegister(){
+string getNewRegister(string str){
     static int nextRegister = 0;
-    return "%reg" + to_string(nextRegister++);
+    return "%" + str + to_string(nextRegister++);
 }
 
 string getNewLabel(string label){

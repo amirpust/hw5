@@ -12,7 +12,6 @@ using namespace std;
 enum BranchLabelIndex {FIRST, SECOND};
 
 class CodeBuffer{
-    int nextRegister;
 	CodeBuffer();
 	CodeBuffer(CodeBuffer const&);
     void operator=(CodeBuffer const&);
@@ -103,7 +102,31 @@ public:
 	//print the content of the global buffer to stdout
 	void printGlobalBuffer();
 
-    int emitOp(BaseObj* E, BaseObj* E1, const string op, BaseObj* E2){
+	string emitAlloca(){
+        string newRbp = getNewRegister();
+        emit(newRbp + " = alloca i32, i32 50");
+        return newRbp;
+    }
+
+    void emitStore(Exp_t* E, string regToStore, string rbpReg){
+        string ptr = getNewRegister("ptr");
+        emit(ptr + " = getelementptr i32, i32* " + rbpReg + ", i32 " + to_string(E->offset));
+
+    }
+
+    string emitLoad(Exp_t* E, string rbpReg){
+        string newReg = getNewRegister();
+        string ptr = getNewRegister("ptr");
+
+        emit(ptr + " = getelementptr i32, i32* " + rbpReg + ", i32 " + to_string(E->offset));
+        emit(newReg + " = load i32, i32* " + ptr); //TODO: test
+
+        return newReg;
+    }
+
+    int emitOp(Exp_t* E, Exp_t* E1, const string op, Exp_t* E2){
+
+
         return emit(E->regName + " = " + op + " i32 " + E1->regName + ", " + E2->regName);
     }
 };

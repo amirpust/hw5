@@ -42,7 +42,7 @@ enum SCOPE_REASON{
 };
 
 
-string getNewRegister();
+string getNewRegister(string reg = "reg");
 string getNewLabel(string label = "Label");
 
 #endif //HW3_ENUMS_HPP
