@@ -31,6 +31,9 @@ public:
 
         emit("declare i32 @printf(i8*, ...)");
         emit("declare void @exit(i32)");
+
+        emit("@.int_specifier = constant [4 x i8] c\"%d\\0A\\00\"");
+        emit("@.str_specifier = constant [4 x i8] c\"%s\\0A\\00\"");
     }
     void definePrints(){
         emit("define void @print(i8*){");
