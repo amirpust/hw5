@@ -43,5 +43,6 @@ enum SCOPE_REASON{
 
 
 string getNewRegister();
+string getNewLabel(string label = "Label");
 
 #endif //HW3_ENUMS_HPP

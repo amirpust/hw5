@@ -27,8 +27,17 @@ public:
         };
         Exp_t* res = new Exp_t(Type(exp1->getDualType(*exp2)));
 
-        if(op != "/"){
+        if(op != "div"){
             codeBuffer.emitOp(res, exp1, op ,exp2);
+        }else{
+            string nextLabel = getNewLabel("GOOD_DIV");
+            codeBuffer.emit("br i32 " + exp2->regName + ", label " + nextLabel + ", label DIVIDE_BY_ZERO"); //TODO: place this label
+            codeBuffer.emit(nextLabel + ":");
+            if(exp1->getDualType((*exp2)) == E_int){
+                codeBuffer.emitOp(res, exp1, "sdiv" ,exp2);
+            }else{
+                codeBuffer.emitOp(res, exp1, "udiv" ,exp2);
+            }
         }
 
         delete exp1;
@@ -36,6 +45,16 @@ public:
         return res;
     }
 
+    Exp_t* ruleInitNum(TYPE t, const Num& n){
+        if (t == E_byte && n.val >= 1 << 8){
+            output::errorByteTooLarge(yylineno, n.val);
+            exit(1);
+        }
+        Exp_t* exp =  new Exp_t(Type(t));
+
+        codeBuffer.emit(exp->regName + " = add i32 " + to_string(n.val) + ", 0");
+        return exp;
+    }
 };
 
 #endif
