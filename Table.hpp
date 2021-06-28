@@ -39,8 +39,8 @@ public:
 
     SymbolTable() : scopeList(), funcList(), seenMainFunc(false) , offsets() , cases(0){
         scopeList.emplace_back(0, GLOBAL_SCOPE);
-        Symbol pSymbol = Symbol(IDtype(""), Type(E_string));
-        SymList pSymList = SymList(vector<Symbol>(1, pSymbol));
+
+        SymList pSymList = SymList(vector<Symbol>(1, Symbol(IDtype(""), Type(E_string))));
         FuncSymbol p = FuncSymbol(Type(E_void),IDtype("print"), pSymList);
 
         SymList piSymList = SymList(vector<Symbol>(1, Symbol(IDtype(""), Type(E_int))));
@@ -51,10 +51,12 @@ public:
 
         offsets.push(0);
     };
+
     void gg() {
         checkMain();
         closeCurrentScope();
     }
+
     void checkMain(){
         if(!seenMainFunc){
             output::errorMainMissing();
