@@ -300,6 +300,9 @@ public:
         newE = e;
     }
 
+    string getCurrentRbp(){
+        return scopeList.back().rbp;
+    }
 private:
     FuncList::iterator findFunc(IDtype _id){
         for (FuncList::iterator f = funcList.funcList.begin(); f != funcList.funcList.end(); f++){
@@ -330,9 +333,6 @@ private:
         return findSym(_id) || findFunc(_id) != funcList.funcList.end();
     }
 
-    string getCurrentRbp(){
-        return scopeList.back().rbp;
-    }
 };
 
 #endif //HW3_TABLE_HPP
