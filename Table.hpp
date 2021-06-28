@@ -10,6 +10,7 @@
 #include "hw3_output.hpp"
 #include <stack>
 #include <algorithm>
+#include "bp.hpp"
 
 
 
@@ -20,6 +21,7 @@ public:
     SymList symList;
     int offest;
     SCOPE_REASON type;
+    string rbp;
 
     Scope(int _offest, SCOPE_REASON _type) :
             symList(),
@@ -85,6 +87,7 @@ public:
     }
     void openFuncScope(IDtype id, SymList args, Type retType) {
         reverse(args.symList.begin(),args.symList.end());
+
         output::printLog("Flag " + id.id);
         if ((retType == E_void) && (id.id == "main") && args.symList.empty()){
             seenMainFunc = true;
