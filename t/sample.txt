@@ -1,6 +1,7 @@
 void main(){
 	int c = 2;
 	int a = c + 4;
+	int d = 3 / a;
 	
 	return;
 }

@@ -17,8 +17,8 @@
 					<DistClean command="C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="hw5">
-				<Option output="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/hw5.exe" prefix_auto="0" extension_auto="0"/>
+			<Target title="MyExecutable">
+				<Option output="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/MyExecutable.exe" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -32,14 +32,14 @@
 					<Add directory="C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/Makefile&quot;  VERBOSE=1 hw5"/>
+					<Build command="C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/Makefile&quot;  VERBOSE=1 MyExecutable"/>
 					<CompileFile command="C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="hw5/fast">
-				<Option output="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/hw5.exe" prefix_auto="0" extension_auto="0"/>
+			<Target title="MyExecutable/fast">
+				<Option output="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/MyExecutable.exe" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -53,7 +53,7 @@
 					<Add directory="C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/Makefile&quot;  VERBOSE=1 hw5/fast"/>
+					<Build command="C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/Makefile&quot;  VERBOSE=1 MyExecutable/fast"/>
 					<CompileFile command="C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
@@ -80,8 +80,53 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/main.cpp">
-			<Option target="hw5"/>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/BaseObj.cpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/BaseObj.hpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/Enums.cpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/Enums.hpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/Exp_t.cpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/Exp_t.hpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/ObjectsPool.hpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/RelopAUX.hpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/Symbol.cpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/Symbol.hpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/Table.hpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/bp.cpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/bp.hpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/hw3_output.cpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/hw3_output.hpp">
+			<Option target="MyExecutable"/>
+		</Unit>
+		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/parser.hpp">
+			<Option target="MyExecutable"/>
 		</Unit>
 		<Unit filename="C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>

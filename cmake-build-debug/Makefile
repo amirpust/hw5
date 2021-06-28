@@ -110,44 +110,179 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named hw5
+# Target rules for targets named MyExecutable
 
 # Build rule for target.
-hw5: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 hw5
-.PHONY : hw5
+MyExecutable: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 MyExecutable
+.PHONY : MyExecutable
 
 # fast build rule for target.
-hw5/fast:
-	$(MAKE) -f CMakeFiles\hw5.dir\build.make CMakeFiles/hw5.dir/build
-.PHONY : hw5/fast
+MyExecutable/fast:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/build
+.PHONY : MyExecutable/fast
 
-main.obj: main.cpp.obj
+BaseObj.obj: BaseObj.cpp.obj
 
-.PHONY : main.obj
+.PHONY : BaseObj.obj
 
 # target to build an object file
-main.cpp.obj:
-	$(MAKE) -f CMakeFiles\hw5.dir\build.make CMakeFiles/hw5.dir/main.cpp.obj
-.PHONY : main.cpp.obj
+BaseObj.cpp.obj:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/BaseObj.cpp.obj
+.PHONY : BaseObj.cpp.obj
 
-main.i: main.cpp.i
+BaseObj.i: BaseObj.cpp.i
 
-.PHONY : main.i
+.PHONY : BaseObj.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles\hw5.dir\build.make CMakeFiles/hw5.dir/main.cpp.i
-.PHONY : main.cpp.i
+BaseObj.cpp.i:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/BaseObj.cpp.i
+.PHONY : BaseObj.cpp.i
 
-main.s: main.cpp.s
+BaseObj.s: BaseObj.cpp.s
 
-.PHONY : main.s
+.PHONY : BaseObj.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles\hw5.dir\build.make CMakeFiles/hw5.dir/main.cpp.s
-.PHONY : main.cpp.s
+BaseObj.cpp.s:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/BaseObj.cpp.s
+.PHONY : BaseObj.cpp.s
+
+Enums.obj: Enums.cpp.obj
+
+.PHONY : Enums.obj
+
+# target to build an object file
+Enums.cpp.obj:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/Enums.cpp.obj
+.PHONY : Enums.cpp.obj
+
+Enums.i: Enums.cpp.i
+
+.PHONY : Enums.i
+
+# target to preprocess a source file
+Enums.cpp.i:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/Enums.cpp.i
+.PHONY : Enums.cpp.i
+
+Enums.s: Enums.cpp.s
+
+.PHONY : Enums.s
+
+# target to generate assembly for a file
+Enums.cpp.s:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/Enums.cpp.s
+.PHONY : Enums.cpp.s
+
+Exp_t.obj: Exp_t.cpp.obj
+
+.PHONY : Exp_t.obj
+
+# target to build an object file
+Exp_t.cpp.obj:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/Exp_t.cpp.obj
+.PHONY : Exp_t.cpp.obj
+
+Exp_t.i: Exp_t.cpp.i
+
+.PHONY : Exp_t.i
+
+# target to preprocess a source file
+Exp_t.cpp.i:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/Exp_t.cpp.i
+.PHONY : Exp_t.cpp.i
+
+Exp_t.s: Exp_t.cpp.s
+
+.PHONY : Exp_t.s
+
+# target to generate assembly for a file
+Exp_t.cpp.s:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/Exp_t.cpp.s
+.PHONY : Exp_t.cpp.s
+
+Symbol.obj: Symbol.cpp.obj
+
+.PHONY : Symbol.obj
+
+# target to build an object file
+Symbol.cpp.obj:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/Symbol.cpp.obj
+.PHONY : Symbol.cpp.obj
+
+Symbol.i: Symbol.cpp.i
+
+.PHONY : Symbol.i
+
+# target to preprocess a source file
+Symbol.cpp.i:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/Symbol.cpp.i
+.PHONY : Symbol.cpp.i
+
+Symbol.s: Symbol.cpp.s
+
+.PHONY : Symbol.s
+
+# target to generate assembly for a file
+Symbol.cpp.s:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/Symbol.cpp.s
+.PHONY : Symbol.cpp.s
+
+bp.obj: bp.cpp.obj
+
+.PHONY : bp.obj
+
+# target to build an object file
+bp.cpp.obj:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/bp.cpp.obj
+.PHONY : bp.cpp.obj
+
+bp.i: bp.cpp.i
+
+.PHONY : bp.i
+
+# target to preprocess a source file
+bp.cpp.i:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/bp.cpp.i
+.PHONY : bp.cpp.i
+
+bp.s: bp.cpp.s
+
+.PHONY : bp.s
+
+# target to generate assembly for a file
+bp.cpp.s:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/bp.cpp.s
+.PHONY : bp.cpp.s
+
+hw3_output.obj: hw3_output.cpp.obj
+
+.PHONY : hw3_output.obj
+
+# target to build an object file
+hw3_output.cpp.obj:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/hw3_output.cpp.obj
+.PHONY : hw3_output.cpp.obj
+
+hw3_output.i: hw3_output.cpp.i
+
+.PHONY : hw3_output.i
+
+# target to preprocess a source file
+hw3_output.cpp.i:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/hw3_output.cpp.i
+.PHONY : hw3_output.cpp.i
+
+hw3_output.s: hw3_output.cpp.s
+
+.PHONY : hw3_output.s
+
+# target to generate assembly for a file
+hw3_output.cpp.s:
+	$(MAKE) -f CMakeFiles\MyExecutable.dir\build.make CMakeFiles/MyExecutable.dir/hw3_output.cpp.s
+.PHONY : hw3_output.cpp.s
 
 # Help Target
 help:
@@ -155,12 +290,27 @@ help:
 	@echo ... all (the default if no target is provided)
 	@echo ... clean
 	@echo ... depend
-	@echo ... hw5
+	@echo ... MyExecutable
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... main.obj
-	@echo ... main.i
-	@echo ... main.s
+	@echo ... BaseObj.obj
+	@echo ... BaseObj.i
+	@echo ... BaseObj.s
+	@echo ... Enums.obj
+	@echo ... Enums.i
+	@echo ... Enums.s
+	@echo ... Exp_t.obj
+	@echo ... Exp_t.i
+	@echo ... Exp_t.s
+	@echo ... Symbol.obj
+	@echo ... Symbol.i
+	@echo ... Symbol.s
+	@echo ... bp.obj
+	@echo ... bp.i
+	@echo ... bp.s
+	@echo ... hw3_output.obj
+	@echo ... hw3_output.i
+	@echo ... hw3_output.s
 .PHONY : help
 
 
