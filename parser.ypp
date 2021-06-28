@@ -237,7 +237,7 @@ int main(){
     output::init();
     output::printLog("Start");
     symbolTablePtr = new SymbolTable();
-    parserPtr = new Parser();
+    parserPtr = new Parser(symbolTablePtr);
 
     int res = yyparse();
     symbolTable.gg();
