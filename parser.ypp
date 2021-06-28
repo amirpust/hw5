@@ -96,10 +96,10 @@ Statements:     Statement                                                   {out
 Statement:      LBRACE {symbolTable.openNewScope(); }
                         Statements
                         RBRACE {symbolTable.closeCurrentScope();}           {output::printProductionRule(14);}
-                | Type ID SC                                                {symbolTable.addSymbol(castType($1), castID($2), Exp_t()) ; output::printProductionRule(15);}
+                | Type ID SC                                                {symbolTable.addSymbol(castID($2), Exp_t(castType($1))) ; output::printProductionRule(15);}
                 | Type ID ASSIGN Exp SC                                     {
                                                                                 Exp_t newExp(castType($1));
-                                                                                symbolTable.addSymbol(castType($1), castID($2), newExp);
+                                                                                symbolTable.addSymbol(castID($2), newExp);
                                                                                 symbolTable.assign(castID($2), castExp($4));
                                                                                 codeBuffer.emit(newExp.regName + " = add i32 0, " +  castExp($4).regName);
                                                                                 output::printProductionRule(16);
@@ -181,13 +181,20 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
 
                 | ID                                                        {$$ = new Exp_t(symbolTable.getExpByID(castID($1))) ; output::printProductionRule(36);}
                 | Call                                                      {$$ = $1 ; output::printProductionRule(37);}
-                | NUM                                                       {$$ = new Exp_t(Type(E_int)); // TODO: i think this is where shit gets fucked up
-                                                                                codeBuffer.emit($$->regName + " = add i32 " + to_string(castNum($1).val) + ", 0");
-                                                                                output::printProductionRule(38);}
-                | NUM B                                                     {if(castNum($1).val > 255) {output::errorByteTooLarge(yylineno, castNum($1).val); exit(1); } ; $$ = new Exp_t(Type(E_byte)); output::printProductionRule(39);}
+                | NUM                                                       {$$ = new Exp_t(Type(E_int));
+                                                                            codeBuffer.emit($$->regName + " = add i32 " + to_string(castNum($1).val) + ", 0");
+                                                                            output::printProductionRule(38);}
+                | NUM B                                                     {if(castNum($1).val > 255) {output::errorByteTooLarge(yylineno, castNum($1).val); exit(1); }
+                                                                            $$ = new Exp_t(Type(E_byte));
+                                                                            codeBuffer.emit($$->regName + " = add i32 " + to_string(castNum($1).val) + ", 0");
+                                                                            output::printProductionRule(39);}
                 | STRING                                                    {$$ = new Exp_t(Type(E_string)); ; output::printProductionRule(40);}
-                | TRUE                                                      {$$ = new Exp_t(Type(E_bool)); output::printProductionRule(41);}
-                | FALSE                                                     {$$ = new Exp_t(Type(E_bool)); output::printProductionRule(42);}
+                | TRUE                                                      {$$ = new Exp_t(Type(E_bool));
+                                                                            codeBuffer.emit($$->regName + " = i1 true");
+                                                                            output::printProductionRule(41);}
+                | FALSE                                                     {$$ = new Exp_t(Type(E_bool));
+                                                                            codeBuffer.emit($$->regName + " = i1 false");
+                                                                            output::printProductionRule(42);}
                 | Exp AND Exp                                               {if (castExp($1).t != Type(E_bool) || castExp($3).t != Type(E_bool)) {output::errorMismatch(yylineno); exit(1);} ; $$ = new Exp_t(Type(E_bool)); delete $1; delete $3;output::printProductionRule(44);}
                 | Exp OR Exp                                                {if (castExp($1).t != Type(E_bool) || castExp($3).t != Type(E_bool)) {output::errorMismatch(yylineno); exit(1);} ; $$ = new Exp_t(Type(E_bool));delete $1; delete $3; output::printProductionRule(45);}
                 | NOT Exp                                                   {if (castExp($2).t != Type(E_bool)) {output::errorMismatch(yylineno); exit(1);} ;$$ = new Exp_t(Type(E_bool));delete $2; output::printProductionRule(43);}
