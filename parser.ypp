@@ -144,52 +144,42 @@ Type :          INT                                                         {$$ 
 ;
 Exp:            LPAREN Exp RPAREN                                           {$$ = $2 ; output::printProductionRule(34);}
                 | Exp BINOP_MUL Exp                                          {
-                                                                                if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
-                                                                                        output::errorMismatch(yylineno);
-                                                                                        output::printLog("isNumerical");
-                                                                                        exit(12);
-                                                                                    };
-                                                                                $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3))));
-                                                                                codeBuffer.emitOp($$, $1, "mul", $3);
-                                                                                delete $1; delete $3; output::printProductionRule(35);}
+                                                                                output::printLog("start mul");
+                                                                                $$ = parser.ruleOP(&castExp($1), &castExp($3), "mul");
+                                                                                output::printProductionRule(35);
+                                                                                output::printLog("end mul");}
                 | Exp BINOP_DIV Exp                                          {
-                                                                                if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
-                                                                                        output::errorMismatch(yylineno);
-                                                                                        output::printLog("isNumerical");
-                                                                                        exit(12);
-                                                                                    };
-                                                                                $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3))));
-                                                                                //TODO : check div by zero and signed and unsigned div
-                                                                                codeBuffer.emitOp($$, $1, "div", $3);
-                                                                                delete $1; delete $3; output::printProductionRule(35);}
-
+                                                                                output::printLog("start div");
+                                                                                $$ = parser.ruleOP(&castExp($1), &castExp($3), "div");
+                                                                                output::printProductionRule(35);
+                                                                                output::printLog("end div");
+                                                                                }
                 | Exp BINOP_PLUS Exp                                          {
+                                                                                output::printLog("start plus");
                                                                                 $$ = parser.ruleOP(&castExp($1), &castExp($3), "add");
                                                                                 output::printProductionRule(35);
+                                                                                output::printLog("end div");
                                                                                 }
                 | Exp BINOP_MINUS Exp                                          {
-                                                                                if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
-                                                                                    output::errorMismatch(yylineno);
-                                                                                    output::printLog("isNumerical");
-                                                                                    exit(12);
-                                                                                };
-                                                                                $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3)))) ;
-                                                                                codeBuffer.emitOp($$, $1, "sub", $3);
-                                                                                delete $1; delete $3;output::printProductionRule(35);
+                                                                                output::printLog("start minus");
+                                                                                $$ = parser.ruleOP(&castExp($1), &castExp($3), "sub");
+                                                                                output::printProductionRule(35);
+                                                                                output::printLog("end minus");
                                                                                 }
 
                 | ID                                                        {$$ = new Exp_t(symbolTable.getExpByID(castID($1))) ; output::printProductionRule(36);}
                 | Call                                                      {$$ = $1 ; output::printProductionRule(37);}
-                | NUM                                                       {$$ = new Exp_t(Type(E_int));
-                                                                            codeBuffer.emit($$->regName + " = add i32 " + to_string(castNum($1).val) + ", 0");
+                | NUM                                                       {
+                                                                            output::printLog("NUM");
+                                                                            $$ = parser.ruleInitNum(to_string(E_int, castNum($1)));
                                                                             output::printProductionRule(38);}
-                | NUM B                                                     {if(castNum($1).val > 255) {output::errorByteTooLarge(yylineno, castNum($1).val); exit(1); }
-                                                                            $$ = new Exp_t(Type(E_byte));
-                                                                            codeBuffer.emit($$->regName + " = add i32 " + to_string(castNum($1).val) + ", 0");
+                | NUM B                                                     {output::printLog("NUM Byte");
+                                                                            if(castNum($1).val > 255) {output::errorByteTooLarge(yylineno, castNum($1).val); exit(1);}
+                                                                            $$ = parser.ruleInitNum(E_byte,castNum($1)) ;
                                                                             output::printProductionRule(39);}
                 | STRING                                                    {$$ = new Exp_t(Type(E_string)); ; output::printProductionRule(40);}
-                | TRUE                                                      {$$ = new Exp_t(Type(E_bool));
-                                                                            codeBuffer.emit($$->regName + " = i1 true");
+                | TRUE                                                      {
+                                                                            $$ = parser.ruleInitBool(E_bool, true);
                                                                             output::printProductionRule(41);}
                 | FALSE                                                     {$$ = new Exp_t(Type(E_bool));
                                                                             codeBuffer.emit($$->regName + " = i1 false");
