@@ -82,9 +82,9 @@ public:
 
     void ruleAddSymbol(IDtype id, Exp_t exp){
         output::printLog("Add Symbol Rule | id: " + id.id + " | exp: " + exp.regName);
-        symbolTable->assign(id, exp);
         Exp_t newExp(exp.t);
         symbolTable->addSymbol(id, &newExp);
+        symbolTable->assign(id, exp);
         codeBuffer.emit(newExp.regName + " = add i32 0, " + exp.regName);
         codeBuffer.emitStore(&newExp, symbolTable->getCurrentRbp());
     }
