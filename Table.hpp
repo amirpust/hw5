@@ -329,6 +329,10 @@ private:
     bool isId(IDtype _id){
         return findSym(_id) || findFunc(_id) != funcList.funcList.end();
     }
+
+    string getCurrentRbp(){
+        return scopeList.back().rbp;
+    }
 };
 
 #endif //HW3_TABLE_HPP
