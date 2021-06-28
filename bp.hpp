@@ -32,12 +32,20 @@ public:
         emit("declare void @exit(i32)");
     }
     void definePrints(){
+        emit("define void @print(i8*){");
+        emit("call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.str_specifier, i32 0, i32 0), i8* %0)");
+        emit("ret void");
+        emit("}");
 
+        emit("define void @printi(i8*){");
+        emit("call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.str_specifier, i32 0, i32 0), i8* %0)");
+        emit("ret void");
+        emit("}");
     }
 	void defineDivideByZero(){
         emit("DIVIDE_BY_ZERO:");
-        emit("%DIVIDE_BY_ZERO.str = call i32 (i8*, ...) @printf(\"Error division by zero\\n\")");
-        emit("%printf_retval = call i32 (i8*, ...) @printf(\"Error division by zero\\n\")");
+        emit("%DIVIDE_BY_ZERO.str = constant [23 x i8] c\"Error division by zero\\00\"");
+        emit("call void @print(i8* getelementptr([23 x i8], [23 x i8]* %DIVIDE_BY_ZERO.str)");
         emit("@exit(0)");
     }
 
