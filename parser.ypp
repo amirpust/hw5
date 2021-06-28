@@ -171,7 +171,7 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                 | Call                                                      {$$ = $1 ; output::printProductionRule(37);}
                 | NUM                                                       {
                                                                             output::printLog("NUM");
-                                                                            $$ = parser.ruleInitNum(to_string(E_int, castNum($1)));
+                                                                            $$ = parser.ruleInitNum(E_int, castNum($1));
                                                                             output::printProductionRule(38);}
                 | NUM B                                                     {output::printLog("NUM Byte");
                                                                             if(castNum($1).val > 255) {output::errorByteTooLarge(yylineno, castNum($1).val); exit(1);}
@@ -179,7 +179,7 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                             output::printProductionRule(39);}
                 | STRING                                                    {$$ = new Exp_t(Type(E_string)); ; output::printProductionRule(40);}
                 | TRUE                                                      {
-                                                                            $$ = parser.ruleInitBool(E_bool, true);
+                                                                            $$ = parser.ruleInitBool(true);
                                                                             output::printProductionRule(41);}
                 | FALSE                                                     {$$ = new Exp_t(Type(E_bool));
                                                                             codeBuffer.emit($$->regName + " = i1 false");
