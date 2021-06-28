@@ -16,7 +16,7 @@
     #define castExp(toCast) (*(static_cast<Exp_t*>(toCast)))
     #define castExpList(toCast) (*(static_cast<ExpList*>(toCast)))
     #define castNum(toCast) (*(static_cast<Num*>(toCast)))
-    #define codeBuffer (CodeBuffer::instance())
+
 
     int yylex();
     void output::printProductionRule(int ruleno);
@@ -25,9 +25,10 @@
     void yyerror(const char*);
 
     SymbolTable* symbolTablePtr;
-
+    Parser* parserPtr;
     #define symbolTable (*symbolTablePtr)
-
+    #define parser (*parserPtr)
+    #include "parser.hpp"
 
 %}
 
@@ -162,14 +163,8 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                                 delete $1; delete $3; output::printProductionRule(35);}
 
                 | Exp BINOP_PLUS Exp                                          {
-                                                                                if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
-                                                                                    output::errorMismatch(yylineno);
-                                                                                    output::printLog("isNumerical");
-                                                                                    exit(12);
-                                                                                };
-                                                                                $$ = new Exp_t(Type(castExp($1).getDualType(castExp($3)))) ;
-                                                                                codeBuffer.emitOp($$, $1, "add", $3);
-                                                                                delete $1; delete $3;output::printProductionRule(35);
+                                                                                $$ = parser.ruleOP($1, $3, "add");
+                                                                                output::printProductionRule(35);
                                                                                 }
                 | Exp BINOP_MINUS Exp                                          {
                                                                                 if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
@@ -241,6 +236,7 @@ int main(){
     output::init();
     output::printLog("Start");
     symbolTablePtr = new SymbolTable();
+    parserPtr = new Parser();
 
     int res = yyparse();
     symbolTable.gg();
