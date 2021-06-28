@@ -25,10 +25,11 @@
     void yyerror(const char*);
 
     SymbolTable* symbolTablePtr;
-    Parser* parserPtr;
-    #define symbolTable (*symbolTablePtr)
     #define parser (*parserPtr)
     #include "parser.hpp"
+    Parser* parserPtr;
+    #define symbolTable (*symbolTablePtr)
+
 
 %}
 
