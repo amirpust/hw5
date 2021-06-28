@@ -91,8 +91,16 @@ public:
 
     Exp_t* ruleLoadExpById(IDtype id){
         Exp_t* exp = new Exp_t(symbolTable->getExpByID(id));
+        if (exp->offset == -2){
+            return exp;
+        }
         codeBuffer.emitLoad(exp, symbolTable->getCurrentRbp());
         return exp;
+    }
+
+    Exp_t* ruleCallFunc(IDtype funcName, ExpList arguments){
+        Exp_t* retVal = new Exp_t(symbolTable->callFunc(funcName, arguments));
+        return retVal;
     }
 };
 

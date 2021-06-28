@@ -147,6 +147,28 @@ public:
 	    emit("}");
 	}
 
+	void emitCallFunc(Exp_t* retVal, IDtype funcName, ExpList arguments){
+        string llvmTypes = "";
+        string llvmArgs = "";
+
+        for(auto exp: arguments.expList){
+            llvmTypes += getLlvmType(exp.t);
+
+            llvmArgs += getLlvmType(exp.t);
+            llvmArgs += " ";
+            llvmArgs += exp.regName;
+
+                    //exp.regName();
+            if (exp.regName != (arguments.expList.back().regName)){
+                llvmArgs += ", ";
+                llvmTypes += ", ";
+            }
+        }
+
+        //    call i32 (i8*, ...) @printf(i8* %spec_ptr, i32 %0)
+        emit("call " + getLlvmType(retVal->t) + " (" + llvmTypes + ") @" + funcName.id + "(" + llvmArgs+")");
+	}
+
 private:
     string getLlvmType(Type t){
         if (t == E_void)

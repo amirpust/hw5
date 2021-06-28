@@ -99,6 +99,9 @@ public:
             output::errorDef(yylineno, id.id);
             exit(1);
         }
+        for(SymList::iterator sym = args.symList.begin(); sym != args.symList.end(); sym++){
+            (*sym).exp.offset = -2;
+        }
 
         funcList.insert(FuncSymbol(retType, id, args));
 
