@@ -45,7 +45,7 @@ public:
 	void defineDivideByZero(){
         emit("DIVIDE_BY_ZERO:");
         emit("%DIVIDE_BY_ZERO.str = constant [23 x i8] c\"Error division by zero\\00\"");
-        emit("call void @print(i8* getelementptr([23 x i8], [23 x i8]* %DIVIDE_BY_ZERO.str)");
+        emit("call void @print(i8* getelementptr([23 x i8], [23 x i8]* %DIVIDE_BY_ZERO.str, i32 0, i32 0)");
         emit("@exit(0)");
     }
 
