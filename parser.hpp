@@ -11,10 +11,13 @@
 #include "bp.hpp"
 #define codeBuffer (CodeBuffer::instance())
 
-extern symbolTable;
 
 class Parser{
 public:
+    SymbolTable* symbolTable;
+
+    Parser(SymbolTable* symbolTable): symbolTable(symbolTable){};
+
     Exp_t* ruleOP(Exp_t* exp1, Exp_t* exp2, string op){
 
         if(!exp1->isNumerical() || !exp2->isNumerical()){
