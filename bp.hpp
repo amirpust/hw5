@@ -111,6 +111,8 @@ public:
     void emitStore(Exp_t* E, string regToStore, string rbpReg){
         string ptr = getNewRegister("ptr");
         emit(ptr + " = getelementptr i32, i32* " + rbpReg + ", i32 " + to_string(E->offset));
+        //store i32 %init_index, i32* %element_ptr
+        emit("store i32, i32* " + regToStore + ", i32 " + ptr); //TODO: test
 
     }
 
