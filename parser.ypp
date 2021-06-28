@@ -232,6 +232,7 @@ int main(){
     symbolTable.gg();
 
     delete symbolTablePtr;
+    delete parserPtr;
     output::printLog("End");
     output::close();
     codeBuffer.printCodeBuffer();
