@@ -79,6 +79,11 @@ public:
         symbolTable->closeCurrentScope();
         codeBuffer.emitCloseFunc();
     }
+
+    void ruleAddSymbol(IDtype id, Exp_t exp){
+        symbolTable->addSymbol(id, &exp);
+        codeBuffer.emitStore(&exp, exp.regName,symbolTable->getCurrentRbp());
+    }
 };
 
 #endif
