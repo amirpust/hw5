@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5
+# Install script for directory: C:/Users/Amir/Desktop/bachelors/semester 6/Compilation/compi5/hw5
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/jonat/OneDrive/Documents/Comp/HW5/hw5/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/Amir/Desktop/bachelors/semester 6/Compilation/compi5/hw5/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
