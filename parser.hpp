@@ -68,6 +68,8 @@ public:
         codeBuffer.emit(exp->regName + " = add i32 " + to_string(val) + ", 0");
         return exp;
     }
+
+    void ruleOpenFunctionScope()
 };
 
 #endif

@@ -69,7 +69,9 @@ public:
     // open scopes
     void openNewScope(SCOPE_REASON type = REGULAR_SCOPE){
         output::printLog("Start openNewScope | size " + to_string(scopeList.size()));
+        string rbp = scopeList.back().rbp;
         scopeList.emplace_back(offsets.top(), type);
+        scopeList.back().rbp = rbp;
         offsets.push(offsets.top());
         output::printLog("End openNewScope | size " + to_string(scopeList.size()));
     }
@@ -85,7 +87,7 @@ public:
 
         openNewScope( SWITCH_SCOPE);
     }
-    void openFuncScope(IDtype id, SymList args, Type retType) {
+    void openFuncScope(IDtype id, SymList args, Type retType, string rbp) {
         reverse(args.symList.begin(),args.symList.end());
 
         output::printLog("Flag " + id.id);
@@ -99,6 +101,7 @@ public:
         }
 
         funcList.insert(FuncSymbol(retType, id, args));
+
         for(SymList::iterator sym = args.symList.begin(); sym != args.symList.end(); sym++){
             if(findFunc((*sym).id) != funcList.funcList.end()){
                 output::printLog("isId:" + (*sym).getId());
@@ -119,6 +122,7 @@ public:
 
         offsets.push(0);
         scopeList.emplace_back(offsets.top(), FUNC_SCOPE);
+        scopeList.back().rbp = rbp;
     }
 
     // triggers
