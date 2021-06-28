@@ -55,6 +55,12 @@ public:
         codeBuffer.emit(exp->regName + " = add i32 " + to_string(n.val) + ", 0");
         return exp;
     }
+
+    Exp_t* ruleInitBool(bool val){
+        Exp_t* exp =  new Exp_t(E_bool);
+        codeBuffer.emit(exp->regName + " = add i32 " + to_string(val) + ", 0");
+        return exp;
+    }
 };
 
 #endif
