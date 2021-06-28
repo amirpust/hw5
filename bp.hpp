@@ -46,15 +46,18 @@ public:
     }
 	void defineDivideByZero(){
         emit("define void @checkDivideByZero(i32){");
+
         emit("%checkIfZero = icmp eq i32 %0 , 0");
         emit("br i1 %checkIfZero, label %DIVIDE_BY_ZERO, label %DONE");
+        
         emit("DONE:");
         emit("ret void");
 
         emit("DIVIDE_BY_ZERO:");
         emit("call void @print(i8* getelementptr([23 x i8], [23 x i8]* @.DIVIDE_BY_ZERO.str, i32 0, i32 0))");
         emit("call void @exit(i32 0)");
-        
+        emit("ret void");
+
         emit("}");
     }
 
