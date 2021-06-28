@@ -167,7 +167,9 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                                 output::printLog("end minus");
                                                                                 }
 
-                | ID                                                        {$$ = new Exp_t(symbolTable.getExpByID(castID($1))) ; output::printProductionRule(36);}
+                | ID                                                        {
+                                                                                $$ = new Exp_t(symbolTable.getExpByID(castID($1)));
+                                                                                output::printProductionRule(36);}
                 | Call                                                      {$$ = $1 ; output::printProductionRule(37);}
                 | NUM                                                       {
                                                                             output::printLog("NUM");

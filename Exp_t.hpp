@@ -10,14 +10,23 @@
 class Exp_t : public BaseObj{
 public:
     Type t;
+    int offset;
     Exp_t(): t(E_def) {};
-    explicit Exp_t(Type t) : t(t) {};
-    Exp_t(Type t, int i) : t(t) {
+    explicit Exp_t(Type t) : t(t), offset(-1) {};
+    Exp_t(Type t, int i) : t(t), offset(-1)  {
         if ( t == E_byte && i >= (1 << 8)){
             output::errorByteTooLarge(yylineno, i);
             exit(5456);
         }
     };
+
+    Exp_t(Type t, int i, int expOffset) : t(t), offset(expOffset)  {
+        if ( t == E_byte && i >= (1 << 8)){
+            output::errorByteTooLarge(yylineno, i);
+            exit(5456);
+        }
+    };
+
     Exp_t(const Exp_t& c) = default;
 
     bool isBool() const {
