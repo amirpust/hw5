@@ -19,8 +19,6 @@ public:
     Parser(SymbolTable* symbolTable): symbolTable(symbolTable){
         codeBuffer.firstEmit();
 
-
-
         codeBuffer.emit("define i32 @main() {");
     };
     ~Parser(){
