@@ -1,6 +1,6 @@
 %{
     #include <iostream>
-    
+
     #include "hw3_output.hpp"
     #include "Enums.hpp"
     #include "RelopAUX.hpp"
@@ -24,7 +24,9 @@
     void output::errorSyn(int lineno);
     void yyerror(const char*);
 
-    SymbolTable symbolTable;
+    SymbolTable* symbolTablePtr;
+
+    #define symbolTable (*symbolTablePtr)
 
 
 %}
@@ -238,11 +240,12 @@ int main(){
     std::cout << "Main" << endl;
     output::init();
     output::printLog("Start");
-    symbolTable = SymbolTable();
+    symbolTablePtr = new SymbolTable();
 
     int res = yyparse();
     symbolTable.gg();
 
+    delete symbolTablePtr;
     output::printLog("End");
     output::close();
     codeBuffer.printCodeBuffer();
