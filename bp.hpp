@@ -27,7 +27,7 @@ public:
 	};
     void declareExterns(){
         emit("@.intFormat = internal constant [4 x i8] c\"%d\\0A\\00\"");
-        emit("%format_ptr = getelementptr [4 x i8], [4 x i8]* @.intFormat, i32 0, i32 0");
+        emit("@.format_ptr = getelementptr [4 x i8], [4 x i8]* @.intFormat, i32 0, i32 0");
         emit("declare i32 @printf(i8*, …)");
         emit("declare void @exit(i32)");
     }
