@@ -17,11 +17,20 @@ public:
     SymbolTable* symbolTable;
 
     Parser(SymbolTable* symbolTable): symbolTable(symbolTable){
+        codeBuffer.emit("@.intFormat = internal constant [4 x i8] c\"%d\\0A\\00\"");
+        codeBuffer.emit("%format_ptr = getelementptr [4 x i8], [4 x i8]* @.intFormat, i32 0, i32 0");
+
+        codeBuffer.emit("declare i32 @printf(i8*, …)");
+        codeBuffer.emit("declare void @exit(i32)");
+        codeBuffer.emit("DIVIDE_BY_ZERO:");
+        //codeBuffer.emit("%printf_retval = call i32 (i8*, ...) @printf(i8* %format_ptr, i32 ");
+        codeBuffer.emit("%printf_retval = call i32 (i8*, ...) @printf(\"Error division by zero\n\")");
+        codeBuffer.emit("@exit(0)");
+
+
         codeBuffer.emit("define i32 @main() {");
     };
     ~Parser(){
-        codeBuffer.emit("DIVIDE_BY_ZERO:");
-
         codeBuffer.emit("ret i32 0  ");
         codeBuffer.emit("}");
 
