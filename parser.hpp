@@ -17,6 +17,9 @@ public:
     SymbolTable* symbolTable;
 
     Parser(SymbolTable* symbolTable): symbolTable(symbolTable){};
+    ~Parser(){
+        codeBuffer.emit("DIVIDE_BY_ZERO:");
+    }
 
     Exp_t* ruleOP(Exp_t* exp1, Exp_t* exp2, string op){
 
