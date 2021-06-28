@@ -258,16 +258,16 @@ public:
             exit(1);
         }
     }
-    void addSymbol(IDtype id, Exp_t exp){
+    void addSymbol(IDtype id, Exp_t* exp){
         if(isId(id)) {
             output::errorDef(yylineno, id.id);
             exit(-1);
         }
-        output::printLog("add symbol"+ id.id + " " + exp.t.getStr());
+        output::printLog("add symbol"+ id.id + " " + exp->t.getStr());
 
-        scopeList.back().symList.insert(Symbol(id, exp));
+        exp->offset = offsets.top()++;
+        scopeList.back().symList.insert(Symbol(id, *exp));
         output::printLog("add symbol after insert "+ id.id + " " + scopeList.back().symList.symList.back().exp.t.getStr());
-        offsets.top()++;
     }
 
     Type getTypeByID(IDtype _id){
