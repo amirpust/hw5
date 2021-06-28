@@ -1,13 +1,16 @@
 %{
     #include <iostream>
+    std::cout << "Before include" << endl;
     #include "hw3_output.hpp"
     #include "Enums.hpp"
     #include "RelopAUX.hpp"
     #include "Exp_t.hpp"
+    std::cout << "Before Table" << endl;
     #include "Table.hpp"
     #include "BaseObj.hpp"
     #include "Symbol.hpp"
     #include "bp.hpp"
+    std::cout << "After include" << endl;
     #define castType(toCast) (*(static_cast<Type*>(toCast)))
     #define castID(toCast) (*(static_cast<IDtype*>(toCast)))
     #define castSymList(toCast) (*(static_cast<SymList*>(toCast)))
