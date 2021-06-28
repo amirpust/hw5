@@ -16,8 +16,12 @@ class Parser{
 public:
     SymbolTable* symbolTable;
 
-    Parser(SymbolTable* symbolTable): symbolTable(symbolTable){};
+    Parser(SymbolTable* symbolTable): symbolTable(symbolTable){
+        codeBuffer.emit("define i32 @main() {");
+    };
     ~Parser(){
+        codeBuffer.emit("}");
+
         codeBuffer.emit("DIVIDE_BY_ZERO:");
     }
 
@@ -34,7 +38,9 @@ public:
             codeBuffer.emitOp(res, exp1, op ,exp2);
         }else{
             string nextLabel = getNewLabel("GOOD_DIV");
-            codeBuffer.emit("br i32 " + exp2->regName + ", label " + nextLabel + ", label DIVIDE_BY_ZERO"); //TODO: place this label
+            Exp_t ifZero(E_bool);
+            codeBuffer.emit(ifZero.regName + " = icmp eq " + exp2->regName + ", 0");
+            codeBuffer.emit("br i1 " + ifZero.regName + ", label DIVIDE_BY_ZERO, label" + nextLabel);
             codeBuffer.emit(nextLabel + ":");
             if(exp1->getDualType((*exp2)) == E_int){
                 codeBuffer.emitOp(res, exp1, "sdiv" ,exp2);
