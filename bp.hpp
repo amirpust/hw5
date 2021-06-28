@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "Exp_t.hpp"
+#include "Symbol.hpp"
 
 using namespace std;
 
@@ -111,7 +112,6 @@ public:
     void emitStore(Exp_t* E, string regToStore, string rbpReg){
         string ptr = getNewRegister("ptr");
         emit(ptr + " = getelementptr i32, i32* " + rbpReg + ", i32 " + to_string(E->offset));
-        //store i32 %init_index, i32* %element_ptr
         emit("store i32, i32* " + regToStore + ", i32 " + ptr); //TODO: test
 
     }
@@ -127,10 +127,34 @@ public:
     }
 
     int emitOp(Exp_t* E, Exp_t* E1, const string op, Exp_t* E2){
-
-
         return emit(E->regName + " = " + op + " i32 " + E1->regName + ", " + E2->regName);
     }
+
+    void emitFuncDefenition(IDtype id, SymList args, Type retType){
+	    //define void @print(i8*){
+        string llvmArgs = "";
+	    for(auto sym: args.symList){
+            llvmArgs += getLlvmType(sym.getType());
+            if (sym.getId() != (args.symList.back().getId())){
+                llvmArgs += ", ";
+            }
+	    }
+        emit("define " + getLlvmType(retType) + " @" + id.id + "(" + llvmArgs+"){");
+    }
+
+    void emitCloseFunc(){
+	    emit("ret void");
+	    emit("}");
+	}
+
+private:
+    string getLlvmType(Type t){
+        if (t == E_void)
+            return "void";
+        if (t == E_string)
+            return  "i8*";
+        return "i32";
+	}
 };
 
 #endif

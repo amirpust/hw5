@@ -19,11 +19,11 @@ public:
     Parser(SymbolTable* symbolTable): symbolTable(symbolTable){
         codeBuffer.firstEmit();
 
-        codeBuffer.emit("define i32 @main() {");
+        //codeBuffer.emit("define i32 @main() {");
     };
     ~Parser(){
-        codeBuffer.emit("ret i32 0  ");
-        codeBuffer.emit("}");
+        //codeBuffer.emit("ret i32 0  ");
+        //codeBuffer.emit("}");
 
     }
 
@@ -69,7 +69,16 @@ public:
         return exp;
     }
 
-    void ruleOpenFunctionScope()
+    void ruleOpenFunctionScope(IDtype id, SymList args, Type retType){
+        codeBuffer.emitFuncDefenition(id, args, retType);
+        string newRbp = codeBuffer.emitAlloca();
+        symbolTable->openFuncScope(id, args, retType, newRbp);
+    }
+
+    void ruleCloseFunc(){
+        symbolTable->closeCurrentScope();
+        codeBuffer.emitCloseFunc();
+    }
 };
 
 #endif

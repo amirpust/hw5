@@ -79,9 +79,15 @@ Funcs:          /*epsilon*/                                                 {out
                 | FuncDecl Funcs                                            {output::printProductionRule(3);}
 ;
 FuncDecl:       RetType ID LPAREN Formals RPAREN LBRACE
-                                    {symbolTable.openFuncScope(castID($2), castSymList($4), castType($1));}
+                                    {
+                                        parser.ruleOpenFunctionScope(castID($2), castSymList($4), castType($1));
+                                    }
                                     Statements
-                                    {output::printLog("Start: Close func scope") ; symbolTable.closeCurrentScope(); output::printLog("Done: Close func scope") ;}
+                                    {
+                                        output::printLog("Start: Close func scope") ;
+                                        parser.ruleCloseFunc();
+                                        output::printLog("Done: Close func scope") ;
+                                    }
                                     RBRACE                                  {output::printProductionRule(4);}
 ;
 RetType:        Type                                                        {$$ = $1; output::printProductionRule(5);}
