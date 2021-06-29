@@ -4,7 +4,7 @@ int sum(int a, int c){
 
 void main(){
 	int c = 20;
-	int a = sum(c, 4 b);
+	int a = sum(c, 4);
 	byte d = 60 b / 6 b;
 	byte f = 254 b;
 	f = f + d;
