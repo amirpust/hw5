@@ -11,6 +11,10 @@ class Exp_t : public BaseObj{
 public:
     Type t;
     int offset;
+
+    TrueList trueList;
+    FalseList falseList;
+
     Exp_t(): t(E_def) {};
     explicit Exp_t(Type t) : t(t), offset(-1) {};
     Exp_t(Type t, int i) : t(t), offset(-1)  {

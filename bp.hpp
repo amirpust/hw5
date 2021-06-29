@@ -5,12 +5,12 @@
 #include <string>
 #include "Exp_t.hpp"
 #include "Symbol.hpp"
+#include "Enums.hpp"
 
 using namespace std;
 
 //this enum is used to distinguish between the two possible missing labels of a conditional branch in LLVM during backpatching.
 //for an unconditional branch (which contains only a single label) use FIRST.
-enum BranchLabelIndex {FIRST, SECOND};
 
 class CodeBuffer{
 	CodeBuffer();
@@ -208,6 +208,14 @@ public:
         //exp->regName = regPtr;
     }
 
+    //Bool statements
+    int emitUnconditinalJump(string label){
+        return emit("br label %"+ label);
+	}
+
+    void emitConditinalJump(string regToCmpRes, string trueLabel, string falseLabel){
+
+    }
 private:
     string getLlvmType(Type t){
         if (t == E_void)

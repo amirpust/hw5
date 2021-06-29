@@ -9,6 +9,7 @@
 #include "Exp_t.hpp"
 #include "Table.hpp"
 #include "bp.hpp"
+using namespace std;
 #define codeBuffer (CodeBuffer::instance())
 
 
@@ -59,19 +60,12 @@ public:
         return exp;
     }
 
-    Exp_t* ruleInitBool(bool val){
-        Exp_t* exp =  new Exp_t(E_bool);
-        codeBuffer.emit(exp->regName + " = add i32 " + to_string(val) + ", 0");
-        return exp;
-    }
-
     void ruleOpenFunctionScope(IDtype id, SymList args, Type retType){
         codeBuffer.emitFuncDefenition(id, args, retType);
         string newRbp = codeBuffer.emitAlloca();
         output::printLog("ruleOpenFunctionScope - new rbp: " + newRbp);
         symbolTable->openFuncScope(id, args, retType, newRbp);
         output::printLog("ruleOpenFunctionScope - end");
-
     }
 
     void ruleCloseFunc(){
@@ -129,6 +123,31 @@ public:
         Exp_t* exp = new Exp_t(E_string);
         codeBuffer.emitSaveString(exp, newStr);
         return exp;
+    }
+
+    // IF statments
+    String* ruleGenLabel(){
+        String* newLabel = new String(getNewLabel("IF_LABEL"));
+        codeBuffer.emitUnconditinalJump(newLabel->val);
+        codeBuffer.emit(newLabel->val+":");
+        return newLabel;
+    }
+
+    Exp_t* ruleInitBool(bool val){
+        Exp_t* exp =  new Exp_t(E_bool);
+        int address = codeBuffer.emitUnconditinalJump("@");
+        if (val){
+            exp->trueList = codeBuffer.makelist(pair<int, BranchLabelIndex >(address, FIRST));
+        }else{
+            exp->falseList = codeBuffer.makelist(pair<int, BranchLabelIndex >(address, SECOND));
+        }
+
+        return exp;
+    }
+
+    void ruleIf(Exp_t exp, String trueS, String falseS){
+        codeBuffer.bpatch(exp.trueList, trueS.val);
+        codeBuffer.bpatch(exp.falseList, falseS.val);
     }
 };
 

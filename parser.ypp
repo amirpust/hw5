@@ -118,9 +118,13 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                 | Call SC                                                   {output::printProductionRule(18);}
                 | RETURN SC                                                 {parser.ruleReturn(Exp_t(E_void)) ; output::printProductionRule(19);}
                 | RETURN Exp SC                                             {parser.ruleReturn(castExp($2)) ; delete $2 ; output::printProductionRule(20);}
-                | IF LPAREN BOOLEXP STARTSCOPE RPAREN Statement {symbolTable.closeCurrentScope();}
-                | IF LPAREN BOOLEXP STARTSCOPE RPAREN Statement ELSE {symbolTable.closeCurrentScope();} STARTSCOPE Statement {symbolTable.closeCurrentScope();}
-                | WHILE LPAREN BOOLEXP RPAREN {symbolTable.openLoopScope();} Statement {symbolTable.closeCurrentScope();}
+                | IF LPAREN BOOLEXP GENLABEL STARTSCOPE RPAREN Statement GENLABEL    
+                {
+                    parser.ruleIf(castExp($3), castString($4),  castString($8));
+                    symbolTable.closeCurrentScope();
+                }
+                | IF LPAREN BOOLEXP STARTSCOPE RPAREN Statement ELSE        {symbolTable.closeCurrentScope();} STARTSCOPE Statement {symbolTable.closeCurrentScope();}
+                | WHILE LPAREN BOOLEXP RPAREN                               {symbolTable.openLoopScope();} Statement {symbolTable.closeCurrentScope();}
                 | BREAK SC                                                  {symbolTable.triggerBreak(); output::printProductionRule(24);}
                 | CONTINUE SC                                               {symbolTable.triggerContinue(); output::printProductionRule(25);}
                 | SWITCH LPAREN Exp RPAREN
@@ -129,6 +133,8 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                             {symbolTable.closeCurrentScope();}
                                                                             {output::printProductionRule(26);}
 ;
+
+GENLABEL:       /*epsilon*/                                                 {$$ = parser.ruleGenLabel();}
 
 BOOLEXP:        Exp                                                         {if (castExp($1).t != Type(E_bool)) {output::errorMismatch(yylineno); output::printLog("BOOLEXP"); exit(1);} $$ = $1;}
 
@@ -187,7 +193,6 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                             $$ = parser.ruleInitBool(true);
                                                                             output::printProductionRule(41);}
                 | FALSE                                                     {$$ = new Exp_t(Type(E_bool));
-                                                                            codeBuffer.emit($$->regName + " = i1 false");
                                                                             output::printProductionRule(42);}
                 | Exp AND Exp                                               {if (castExp($1).t != Type(E_bool) || castExp($3).t != Type(E_bool)) {output::errorMismatch(yylineno); exit(1);} ; $$ = new Exp_t(Type(E_bool)); delete $1; delete $3;output::printProductionRule(44);}
                 | Exp OR Exp                                                {if (castExp($1).t != Type(E_bool) || castExp($3).t != Type(E_bool)) {output::errorMismatch(yylineno); exit(1);} ; $$ = new Exp_t(Type(E_bool));delete $1; delete $3; output::printProductionRule(45);}

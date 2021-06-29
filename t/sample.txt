@@ -3,15 +3,9 @@ int sum(int a, int c){
 }
 
 void main(){
-	int c = 20;
-	int a = sum(c, 4 b);
-	printi(a);
-	byte d = 60 b / 6 b;
-	byte f = 254 b;
-	f = f + d;
-	printi(f);
-    f = 254;
-    int j = f + a;
+	if (true) {
+	    print("TRUUUUUUUU");
+	}
 
     printi(100);
     printi(j);

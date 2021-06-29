@@ -2,6 +2,7 @@
 #define HW3_ENUMS_HPP
 
 #include <string>
+#include <vector>
 
 extern int yylineno;
 using namespace std;
@@ -46,4 +47,7 @@ string getNewRegister(string reg = "reg");
 string getNewGlobalRegister(string str = "glob");
 string getNewLabel(string label = "Label");
 
+enum BranchLabelIndex {FIRST, SECOND};
+typedef vector<pair<int,BranchLabelIndex>> TrueList;
+typedef vector<pair<int,BranchLabelIndex>> FalseList;
 #endif //HW3_ENUMS_HPP

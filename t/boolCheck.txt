@@ -1,0 +1,4 @@
+void main(){
+	bool check = (true or false) and ( 7 <= 9 );
+	print("yay");
+}
