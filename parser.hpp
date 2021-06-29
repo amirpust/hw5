@@ -57,6 +57,9 @@ public:
             output::errorByteTooLarge(yylineno, n.val);
             exit(1);
         }
+        if (n.val < 1 << 8){
+            t = E_byte;
+        }
         Exp_t* exp =  new Exp_t(Type(t));
 
         codeBuffer.emit(exp->regName + " = add i32 " + to_string(n.val) + ", 0");
