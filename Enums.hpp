@@ -52,4 +52,5 @@ string getNewLabel(string label = "Label");
 enum BranchLabelIndex {FIRST, SECOND};
 typedef vector<pair<int,BranchLabelIndex>> TrueList;
 typedef vector<pair<int,BranchLabelIndex>> FalseList;
+typedef vector<pair<int,BranchLabelIndex>> NextList;
 #endif //HW3_ENUMS_HPP

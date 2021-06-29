@@ -14,6 +14,7 @@ public:
 
     TrueList trueList;
     FalseList falseList;
+    NextList nextList;
 
     Exp_t(): t(E_def) {};
     explicit Exp_t(Type t) : t(t), offset(-1) {};

@@ -149,12 +149,23 @@ public:
         codeBuffer.bpatch(exp.trueList, trueS.val);
         String* nextLabel = ruleGenLabel();
         codeBuffer.bpatch(exp.falseList, nextLabel->val);
+        codeBuffer.bpatch(exp.nextList, nextLabel->val);
         delete nextLabel;
     }
 
     void ruleIf(Exp_t exp, String trueS, String falseS){
         codeBuffer.bpatch(exp.trueList, trueS.val);
         codeBuffer.bpatch(exp.falseList, falseS.val);
+
+        String* nextLabel = ruleGenLabel();
+        codeBuffer.bpatch(exp.nextList, nextLabel->val);
+        delete nextLabel;
+    }
+
+    void ruleGenNextLabel(Exp_t* parent){
+        int address = codeBuffer.emitUnconditinalJump("@");
+        NextList nl = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, FIRST));
+        parent->nextList = codeBuffer.merge(nl, parent->nextList);
     }
 
     void ruleLogicalAnd(Exp_t* parent, Exp_t E1, Exp_t E2, String label){
