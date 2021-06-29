@@ -4,7 +4,6 @@
 #include "Enums.hpp"
 #include "Exp_t.hpp"
 
-string llvmRelop[] = {"sgt", "slt" ,"sge" , "sle", "eq", "ne"};
 
 class RelopAUX : public BaseObj{
 public:
@@ -32,6 +31,7 @@ public:
         }
     };
     string getLLVMRelop(){
+        static string llvmRelop[] = {"sgt", "slt" ,"sge" , "sle", "eq", "ne"};
         return llvmRelop[(int)(op)];
     }
 };
