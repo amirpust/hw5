@@ -135,7 +135,7 @@ public:
 
     Exp_t* ruleInitBool(bool val){
         Exp_t* exp =  new Exp_t(E_bool);
-        int address = codeBuffer.emitUnconditinalJump("@");
+        int address = codeBuffer.emit("br label @");
         if (val){
             exp->trueList = codeBuffer.makelist(pair<int, BranchLabelIndex >(address, FIRST));
         }else{
