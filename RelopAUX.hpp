@@ -6,7 +6,7 @@
 
 string llvmRelop[] = {"sgt", "slt" ,"sge" , "sle", "eq", "ne"};
 
-class RelopAUX{
+class RelopAUX : public BaseObj{
 public:
     RELOP_ENUM op;
 
