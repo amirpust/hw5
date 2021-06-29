@@ -179,6 +179,17 @@ public:
         emit("call " + getLlvmType(retVal->t) + " @" + funcName.id + "(" + llvmArgs+")");
 	}
 
+	void emitReturn(Exp_t* retType){
+	    if(retType->t.t == E_void){
+	        emit("ret void");
+
+	    }else{
+
+	        emit("ret " + getLlvmType(retType->t.t) + " " + retType->regName);
+	    }
+        emit("}");
+	}
+
 private:
     string getLlvmType(Type t){
         if (t == E_void)
