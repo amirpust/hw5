@@ -147,8 +147,9 @@ public:
 
     void ruleIf(Exp_t exp, String trueS){
         codeBuffer.bpatch(exp.trueList, trueS.val);
-        string nextLabel = codeBuffer.genLabel();
-        codeBuffer.bpatch(exp.falseList, nextLabel);
+        String* nextLabel = ruleGenLabel();
+        codeBuffer.bpatch(exp.falseList, nextLabel->val);
+        delete nextLabel;
     }
 
     void ruleIf(Exp_t exp, String trueS, String falseS){
