@@ -107,6 +107,9 @@ public:
             output::printLog(arg.regName + ": " + to_string(arg.offset));
         }
         reverse(arguments.expList.begin(), arguments.expList.end());
+        for (auto arg : arguments.expList){
+            output::printLog(arg.regName + ": " + to_string(arg.offset));
+        }
         codeBuffer.emitCallFunc(retVal, funcName, arguments);
         return retVal;
     }
