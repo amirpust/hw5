@@ -145,6 +145,10 @@ public:
         return exp;
     }
 
+    void ruleIf(Exp_t exp, String trueS){
+        codeBuffer.bpatch(exp.trueList, trueS.val);
+    }
+
     void ruleIf(Exp_t exp, String trueS, String falseS){
         codeBuffer.bpatch(exp.trueList, trueS.val);
         codeBuffer.bpatch(exp.falseList, falseS.val);

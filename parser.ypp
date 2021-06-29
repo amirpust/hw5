@@ -120,7 +120,7 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                 | RETURN Exp SC                                             {parser.ruleReturn(castExp($2)) ; delete $2 ; output::printProductionRule(20);}
                 | IF LPAREN BOOLEXP STARTSCOPE RPAREN GENLABEL Statement    
                 {
-                    parser.ruleIf(castExp($3), castString($6), NULL);
+                    parser.ruleIf(castExp($3), castString($6));
                     symbolTable.closeCurrentScope();
                 }
                 | IF LPAREN BOOLEXP STARTSCOPE RPAREN
