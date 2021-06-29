@@ -33,7 +33,7 @@ void main(){
         print("F");
     }
 
-    if (!true) {
+    if (!(true)) {
         print("F");
     } else {
         print("T6");
