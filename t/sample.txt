@@ -21,7 +21,7 @@ void main(){
         print("T3");
     }
 
-    if (-1254612 < 5 b) {
+    if ( -1254612 < 5 ) {
         print("T4");
     } else {
         print("F");
