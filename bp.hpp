@@ -192,6 +192,12 @@ public:
 	    }
 	}
 
+	void emitSaveString(Exp_t* exp, String str){
+	    //"@.DIVIDE_BY_ZERO.str = internal constant [23 x i8] c\"Error division by zero\\00\""
+	    exp->regName = getNewRegister("@.string");
+	    emitGlobal(exp->regName + " = internal constant [" + to_string(str.val.size()) + "x i8] c" + str.val);
+	}
+
 private:
     string getLlvmType(Type t){
         if (t == E_void)

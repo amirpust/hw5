@@ -126,7 +126,9 @@ public:
 
     Exp_t* ruleInitString(String newStr){
         output::printLog(newStr.val);
-        return new Exp_t(E_string);
+        Exp_t* exp = new Exp_t(E_string);
+        codeBuffer.emitSaveString(exp, newStr);
+        return exp;
     }
 };
 

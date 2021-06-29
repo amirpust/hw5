@@ -15,7 +15,7 @@ void main(){
 
     printi(100);
     printi(j);
-    //print("yay");
+    print("yay");
 
     //Comment
 
