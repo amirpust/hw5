@@ -102,6 +102,10 @@ public:
 
     Exp_t* ruleCallFunc(IDtype funcName, ExpList arguments){
         Exp_t* retVal = new Exp_t(symbolTable->callFunc(funcName, arguments));
+        output::printLog("ruleCallFunc " + funcName.id);
+        for (auto arg : arguments.expList){
+            output::printLog(arg.regName + ": " + to_string(arg.offset));
+        }
         reverse(arguments.expList.begin(), arguments.expList.end());
         codeBuffer.emitCallFunc(retVal, funcName, arguments);
         return retVal;
