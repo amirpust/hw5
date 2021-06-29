@@ -8,6 +8,11 @@ string getNewRegister(string str){
     return "%" + str + to_string(nextRegister++);
 }
 
+string getNewGlobalRegister(string str){
+    static int nextRegister = 0;
+    return "@." + str + to_string(nextRegister++);
+}
+
 string getNewLabel(string label){
     static int nextLabel = 0;
     return label + to_string(nextLabel++);

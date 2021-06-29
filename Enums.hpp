@@ -43,6 +43,7 @@ enum SCOPE_REASON{
 
 
 string getNewRegister(string reg = "reg");
+string getNewGlobalRegister(string str = "glob");
 string getNewLabel(string label = "Label");
 
 #endif //HW3_ENUMS_HPP
