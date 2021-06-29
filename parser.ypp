@@ -107,9 +107,9 @@ Statements:     Statement                                                   {out
 Statement:      LBRACE {symbolTable.openNewScope(); }
                         Statements
                         RBRACE {symbolTable.closeCurrentScope();}           {output::printProductionRule(14);}
-                | Type ID SC                                                {parser.ruleAddSymbol(castID($2), Exp_t(castType($1))); ; output::printProductionRule(15);}
+                | Type ID SC                                                {parser.ruleAddSymbol(castType($1), castID($2), Exp_t(castType($1))); ; output::printProductionRule(15);}
                 | Type ID ASSIGN Exp SC                                     {
-                                                                                parser.ruleAddSymbol(castID($2), castExp($4));
+                                                                                parser.ruleAddSymbol(castType($1), castID($2), castExp($4));
                                                                                 output::printProductionRule(16);
                                                                             }
                 | ID ASSIGN Exp SC                                          {

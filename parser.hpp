@@ -81,9 +81,9 @@ public:
         codeBuffer.emitCloseFunc();
     }
 
-    void ruleAddSymbol(IDtype id, Exp_t exp){
+    void ruleAddSymbol(Type t, IDtype id, Exp_t exp){
         output::printLog("Add Symbol Rule | id: " + id.id + " | exp: " + exp.regName);
-        Exp_t newExp(exp.t);
+        Exp_t newExp(t);
         symbolTable->addSymbol(id, &newExp);
         symbolTable->assign(id, exp);
         codeBuffer.emitAssign(&newExp, &exp, symbolTable->getCurrentRbp());
