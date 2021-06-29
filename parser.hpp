@@ -162,6 +162,16 @@ public:
         delete nextLabel;
     }
 
+    void ruleWhile(Exp_t exp, String expS, String trueS){
+        codeBuffer.emitUnconditinalJump(expS.val);
+        String* nextLabel = ruleGenLabel("NEXT_LABEL");
+
+        codeBuffer.bpatch(exp.trueList, trueS.val);
+        codeBuffer.bpatch(exp.falseList, nextLabel->val);
+        codeBuffer.bpatch(exp.nextList, nextLabel->val);
+        delete nextLabel;
+    }
+
     void ruleGenNextLabel(Exp_t* parent){
         int address = codeBuffer.emitUnconditinalJump("@");
         NextList nl = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, FIRST));

@@ -133,12 +133,12 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                         delete $3; delete $6; delete $11; 
                         symbolTable.closeCurrentScope();
                     }
-                | WHILE LPAREN BOOLEXP RPAREN GENLABEL
+                | WHILE LPAREN GENLABEL BOOLEXP RPAREN GENLABEL
                     {symbolTable.openLoopScope();}
                     Statement
                     {
-                        parser.ruleIf(castExp($3), castString($5));
-                        delete $3; delete $5; 
+                        parser.ruleWhile(castExp($4), castString($3), castString($6));
+                        delete $3; delete $4; delete $6; 
                         symbolTable.closeCurrentScope();
                     }
                 | BREAK SC                                                  {symbolTable.triggerBreak(); output::printProductionRule(24);}
