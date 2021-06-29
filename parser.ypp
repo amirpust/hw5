@@ -242,8 +242,9 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                                     exit(12);
                                                                                 }
                                                                                 $$ = new Exp_t(Type(E_bool));
-                                                                                parser.ruleRelop(&castExp($$), castExp($1), castExp($3));
+                                                                                parser.ruleRelop(&castExp($$), castExp($1), castExp($3), castRelopAUX($2));
                                                                                 delete $1;
+                                                                                delete $2;
                                                                                 delete $3;
                                                                             };
 ;

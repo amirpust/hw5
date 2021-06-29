@@ -174,7 +174,10 @@ public:
     }
 
     void ruleRelop(Exp_t* parent, Exp_t exp1, Exp_t exp2, RelopAUX op){
-
+        codeBuffer.emitRelop(parent, exp1, exp2, op);
+        int address = codeBuffer.emitConditinalJump(parent->regName, "@", "@");
+        parent->trueList = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, FIRST));
+        parent->falseList = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, SECOND));
     }
 };
 
