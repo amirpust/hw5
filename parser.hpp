@@ -7,6 +7,7 @@
 #include "Enums.hpp"
 #include "RelopAUX.hpp"
 #include "Exp_t.hpp"
+#include "Statement.hpp"
 #include "Table.hpp"
 #include "bp.hpp"
 using namespace std;
@@ -162,13 +163,15 @@ public:
         delete nextLabel;
     }
 
-    void ruleWhile(Exp_t exp, String expS, String trueS){
+    void ruleWhile(Exp_t exp, String expS, String trueS, Statement statement){
         codeBuffer.emitUnconditinalJump(expS.val);
         String* nextLabel = ruleGenLabel("NEXT_LABEL");
 
         codeBuffer.bpatch(exp.trueList, trueS.val);
         codeBuffer.bpatch(exp.falseList, nextLabel->val);
         codeBuffer.bpatch(exp.nextList, nextLabel->val);
+        codeBuffer.bpatch(statement.breakList, nextLabel->val);
+        codeBuffer.bpatch(statement.contList, expS.val);
         delete nextLabel;
     }
 
@@ -199,6 +202,23 @@ public:
         int address = codeBuffer.emitConditinalJump(parent->regName, "@", "@");
         parent->trueList = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, FIRST));
         parent->falseList = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, SECOND));
+    }
+
+
+    //Statements
+    void mergeStatement(Statement* parent, Statement s){
+        parent->contList = codeBuffer.merge(parent->contList, s.contList);
+        parent->breakList = codeBuffer.merge(parent->breakList, s.breakList);
+    }
+
+    void placeBreak(Statement* parent){
+        int address = codeBuffer.emitUnconditinalJump("@");
+        parent->breakList = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, FIRST));
+    }
+
+    void placeCont(Statement* parent){
+        int address = codeBuffer.emitUnconditinalJump("@");
+        parent->contList = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, FIRST));
     }
 };
 

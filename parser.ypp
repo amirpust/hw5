@@ -8,6 +8,7 @@
     #include "Table.hpp"
     #include "BaseObj.hpp"
     #include "Symbol.hpp"
+    #include "Statement.hpp"
     #include "bp.hpp"
     #define castType(toCast) (*(static_cast<Type*>(toCast)))
     #define castID(toCast) (*(static_cast<IDtype*>(toCast)))
@@ -18,7 +19,7 @@
     #define castNum(toCast) (*(static_cast<Num*>(toCast)))
     #define castString(toCast) (*(static_cast<String*>(toCast)))
     #define castRelopAUX(toCast) (*(static_cast<RelopAUX*>(toCast)))
-
+    #define castStatement(toCast) (*(static_cast<Statement*>(toCast)))
 
 
     int yylex();
@@ -102,47 +103,85 @@ FormalsList:    FormalDecl                                                  {out
 ;
 FormalDecl:     Type ID                                                     {$$ = new Symbol(castID($2), castType($1)) ; delete $1; delete $2;output::printProductionRule(11);}
 ;
-Statements:     Statement                                                   {output::printProductionRule(12);}
-                |Statements Statement                                       {output::printProductionRule(13);}
+Statements:     Statement                                                   {
+                                                                                $$ = new Statement(); 
+                                                                                parser.mergeStatement(&castStatement($$), castStatement($1));
+                                                                                delete $1;
+                                                                                output::printProductionRule(12);
+                                                                            }
+                |Statements Statement                                       {
+                                                                                $$ = new Statement(); 
+                                                                                parser.mergeStatement(&castStatement($$), castStatement($1));
+                                                                                parser.mergeStatement(&castStatement($$), castStatement($2));
+                                                                                delete $1; delete $2;
+                                                                                output::printProductionRule(13);
+                                                                            }
 ;
 Statement:      LBRACE {symbolTable.openNewScope(); }
                         Statements
-                        RBRACE {symbolTable.closeCurrentScope();}           {output::printProductionRule(14);}
-                | Type ID SC                                                {parser.ruleAddSymbol(castType($1), castID($2), Exp_t(castType($1))); ; output::printProductionRule(15);}
+                        RBRACE {symbolTable.closeCurrentScope();}           {
+                                                                                $$ = new Statement(); 
+                                                                                parser.mergeStatement(&castStatement($$), castStatement($3));
+                                                                                delete $3;
+                                                                                output::printProductionRule(14);
+                                                                            }
+                | Type ID SC                                                {
+                                                                                $$ = new Statement(); 
+                                                                                parser.ruleAddSymbol(castType($1), castID($2), Exp_t(castType($1))); 
+                                                                                output::printProductionRule(15);
+                                                                            }
                 | Type ID ASSIGN Exp SC                                     {
+                                                                                $$ = new Statement(); 
                                                                                 parser.ruleAddSymbol(castType($1), castID($2), castExp($4));
                                                                                 output::printProductionRule(16);
                                                                             }
                 | ID ASSIGN Exp SC                                          {
-                                                                            parser.ruleAssign(castID($1), castExp($3));
-                                                                            output::printProductionRule(17);
+                                                                                $$ = new Statement();
+                                                                                parser.ruleAssign(castID($1), castExp($3));
+                                                                                output::printProductionRule(17);
                                                                             }
-                | Call SC                                                   {output::printProductionRule(18);}
-                | RETURN SC                                                 {parser.ruleReturn(Exp_t(E_void)) ; output::printProductionRule(19);}
-                | RETURN Exp SC                                             {parser.ruleReturn(castExp($2)) ; delete $2 ; output::printProductionRule(20);}
+                | Call SC                                                   {$$ = new Statement(); output::printProductionRule(18);}
+                | RETURN SC                                                 {$$ = new Statement(); parser.ruleReturn(Exp_t(E_void)) ; output::printProductionRule(19);}
+                | RETURN Exp SC                                             {$$ = new Statement(); parser.ruleReturn(castExp($2)) ; delete $2 ; output::printProductionRule(20);}
                 | IF LPAREN BOOLEXP STARTSCOPE RPAREN GENLABEL Statement    
                 {
+                    $$ = new Statement();
+                    parser.mergeStatement(&castStatement($$), castStatement($7));
                     parser.ruleIf(castExp($3), castString($6));
                     symbolTable.closeCurrentScope();
+                    delete $7;
                 }
                 | IF LPAREN BOOLEXP STARTSCOPE RPAREN
                 GENLABEL Statement ELSE {parser.ruleGenNextLabel(&castExp($3)); symbolTable.closeCurrentScope();}
                 STARTSCOPE GENLABEL Statement 
                     {
+                        $$ = new Statement();
+                        parser.mergeStatement(&castStatement($$), castStatement($7));
+                        parser.mergeStatement(&castStatement($$), castStatement($12));
                         parser.ruleIf(castExp($3), castString($6), castString($11));
-                        delete $3; delete $6; delete $11; 
+                        delete $3; delete $6;  delete $7;  delete $11; delete $12; 
                         symbolTable.closeCurrentScope();
                     }
                 | WHILE LPAREN GENLABEL BOOLEXP RPAREN GENLABEL
                     {symbolTable.openLoopScope();}
                     Statement
                     {
-                        parser.ruleWhile(castExp($4), castString($3), castString($6));
-                        delete $3; delete $4; delete $6; 
+                        parser.ruleWhile(castExp($4), castString($3), castString($6),castStatement($8));
+                        delete $3; delete $4; delete $6;  delete $8; 
                         symbolTable.closeCurrentScope();
                     }
-                | BREAK SC                                                  {symbolTable.triggerBreak(); output::printProductionRule(24);}
-                | CONTINUE SC                                               {symbolTable.triggerContinue(); output::printProductionRule(25);}
+                | BREAK SC                                                  {
+                                                                                symbolTable.triggerBreak(); 
+                                                                                $$ = new Statement();
+                                                                                parser.placeBreak(&castStatement($$));
+                                                                                output::printProductionRule(24);
+                                                                            }
+                | CONTINUE SC                                               {   
+                                                                                symbolTable.triggerContinue(); 
+                                                                                $$ = new Statement();
+                                                                                parser.placeCont(&castStatement($$));
+                                                                                output::printProductionRule(25);
+                                                                            }
                 | SWITCH LPAREN Exp RPAREN
                             {symbolTable.openSwitchScope(castExp($3));}
                             LBRACE CaseList RBRACE
