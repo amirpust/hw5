@@ -126,9 +126,7 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                     symbolTable.closeCurrentScope();
                 }
                 | IF LPAREN BOOLEXP STARTSCOPE RPAREN
-                GENLABEL Statement {
-                    parser.ruleGenNextLabel(&castExp($3));
-                } ELSE {symbolTable.closeCurrentScope();}
+                GENLABEL Statement ELSE {symbolTable.closeCurrentScope();}
                 STARTSCOPE GENLABEL Statement 
                 {
                     parser.ruleIf(castExp($3), castString($6), castString($11));
