@@ -42,6 +42,7 @@ public:
 class String: public BaseObj{
 public:
     string val;
+    int address;
     String(string val);
 };
 

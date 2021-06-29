@@ -126,10 +126,10 @@ public:
     }
 
     // IF statments
-    String* ruleGenLabel(){
-        String* newLabel = new String(getNewLabel("IF_LABEL"));
+    String* ruleGenLabel(string prefix = "IF_LABEL"){
+        String* newLabel = new String(getNewLabel(prefix));
         codeBuffer.emitUnconditinalJump(newLabel->val);
-        codeBuffer.emit(newLabel->val+":");
+        newLabel->address = codeBuffer.emit(newLabel->val+":");
         return newLabel;
     }
 
@@ -147,7 +147,7 @@ public:
 
     void ruleIf(Exp_t exp, String trueS){
         codeBuffer.bpatch(exp.trueList, trueS.val);
-        String* nextLabel = ruleGenLabel();
+        String* nextLabel = ruleGenLabel("NEXT_LABEL");
         codeBuffer.bpatch(exp.falseList, nextLabel->val);
         codeBuffer.bpatch(exp.nextList, nextLabel->val);
         delete nextLabel;
@@ -157,7 +157,7 @@ public:
         codeBuffer.bpatch(exp.trueList, trueS.val);
         codeBuffer.bpatch(exp.falseList, falseS.val);
 
-        String* nextLabel = ruleGenLabel();
+        String* nextLabel = ruleGenLabel("NEXT_LABEL");
         codeBuffer.bpatch(exp.nextList, nextLabel->val);
         delete nextLabel;
     }

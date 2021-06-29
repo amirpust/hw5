@@ -128,11 +128,19 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                 | IF LPAREN BOOLEXP STARTSCOPE RPAREN
                 GENLABEL Statement ELSE {parser.ruleGenNextLabel(&castExp($3)); symbolTable.closeCurrentScope();}
                 STARTSCOPE GENLABEL Statement 
-                {
-                    parser.ruleIf(castExp($3), castString($6), castString($11));
-                    symbolTable.closeCurrentScope();
-                }
-                | WHILE LPAREN BOOLEXP RPAREN                               {symbolTable.openLoopScope();} Statement {symbolTable.closeCurrentScope();}
+                    {
+                        parser.ruleIf(castExp($3), castString($6), castString($11));
+                        delete $3; delete $6; delete $11; 
+                        symbolTable.closeCurrentScope();
+                    }
+                | WHILE LPAREN BOOLEXP RPAREN GENLABEL
+                    {symbolTable.openLoopScope();}
+                    Statement
+                    {
+                        parser.ruleIf(castExp($3), castString($5));
+                        delete $3; delete $5; 
+                        symbolTable.closeCurrentScope();
+                    }
                 | BREAK SC                                                  {symbolTable.triggerBreak(); output::printProductionRule(24);}
                 | CONTINUE SC                                               {symbolTable.triggerContinue(); output::printProductionRule(25);}
                 | SWITCH LPAREN Exp RPAREN
