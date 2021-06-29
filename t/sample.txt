@@ -1,14 +1,16 @@
 void main(){
 	int c = 2;
 	int a = c + 4;
-	int d = 12 / a;
+	byte d = 60 / a;
+	byte f = 254;
+	f = f + d;
+
 
     printi(100);
-    printi(d);
+    printi(f);
     //print("yay");
 
     //Comment
 
-	int f = 5 / 0;
 	return;
 }

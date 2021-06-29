@@ -126,8 +126,15 @@ public:
         return newReg;
     }
 
-    int emitOp(Exp_t* E, Exp_t* E1, const string op, Exp_t* E2){
-        return emit(E->regName + " = " + op + " i32 " + E1->regName + ", " + E2->regName);
+    void emitOp(Exp_t* E, Exp_t* E1, const string op, Exp_t* E2){
+        emit(E->regName + " = " + op + " i32 " + E1->regName + ", " + E2->regName);
+        if (E->t == E_byte ||E->t == E_bool ){
+            string newReg = getNewRegister();
+            // and i32 4, %var
+            emit(newReg + " = and i32 255, " + E->regName);
+            E->regName = newReg;
+        }
+
     }
 
     void emitFuncDefenition(IDtype id, SymList args, Type retType){
