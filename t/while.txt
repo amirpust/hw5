@@ -1,6 +1,12 @@
 void main(){
     int i = 5;
     while ( i <= 25) {
+        if ( 10 <= i and i < 15 )
+            continue
+
+        if ( i == 20 )
+            break
+
         printi(i);
         i = i + 1;
     }
