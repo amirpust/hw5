@@ -1,5 +1,5 @@
 int sum(int a, byte c){
-    return a + c;
+    return 0;
 }
 
 void main(){

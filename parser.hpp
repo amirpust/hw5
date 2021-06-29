@@ -70,6 +70,8 @@ public:
         string newRbp = codeBuffer.emitAlloca();
         output::printLog("ruleOpenFunctionScope - new rbp: " + newRbp);
         symbolTable->openFuncScope(id, args, retType, newRbp);
+        output::printLog("ruleOpenFunctionScope - end");
+
     }
 
     void ruleCloseFunc(){
