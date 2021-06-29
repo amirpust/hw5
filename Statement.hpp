@@ -16,6 +16,6 @@ class Statement : public BaseObj {
 public:
     ContList contList;
     BreakList breakList;
-}
+};
 
 #endif //HW5_STATEMENT_HPP
