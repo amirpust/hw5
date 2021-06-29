@@ -127,6 +127,7 @@ public:
     }
 
     void emitOp(Exp_t* E, Exp_t* E1, const string op, Exp_t* E2){
+	    output::printLog("emitOP: reg " + E->regName + " type" + E->t.getStr());
         emit(E->regName + " = " + op + " i32 " + E1->regName + ", " + E2->regName);
         if (E->t == E_byte ||E->t == E_bool ){
             string newReg = getNewRegister();
