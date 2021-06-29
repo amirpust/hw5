@@ -21,7 +21,7 @@ void main(){
         print("T3");
     }
 
-    if ( 2 b < 5 ) {
+    if ( 2 b < 5 ) { // // -5 -> syntax error
         print("T4");
     } else {
         print("F");
@@ -33,7 +33,7 @@ void main(){
         print("F");
     }
 
-    if (!(true)) {
+    if (not true) {  //!true - lexical error
         print("F");
     } else {
         print("T6");
