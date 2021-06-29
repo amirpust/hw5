@@ -4,19 +4,42 @@ int sum(int a, int c){
 
 void main(){
 	if (3 >= 0) {
-	    print("TRUUUUUUUU");
+	    print("T1");
+	} else {
+        print("F");
 	}
 
-    if (4 < 2) {
-        print("FALSEEEE");
+	if (4 < 2) {
+        print("F");
+    } else {
+         print("T2");
     }
 
-    if ( true or (1/0 >= 6) ){
-        print("Go home you're drunk");
+    if (1 < 0 b) {
+        print("F");
+    } else {
+        print("T3");
     }
 
-    printi(100);
-    print("yay");
+    if (-1254612 < 5 b) {
+        print("T4");
+    } else {
+        print("F");
+    }
+
+    if (0 == 0 or (1 > 1/0)) {
+        print("T5");
+    } else {
+        print("F");
+    }
+
+    if (!true) {
+        print("F");
+    } else {
+        print("T6");
+    }
+
+
 
     //Comment
 
