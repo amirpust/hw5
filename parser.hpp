@@ -92,8 +92,8 @@ public:
 
     Exp_t* ruleLoadExpById(IDtype id){
         Exp_t* exp = new Exp_t(symbolTable->getExpByID(id));
-        if (exp->offset <= 0){
-            exp->regName = "%" + to_string((-1)*exp->offset);
+        if (exp->offset < 0){
+            exp->regName = "%" + to_string(((-1)*exp->offset) - 1);
             return exp;
         }
         codeBuffer.emitLoad(exp, symbolTable->getCurrentRbp());

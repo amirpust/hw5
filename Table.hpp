@@ -99,7 +99,7 @@ public:
             output::errorDef(yylineno, id.id);
             exit(1);
         }
-        int offsetI = 0;
+        int offsetI = -1;
         for(SymList::iterator sym = args.symList.begin(); sym != args.symList.end(); sym++){
             (*sym).exp.offset = offsetI--;
         }
