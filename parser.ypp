@@ -206,11 +206,14 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                     delete $1; delete $3; delete $4;output::printProductionRule(44);
                 }
                 | Exp OR GENLABEL Exp
-                {if (castExp($1).t != Type(E_bool) || castExp($3).t != Type(E_bool)) {
-                output::errorMismatch(yylineno); exit(1);
-                } $$ = new Exp_t(Type(E_bool));
+                {   
+                    if (castExp($1).t != Type(E_bool) || castExp($4).t != Type(E_bool)) {
+                        output::errorMismatch(yylineno); exit(1);
+                    } 
+                $$ = new Exp_t(Type(E_bool));
                 parser.ruleLogicalOr(&castExp($$), castExp($1), castExp($4), castString($3));
-                delete $1; delete $3;delete $4; output::printProductionRule(45);}
+                delete $1; delete $3;delete $4; output::printProductionRule(45);
+                }
                 | NOT Exp                                                   {if (castExp($2).t != Type(E_bool)) {output::errorMismatch(yylineno); exit(1);} ;$$ = new Exp_t(Type(E_bool));delete $2; output::printProductionRule(43);}
                 | Exp EQUALITY Exp                                          {
                                                                                     if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
