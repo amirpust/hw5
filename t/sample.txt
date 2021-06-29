@@ -3,6 +3,8 @@ void main(){
 	int a = c + 4;
 	int d = 3 / a;
 
+	printi(5);
+
 	int f = 5 / 0;
 	return;
 }
