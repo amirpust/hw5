@@ -17,6 +17,8 @@
     #define castExpList(toCast) (*(static_cast<ExpList*>(toCast)))
     #define castNum(toCast) (*(static_cast<Num*>(toCast)))
     #define castString(toCast) (*(static_cast<String*>(toCast)))
+    #define castRelopAUX(toCast) (*(static_cast<RelopAUX*>(toCast)))
+
 
 
     int yylex();
@@ -214,15 +216,25 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                 parser.ruleLogicalOr(&castExp($$), castExp($1), castExp($4), castString($3));
                 delete $1; delete $3;delete $4; output::printProductionRule(45);
                 }
-                | NOT Exp                                                   {if (castExp($2).t != Type(E_bool)) {output::errorMismatch(yylineno); exit(1);} ;$$ = new Exp_t(Type(E_bool));delete $2; output::printProductionRule(43);}
+                | NOT Exp                                                   {
+                                                                            if (castExp($2).t != Type(E_bool)) {
+                                                                            output::errorMismatch(yylineno);
+                                                                            exit(1);
+                                                                            }
+                                                                            $$ = new Exp_t(Type(E_bool));
+                                                                            parser.ruleLogicalOrNot(&castExp($$),castExp($2));
+                                                                            delete $2;
+                                                                            output::printProductionRule(43);
+                                                                            }
                 | Exp EQUALITY Exp                                          {
-                                                                                    if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
-                                                                                        output::errorMismatch(yylineno);
-                                                                                        exit(12);
-                                                                                    }
-                                                                                    $$ = new Exp_t(Type(E_bool));
-                                                                                    delete $1;
-                                                                                    delete $3;
+                                                                                if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
+                                                                                    output::errorMismatch(yylineno);
+                                                                                    exit(12);
+                                                                                }
+                                                                                $$ = new Exp_t(Type(E_bool));
+                                                                                parser.ruleRelop(&castExp($$), castExp($1), castExp($3), castRelopAUX($2));
+                                                                                delete $1;
+                                                                                delete $3;
                                                                             }
                 | Exp RELOP Exp                                             {
                                                                                 if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
@@ -230,6 +242,7 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                                     exit(12);
                                                                                 }
                                                                                 $$ = new Exp_t(Type(E_bool));
+                                                                                parser.ruleRelop(&castExp($$), castExp($1), castExp($3));
                                                                                 delete $1;
                                                                                 delete $3;
                                                                             };

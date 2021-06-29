@@ -26,10 +26,12 @@ const std::string typeStr[] = {
 };
 
 enum RELOP_ENUM{
-    E_L,
     E_G,
+    E_L,
+    E_GOE,
     E_LOE,
-    E_GOE
+    E_EQ,
+    E_NE
 };
 
 enum SCOPE_REASON{

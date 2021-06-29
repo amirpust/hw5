@@ -6,6 +6,7 @@
 #include "Exp_t.hpp"
 #include "Symbol.hpp"
 #include "Enums.hpp"
+#include "RelopAUX.hpp"
 
 using namespace std;
 
@@ -216,6 +217,10 @@ public:
     void emitConditinalJump(string regToCmpRes, string trueLabel, string falseLabel){
 
     }
+
+    void emitRelop(Exp_t* parent, Exp_t expLeft, Exp_t expRight, RelopAUX relop){
+        emit(parent->regName + " = icmp " + relop.getLLVMRelop() + " i32 " + expLeft.regName + " " + expRight.regName);
+	}
 private:
     string getLlvmType(Type t){
         if (t == E_void)

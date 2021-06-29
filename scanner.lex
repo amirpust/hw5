@@ -51,8 +51,8 @@ default                                             return DEFAULT;
 \{                                                  return LBRACE;
 \}                                                  return RBRACE;
 =                                                   return ASSIGN;
-"<"|">"|"<="|">="                                   {return RELOP;}
-"=="|"!="                                           return EQUALITY;
+"<"|">"|"<="|">="                                   {yylval = new RelopAUX(string(yytext)); return RELOP;}
+"=="|"!="                                           {yylval = new RelopAUX(string(yytext)); return EQUALITY;}
 "*"                                                 {return BINOP_MUL;}
 "/"                                                 {return BINOP_DIV;}
 "+"                                                 {return BINOP_PLUS;}
