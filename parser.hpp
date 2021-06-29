@@ -103,14 +103,17 @@ public:
     Exp_t* ruleCallFunc(IDtype funcName, ExpList arguments){
         Exp_t* retVal = new Exp_t(symbolTable->callFunc(funcName, arguments));
         output::printLog("ruleCallFunc " + funcName.id);
-        for (auto arg : arguments.expList){
-            output::printLog(arg.regName + ": " + to_string(arg.offset));
+        ExpList reversedArgs;
+        for (int i = arguments.expList.size() - 1; i >= 0 ; i--){
+            reversedArgs.insert(arguments.expList[i]);
         }
-        std::reverse(arguments.expList.begin(), arguments.expList.end());
-        for (auto arg : arguments.expList){
+
+        for (auto arg : reversedArgs.expList){
             output::printLog(arg.regName + ": " + to_string(arg.offset));
+
         }
-        codeBuffer.emitCallFunc(retVal, funcName, arguments);
+
+        codeBuffer.emitCallFunc(retVal, funcName, reversedArgs);
         return retVal;
     }
 
