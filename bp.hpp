@@ -211,7 +211,7 @@ public:
 
     //Bool statements
     int emitUnconditinalJump(string label){
-        return emit("br label %"+ label);
+        return emit("br label "+ label);
 	}
 
     int emitConditinalJump(string regToCmpRes, string trueLabel, string falseLabel){
