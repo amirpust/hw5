@@ -122,7 +122,7 @@ public:
 
         emit(ptr + " = getelementptr i32, i32* " + rbpReg + ", i32 " + to_string(E->offset));
         emit(newReg + " = load i32, i32* " + ptr); //TODO: test
-
+        E->regName = newReg;
         return newReg;
     }
 
