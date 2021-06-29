@@ -219,7 +219,7 @@ public:
     }
 
     void emitRelop(Exp_t* parent, Exp_t expLeft, Exp_t expRight, RelopAUX relop){
-        emit(parent->regName + " = icmp " + relop.getLLVMRelop() + " i32 " + expLeft.regName + " " + expRight.regName);
+        emit(parent->regName + " = icmp " + relop.getLLVMRelop() + " i32 " + expLeft.regName + ", " + expRight.regName);
 	}
 private:
     string getLlvmType(Type t){
