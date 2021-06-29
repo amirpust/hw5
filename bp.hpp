@@ -195,12 +195,13 @@ public:
 	void emitSaveString(Exp_t* exp, String str){
 	    //"@.DIVIDE_BY_ZERO.str = internal constant [23 x i8] c\"Error division by zero\\00\""
 	    //i8* getelementptr([23 x i8], [23 x i8]* @.DIVIDE_BY_ZERO.str, i32 0, i32 0)
+	    // getelementptr [13 x i8], [13 x i8]* @.str, i64 0, i64 0
 	    str.val.pop_back();
 
         string reg =  getNewGlobalRegister("string");
         string regPtr =  exp->regName + ".ptr";
         string sizeStr = "[" + to_string(str.val.length()) + " x i8]";
-        string getPtr = "getelementptr(" + sizeStr + ", " + sizeStr + "* " + reg + ", i32 0, i32 0)";
+        string getPtr = "getelementptr " + sizeStr + ", " + sizeStr + "* " + reg + ", i32 0, i32 0";
         emitGlobal(reg + " = constant" + sizeStr + " c" + str.val + "\\00\"");
         emitGlobal(regPtr + " = " + getPtr);
         exp->regName = regPtr;
