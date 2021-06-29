@@ -175,7 +175,11 @@ public:
         }
 
         //    call i32 (i8*, ...) @printf(i8* %spec_ptr, i32 %0)
-        emit("call " + getLlvmType(retVal->t) + " @" + funcName.id + "(" + llvmArgs+")");
+        if (retVal->t == E_void){
+            emit("call " + getLlvmType(retVal->t) + " @" + funcName.id + "(" + llvmArgs+")");
+        }else{
+            emit(retVal->regName + " = call " + getLlvmType(retVal->t) + " @" + funcName.id + "(" + llvmArgs+")");
+        }
 	}
 
 	void emitReturn(Exp_t* retType){
