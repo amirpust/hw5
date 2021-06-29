@@ -162,6 +162,12 @@ public:
         parent->trueList = TrueList(E2.trueList);
         parent->falseList = codeBuffer.merge(E1.falseList, E2.falseList);
     }
+
+    void ruleLogicalOr(Exp_t* parent, Exp_t E1, Exp_t E2, String label){
+        codeBuffer.bpatch(E1.falseList, label.val);
+        parent->falseList = TrueList(E2.falseList);
+        parent->trueList = codeBuffer.merge(E1.trueList, E2.trueList);
+    }
 };
 
 #endif
