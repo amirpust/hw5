@@ -216,7 +216,7 @@ public:
 
     int emitConditinalJump(string regToCmpRes, string trueLabel, string falseLabel){
 	    //br i1 %checkIfZero, label %DIVIDE_BY_ZERO, label %DONE
-        return emit("br i1 %"+regToCmpRes+ ", label %"+ trueLabel + ", label %"+ falseLabel);
+        return emit("br i1 "+regToCmpRes+ ", label "+ trueLabel + ", label "+ falseLabel);
     }
 
     void emitRelop(Exp_t* parent, Exp_t expLeft, Exp_t expRight, RelopAUX relop){
