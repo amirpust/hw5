@@ -222,7 +222,7 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                             exit(1);
                                                                             }
                                                                             $$ = new Exp_t(Type(E_bool));
-                                                                            parser.ruleLogicalOrNot(&castExp($$),castExp($2));
+                                                                            parser.ruleLogicalNot(&castExp($$),castExp($2));
                                                                             delete $2;
                                                                             output::printProductionRule(43);
                                                                             }
