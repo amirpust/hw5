@@ -194,7 +194,7 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                 | TRUE                                                      {
                                                                             $$ = parser.ruleInitBool(true);
                                                                             output::printProductionRule(41);}
-                | FALSE                                                     {$$ = new Exp_t(Type(E_bool));
+                | FALSE                                                     {$$ =  parser.ruleInitBool(false);
                                                                             output::printProductionRule(42);}
                 | Exp AND Exp                                               {if (castExp($1).t != Type(E_bool) || castExp($3).t != Type(E_bool)) {output::errorMismatch(yylineno); exit(1);} ; $$ = new Exp_t(Type(E_bool)); delete $1; delete $3;output::printProductionRule(44);}
                 | Exp OR Exp                                                {if (castExp($1).t != Type(E_bool) || castExp($3).t != Type(E_bool)) {output::errorMismatch(yylineno); exit(1);} ; $$ = new Exp_t(Type(E_bool));delete $1; delete $3; output::printProductionRule(45);}
