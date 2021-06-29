@@ -86,13 +86,12 @@ public:
         Exp_t newExp(exp.t);
         symbolTable->addSymbol(id, &newExp);
         symbolTable->assign(id, exp);
-        codeBuffer.emitAssign(&newExp, &exp);
-        codeBuffer.emitStore(&newExp, symbolTable->getCurrentRbp());
+        codeBuffer.emitAssign(&newExp, &exp, symbolTable->getCurrentRbp());
     }
 
     void ruleAssign(IDtype id, Exp_t exp){
-        Exp_t* dst = ruleLoadExpById(id);
-        codeBuffer.emitAssign(dst, &exp);
+        Exp_t dst = symbolTable->getExpByID(id);
+        codeBuffer.emitAssign(&dst, &exp, symbolTable->getCurrentRbp());
     }
 
     Exp_t* ruleLoadExpById(IDtype id){
