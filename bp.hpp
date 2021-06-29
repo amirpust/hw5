@@ -202,8 +202,8 @@ public:
         string regPtr =  reg + ".ptr";
         string sizeStr = "[" + to_string(str.val.length()) + " x i8]";
         string getPtr = "getelementptr " + sizeStr + ", " + sizeStr + "* " + reg + ", i32 0, i32 0";
-        emitGlobal(reg + " = constant" + sizeStr + " c" + str.val + "\\00\"");
-        emitGlobal(regPtr + " = global " + getPtr);
+        emitGlobal(reg + " = constant " + sizeStr + " c" + str.val + "\\00\"");
+        emitGlobal(regPtr + " = constant " + getPtr);
         exp->regName = regPtr;
     }
 
