@@ -182,7 +182,7 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                             if(castNum($1).val > 255) {output::errorByteTooLarge(yylineno, castNum($1).val); exit(1);}
                                                                             $$ = parser.ruleInitNum(E_byte,castNum($1)) ;
                                                                             output::printProductionRule(39);}
-                | STRING                                                    {$$ = parser.ruleInitString($1); ; output::printProductionRule(40);}
+                | STRING                                                    {$$ = parser.ruleInitString(castString($1)); ; output::printProductionRule(40);}
                 | TRUE                                                      {
                                                                             $$ = parser.ruleInitBool(true);
                                                                             output::printProductionRule(41);}
