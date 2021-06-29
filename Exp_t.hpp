@@ -65,6 +65,7 @@ public:
         return false;
     }
 
+    /*
     Exp_t& operator=(const Exp_t& e){
         if (!Exp_t(e).castType(t)){
             output::errorMismatch(yylineno);
@@ -72,7 +73,7 @@ public:
             exit(-1);
         }
         return (*this);
-    };
+    };*/
     /*
     Exp_t operator+(const Exp_t& e) const {
         if(!isNumerical() || !e.isNumerical()){

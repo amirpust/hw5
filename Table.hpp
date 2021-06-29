@@ -293,8 +293,7 @@ public:
             output::errorUndef(yylineno, _id.id);
             exit(-463);
         }
-        Exp_t newE = Exp_t(sym->exp);
-        newE = e;
+        sym->exp.castType(e.t);
     }
 
     string getCurrentRbp(){
