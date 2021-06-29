@@ -118,15 +118,14 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                 | Call SC                                                   {output::printProductionRule(18);}
                 | RETURN SC                                                 {parser.ruleReturn(Exp_t(E_void)) ; output::printProductionRule(19);}
                 | RETURN Exp SC                                             {parser.ruleReturn(castExp($2)) ; delete $2 ; output::printProductionRule(20);}
-                | IF LPAREN BOOLEXP  {String* trueLabel = parser.ruleGenLabel();} STARTSCOPE RPAREN Statement  
-                {   String* nextLabel = parser.ruleGenLabel();
-                    parser.ruleIf(castExp($3), castString(trueLabel),  castString(nextLabel));
+                | IF LPAREN BOOLEXP STARTSCOPE RPAREN GENLABEL Statement    
+                {
+                    parser.ruleIf(castExp($3), castString($6), NULL);
                     symbolTable.closeCurrentScope();
                 }
-                | IF LPAREN BOOLEXP  
-                         {$$ = parser.ruleGenLabel();} STARTSCOPE RPAREN Statement ELSE {symbolTable.closeCurrentScope();}
-                         {$$ = parser.ruleGenLabel();} STARTSCOPE Statement {symbolTable.closeCurrentScope();}
-                         {$$ = parser.ruleGenLabel();}
+                | IF LPAREN BOOLEXP STARTSCOPE RPAREN
+                GENLABEL Statement ELSE {symbolTable.closeCurrentScope();}
+                STARTSCOPE GENLABEL Statement {symbolTable.closeCurrentScope();}
                 | WHILE LPAREN BOOLEXP RPAREN                               {symbolTable.openLoopScope();} Statement {symbolTable.closeCurrentScope();}
                 | BREAK SC                                                  {symbolTable.triggerBreak(); output::printProductionRule(24);}
                 | CONTINUE SC                                               {symbolTable.triggerContinue(); output::printProductionRule(25);}
