@@ -19,7 +19,7 @@ void main(){
         print("good");
     }
 
-    if (false and 1/0){
+    if (false and (1/0 >= 6) ){
         print("Very Bad");
     }
 
