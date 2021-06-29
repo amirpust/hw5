@@ -200,7 +200,7 @@ public:
         string reg =  getNewGlobalRegister("string");
         string regPtr =  exp->regName + ".ptr";
         string sizeStr = "[" + to_string(str.val.length()) + " x i8]";
-        string getPtr = "i8* getelementptr(" + sizeStr + ", " + sizeStr + "* " + reg + ", i32 0, i32 0)";
+        string getPtr = "getelementptr(" + sizeStr + ", " + sizeStr + "* " + reg + ", i32 0, i32 0)";
         emitGlobal(reg + " = constant" + sizeStr + " c" + str.val + "\\00\"");
         emitGlobal(regPtr + " = " + getPtr);
         exp->regName = regPtr;
