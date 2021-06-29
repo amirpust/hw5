@@ -195,7 +195,8 @@ public:
 	void emitSaveString(Exp_t* exp, String str){
 	    //"@.DIVIDE_BY_ZERO.str = internal constant [23 x i8] c\"Error division by zero\\00\""
 	    exp->regName = getNewGlobalRegister("string");
-	    emitGlobal(exp->regName + " = internal constant [ " + to_string(str.val.size()) + " x i8] c\"" + str.val+"\\0\"");
+	    str.val.pop_back();
+        emitGlobal(exp->regName + " = constant [" + to_string(str.val.length()) + " x i8] c" + str.val + "\\00\"");
 	}
 
 private:
