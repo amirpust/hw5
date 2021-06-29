@@ -97,7 +97,8 @@ public:
 
     Exp_t* ruleLoadExpById(IDtype id){
         Exp_t* exp = new Exp_t(symbolTable->getExpByID(id));
-        if (exp->offset == -2){
+        if (exp->offset <= 0){
+            exp->regName = "%" + to_string((-1)*exp->offset);
             return exp;
         }
         codeBuffer.emitLoad(exp, symbolTable->getCurrentRbp());
@@ -108,6 +109,11 @@ public:
         Exp_t* retVal = new Exp_t(symbolTable->callFunc(funcName, arguments));
         codeBuffer.emitCallFunc(retVal, funcName, arguments);
         return retVal;
+    }
+
+    void ruleReturn(Exp_t exp){
+        symbolTable->checkReturnType(exp);
+        codeBuffer.emitReturn(&exp);
     }
 };
 

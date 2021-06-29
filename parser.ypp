@@ -117,8 +117,8 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                                                                             output::printProductionRule(17);
                                                                             }
                 | Call SC                                                   {output::printProductionRule(18);}
-                | RETURN SC                                                 {symbolTable.checkReturnType() ; output::printProductionRule(19);}
-                | RETURN Exp SC                                             {symbolTable.checkReturnType(castExp($2)) ; output::printProductionRule(20);}
+                | RETURN SC                                                 {parser.ruleReturn(castExp(Exp_t(E_void)) ; output::printProductionRule(19);}
+                | RETURN Exp SC                                             {parser.ruleReturn(castExp($2)) ; output::printProductionRule(20);}
                 | IF LPAREN BOOLEXP STARTSCOPE RPAREN Statement {symbolTable.closeCurrentScope();}
                 | IF LPAREN BOOLEXP STARTSCOPE RPAREN Statement ELSE {symbolTable.closeCurrentScope();} STARTSCOPE Statement {symbolTable.closeCurrentScope();}
                 | WHILE LPAREN BOOLEXP RPAREN {symbolTable.openLoopScope();} Statement {symbolTable.closeCurrentScope();}
