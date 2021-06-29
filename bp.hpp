@@ -137,6 +137,10 @@ public:
 
     }
 
+    void emitAssign(Exp_t* dst, Exp_t* src){
+        emit(dst->regName + " = add i32 0, " + src->regName);
+    }
+
     void emitFuncDefenition(IDtype id, SymList args, Type retType){
 	    //define void @print(i8*){
         string llvmArgs = "";

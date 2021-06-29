@@ -112,9 +112,9 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                                                                                 parser.ruleAddSymbol(castID($2), castExp($4));
                                                                                 output::printProductionRule(16);
                                                                             }
-                | ID ASSIGN Exp SC                                          {Exp_t id = symbolTable.getExpByID(castID($1));
-                                                                             codeBuffer.emit(id.regName + " = add i32 0, " +  castExp($3).regName);
-                                                                             id = castExp($3) ; output::printProductionRule(17);
+                | ID ASSIGN Exp SC                                          {
+                                                                            parser.ruleAssign(castID($1), castExp($3));
+                                                                            output::printProductionRule(17);
                                                                             }
                 | Call SC                                                   {output::printProductionRule(18);}
                 | RETURN SC                                                 {symbolTable.checkReturnType() ; output::printProductionRule(19);}
