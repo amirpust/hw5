@@ -3,7 +3,11 @@ void main(){
 	int a = c + 4;
 	int d = 3 / a;
 
-	printi(5);
+    printi(100);
+    printi(d);
+    //print("yay");
+
+    //Comment
 
 	int f = 5 / 0;
 	return;
