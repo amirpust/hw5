@@ -304,6 +304,7 @@ public:
     }
 
     string getCurrentRbp(){
+        output::printLog("getCurrentRbp: " + scopeList.back().rbp);
         return scopeList.back().rbp;
     }
 

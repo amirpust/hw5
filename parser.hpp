@@ -72,6 +72,7 @@ public:
     void ruleOpenFunctionScope(IDtype id, SymList args, Type retType){
         codeBuffer.emitFuncDefenition(id, args, retType);
         string newRbp = codeBuffer.emitAlloca();
+        output::printLog("ruleOpenFunctionScope - new rbp: " + newRbp);
         symbolTable->openFuncScope(id, args, retType, newRbp);
     }
 
