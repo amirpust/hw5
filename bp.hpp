@@ -194,10 +194,17 @@ public:
 
 	void emitSaveString(Exp_t* exp, String str){
 	    //"@.DIVIDE_BY_ZERO.str = internal constant [23 x i8] c\"Error division by zero\\00\""
-	    exp->regName = getNewGlobalRegister("string");
+	    //i8* getelementptr([23 x i8], [23 x i8]* @.DIVIDE_BY_ZERO.str, i32 0, i32 0)
 	    str.val.pop_back();
-        emitGlobal(exp->regName + " = constant [" + to_string(str.val.length()) + " x i8] c" + str.val + "\\00\"");
-	}
+
+        string reg =  getNewGlobalRegister("string");
+        string regPtr =  exp->regName + ".ptr";
+        string sizeStr = "[" + to_string(str.val.length()) + " x i8]";
+        string getPtr = "i8* getelementptr(" + sizeStr + ", " + sizeStr + "* " + reg + ", i32 0, i32 0)";
+        emitGlobal(reg + " = constant" + sizeStr + " c" + str.val + "\\00\"");
+        emitGlobal(regPtr + " = " + getPtr);
+        exp->regName = regPtr;
+    }
 
 private:
     string getLlvmType(Type t){
