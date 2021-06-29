@@ -156,6 +156,12 @@ public:
         codeBuffer.bpatch(exp.trueList, trueS.val);
         codeBuffer.bpatch(exp.falseList, falseS.val);
     }
+
+    void ruleLogicalAnd(Exp_t* parent, Exp_t E1, Exp_t E2, String label){
+        codeBuffer.bpatch(E1.trueList, label.val);
+        parent->trueList = TrueList(E2.trueList);
+        parent->falseList = codeBuffer.merge(E1.falseList, E2.falseList);
+    }
 };
 
 #endif

@@ -11,6 +11,18 @@ void main(){
         print("FALSEEEE");
     }
 
+    if (true and false) {
+        print("bad");
+    }
+
+    if (true and true) {
+        print("good");
+    }
+
+    if (false and 1/0){
+        print("Very Bad");
+    }
+
     printi(100);
     print("yay");
 
