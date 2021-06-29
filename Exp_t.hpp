@@ -42,18 +42,21 @@ public:
         return E_int;
     }
     bool castType(Type newT){
+        if (t == newT){
+            return true;
+        }
+
         if(newT == E_void || t == E_void){
             output::errorMismatch(yylineno);
             output::printLog("Casting void");
             exit(1);
         }
+
         if (newT == E_int && t == E_byte){
             t = E_int;
             return true;
         }
-        if (t == newT){
-            return true;
-        };
+
         if (t == E_def){
             t = newT;
             return true;
