@@ -60,7 +60,7 @@ default                                             return DEFAULT;
 [a-zA-Z][a-zA-Z0-9]*                                {yylval = new IDtype(string(yytext));  return ID;}
 {noZeroDigit}{digit}*                               {yylval = new Num(stoi(yytext)); return NUM;}
 0                                                   {yylval = new Num(0); return NUM;}
-\"([^\n\r\"\\]|\\[rnt"\\])+\"                       {return STRING;}
+\"([^\n\r\"\\]|\\[rnt"\\])+\"                       {yylval = new String(yytext); return STRING;}
 \/\/[^\r\n]*(\r|\n|\r\n)?                           ;
 {whitespace}                                        ;
 .                                                   printLexError();

@@ -123,6 +123,11 @@ public:
         symbolTable->checkReturnType(exp);
         codeBuffer.emitReturn(&exp);
     }
+
+    Exp_t* ruleInitString(String newStr){
+        output::printLog(newStr.val);
+        return new Exp_t(E_string);
+    }
 };
 
 #endif

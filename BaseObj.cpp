@@ -21,3 +21,4 @@ string Type::getStr() const {
 Num::Num(int val) : val(val) {}
 
 
+String::String(string val) : val(val) {}

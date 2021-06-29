@@ -39,6 +39,12 @@ public:
     Num(int val);
 };
 
+class String: public BaseObj{
+public:
+    string val;
+    String(string val);
+};
+
 #define YYSTYPE BaseObj*
 
 
