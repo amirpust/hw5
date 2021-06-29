@@ -166,7 +166,10 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                     {symbolTable.openLoopScope();}
                     Statement
                     {
-                        parser.ruleWhile(castExp($4), castString($3), castString($6),castStatement($8));
+                        output::printLog("Start While Rule")
+                        parser.ruleWhile(castExp($4), castString($3), castString($6), castStatement($8));
+                        output::printLog("Start While Rule")
+
                         delete $3; delete $4; delete $6;  delete $8; 
                         symbolTable.closeCurrentScope();
                     }
@@ -221,7 +224,7 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                                 output::printLog("start plus");
                                                                                 $$ = parser.ruleOP(&castExp($1), &castExp($3), "add");
                                                                                 output::printProductionRule(35);
-                                                                                output::printLog("end div");
+                                                                                output::printLog("end plus");
                                                                                 }
                 | Exp BINOP_MINUS Exp                                          {
                                                                                 output::printLog("start minus");
