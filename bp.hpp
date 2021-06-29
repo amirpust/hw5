@@ -204,7 +204,7 @@ public:
         string getPtr = "getelementptr " + sizeStr + ", " + sizeStr + "* " + reg + ", i32 0, i32 0";
         emitGlobal(reg + " = constant " + sizeStr + " c" + str.val + "\\00\"");
         //emitGlobal(regPtr + " = constant " + getPtr);
-        emit(exp->regName =  + " = " + getPtr);
+        emit(exp->regName + " = " + getPtr);
         //exp->regName = regPtr;
     }
 
