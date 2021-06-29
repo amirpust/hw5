@@ -123,7 +123,10 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                     parser.ruleIf(castExp($3), castString($4),  castString($8));
                     symbolTable.closeCurrentScope();
                 }
-                | IF LPAREN BOOLEXP STARTSCOPE RPAREN Statement ELSE        {symbolTable.closeCurrentScope();} STARTSCOPE Statement {symbolTable.closeCurrentScope();}
+                | IF LPAREN BOOLEXP  
+                        GENLABEL STARTSCOPE RPAREN Statement ELSE {symbolTable.closeCurrentScope();}
+                        GENLABEL STARTSCOPE Statement {symbolTable.closeCurrentScope();}
+                        GENLABEL
                 | WHILE LPAREN BOOLEXP RPAREN                               {symbolTable.openLoopScope();} Statement {symbolTable.closeCurrentScope();}
                 | BREAK SC                                                  {symbolTable.triggerBreak(); output::printProductionRule(24);}
                 | CONTINUE SC                                               {symbolTable.triggerContinue(); output::printProductionRule(25);}
