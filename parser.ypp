@@ -84,9 +84,7 @@ FuncDecl:       RetType ID LPAREN Formals RPAREN LBRACE
                                     }
                                     Statements
                                     {
-                                        output::printLog("Start: Close func scope") ;
                                         parser.ruleCloseFunc();
-                                        output::printLog("Done: Close func scope") ;
                                     }
                                     RBRACE                                  {output::printProductionRule(4);}
 ;

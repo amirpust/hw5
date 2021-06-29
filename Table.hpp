@@ -156,8 +156,6 @@ public:
     }
 
     Type callFunc(IDtype funcName, ExpList arguments) {
-        output::printLog("callFunc: start");
-
         if(findFunc(funcName) == funcList.funcList.end()){
             output::errorUndefFunc(yylineno, funcName.id);
             exit(1);
@@ -170,9 +168,6 @@ public:
         }
 
         reverse(sArgs.symList.begin(),sArgs.symList.end());
-
-        output::printLog("callFunc: Flag 1");
-
         FuncSymbol func = *findFunc(funcName);
         output::printLog("func size: " + to_string(func.symList.symList.size()));
         output::printLog("sArgs size: " + to_string(sArgs.symList.size()));
@@ -244,7 +239,6 @@ public:
 
 
         scopeList.pop_back();
-        output::printLog("closeCurrentScope - end flag");
     }
 
     void checkReturnType(Exp_t exp){
@@ -271,7 +265,6 @@ public:
 
         exp->offset = offsets.top()++;
         scopeList.back().symList.insert(Symbol(id, *exp));
-        output::printLog("add symbol after insert "+ id.id + " " + scopeList.back().symList.symList.back().exp.t.getStr());
     }
 
     Type getTypeByID(IDtype _id){

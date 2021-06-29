@@ -4,10 +4,8 @@
 //Symbol
 Symbol::Symbol(IDtype id) : id(id) {}
 Symbol::Symbol(IDtype id, Exp_t exp) : id(id), exp(exp) {
-    output::printLog("Symbol ctor: " + this->exp.t.getStr());
 }
 Symbol::Symbol(IDtype id, Type t) : id(id), exp(t) {
-    output::printLog("Symbol ctor(type): " + this->exp.t.getStr());
 }
 Symbol::Symbol(const Symbol& _sym) : id(_sym.id), exp(_sym.exp){}
 
