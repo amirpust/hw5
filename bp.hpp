@@ -211,12 +211,16 @@ public:
 
     //Bool statements
     int emitUnconditinalJump(string label){
-        return emit("br label "+ label);
+	    if(label.front() == '%')
+            return emit("br label "+ label);
+        return emit("br label %"+ label);
 	}
 
     int emitConditinalJump(string regToCmpRes, string trueLabel, string falseLabel){
 	    //br i1 %checkIfZero, label %DIVIDE_BY_ZERO, label %DONE
-        return emit("br i1 "+regToCmpRes+ ", label "+ trueLabel + ", label "+ falseLabel);
+        if(regToCmpRes.front() == '%')
+            return emit("br i1 "+regToCmpRes+ ", label "+ trueLabel + ", label "+ falseLabel);
+        return emit("br i1 %"+regToCmpRes+ ", label "+ trueLabel + ", label "+ falseLabel);
     }
 
     void emitRelop(Exp_t* parent, Exp_t expLeft, Exp_t expRight, RelopAUX relop){
