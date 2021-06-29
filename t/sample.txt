@@ -7,6 +7,10 @@ void main(){
 	    print("TRUUUUUUUU");
 	}
 
+    if (false) {
+        print("FALSEEEE");
+    }
+
     printi(100);
     printi(j);
     print("yay");
