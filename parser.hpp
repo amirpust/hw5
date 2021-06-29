@@ -102,6 +102,7 @@ public:
 
     Exp_t* ruleCallFunc(IDtype funcName, ExpList arguments){
         Exp_t* retVal = new Exp_t(symbolTable->callFunc(funcName, arguments));
+        reverse(arguments.expList.begin(), arguments.expList.end());
         codeBuffer.emitCallFunc(retVal, funcName, arguments);
         return retVal;
     }
