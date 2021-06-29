@@ -21,11 +21,6 @@ public:
 
         //codeBuffer.emit("define i32 @main() {");
     };
-    ~Parser(){
-        //codeBuffer.emit("ret i32 0  ");
-        //codeBuffer.emit("}");
-
-    }
 
     Exp_t* ruleOP(Exp_t* exp1, Exp_t* exp2, string op){
 

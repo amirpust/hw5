@@ -156,7 +156,6 @@ public:
     }
 
     void emitCloseFunc(){
-	    emit("ret void");
 	    emit("}");
 	}
 
@@ -187,7 +186,6 @@ public:
 
 	        emit("ret " + getLlvmType(retType->t.t) + " " + retType->regName);
 	    }
-        emit("}");
 	}
 
 private:
