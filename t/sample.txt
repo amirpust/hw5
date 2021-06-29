@@ -16,11 +16,31 @@ void main(){
     }
 
     if (true and true) {
-        print("good");
+        print("good1");
     }
 
     if (false and (1/0 >= 6) ){
         print("Very Bad");
+    }
+
+    if (true or false) {
+        print("good2");
+    }
+
+    if (true or true) {
+        print("good3");
+    }
+
+    if (false or true){
+        print("good4");
+    }
+
+    if (false or false){
+        print("bad");
+    }
+
+    if ( true or (1/0 >= 6) ){
+        print("Go home you're drunk");
     }
 
     printi(100);
