@@ -6,17 +6,17 @@ void main(){
 	if (3 >= 0) {
 	    print("T1");
 	} else {
-        print("F");
+        print("F1");
 	}
 
 	if (4 < 2) {
-        print("F");
+        print("F2");
     } else {
          print("T2");
     }
 
     if (1 < 0 b) {
-        print("F");
+        print("F3");
     } else {
         print("T3");
     }
@@ -24,17 +24,17 @@ void main(){
     if ( 2 b < 5 ) { // // -5 -> syntax error
         print("T4");
     } else {
-        print("F");
+        print("F4");
     }
 
     if (0 == 0 or (1 > 1/0)) {
         print("T5");
     } else {
-        print("F");
+        print("F5");
     }
 
     if (not true) {  //!true - lexical error
-        print("F");
+        print("F6");
     } else {
         print("T6");
     }
