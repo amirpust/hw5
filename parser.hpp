@@ -167,6 +167,11 @@ public:
         }
 
         codeBuffer.emitCallFunc(retVal, funcName, reversedArgs);
+        if(retVal->t == E_bool){
+           Exp_t* newRetVal = boolToExp(*retVal);
+           delete retVal;
+           return newRetVal;
+        }
         return retVal;
     }
 
