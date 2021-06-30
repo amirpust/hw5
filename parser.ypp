@@ -192,12 +192,15 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                                                                                 output::printProductionRule(25);
                                                                             }
                 | SWITCH LPAREN Exp RPAREN
-                            {symbolTable.openSwitchScope(castExp($3));}
+                            {
+                                $$ = new Statement();
+                                parser.ruleInitSwitch(&castStatement($$));
+                                symbolTable.openSwitchScope(castExp($3));
+                            }
                             LBRACE CaseList RBRACE
                             {
                                 output::printLog("PARSER: switch start");
                                 symbolTable.closeCurrentScope();
-                                $$ = new Statement();
                                 parser.ruleSwitch(&castStatement($$), castExp($3), castCaseList($7));
                                 delete $3; delete $7;
                                 output::printProductionRule(26);
