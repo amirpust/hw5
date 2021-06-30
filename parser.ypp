@@ -338,10 +338,11 @@ CaseList:       CaseDecl CaseList                                           {
                                                                             }
 ;
 CaseDecl:       CASE NUM COLON  {symbolTable.triggerCase();}
-                            Statements                                      {
+                    GENLABEL Statements                                      {
                                                                                 output::printLog("PARSER: CaseDecl");
                                                                                 $$ = new CaseList();
-                                                                                parser.ruleAddCase(&castCaseList($$), castNum($2), castStatement($5));
+                                                                                parser.ruleAddCase(&castCaseList($$), castNum($2), castStatement($6), castString($5));
+                                                                                delete $2; delete $3; delete $5; delete $6;
                                                                                 output::printProductionRule(51);
                                                                             }
 ;
