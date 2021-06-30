@@ -87,40 +87,44 @@ public:
         symbolTable->assign(id, exp);
 
         if (exp.t == E_bool){
-            string tl, fl, nl;
-            NextList nextList;
-            int n1, n2;
-            Exp_t* newSrc = new Exp_t(E_bool);
-
-            tl = getNewLabel("PHI_TRUE_LABEL");
-            codeBuffer.emit(tl+":");
-            n1 = codeBuffer.emitUnconditinalJump("@");
-
-            fl = getNewLabel("PHI_FALSE_LABEL");
-            codeBuffer.emit(fl+":");
-            n2 = codeBuffer.emitUnconditinalJump("@");
-
-            nl = getNewLabel("PHI_NEXT_LABEL");
-            codeBuffer.emit(nl+":");
-
-            nextList = codeBuffer.merge(
-                        codeBuffer.makelist(pair<int, BranchLabelIndex >(n1, FIRST)),
-                        codeBuffer.makelist(pair<int, BranchLabelIndex >(n2, FIRST))
-                    );
-
-            codeBuffer.bpatch(exp.trueList, tl);
-            codeBuffer.bpatch(exp.falseList, fl);
-            codeBuffer.bpatch(nextList, nl);
-
-            codeBuffer.emitPhi(newSrc, tl, fl);
+            Exp_t* newSrc = boolToExp(exp);
             codeBuffer.emitAssign(&dst, newSrc, symbolTable->getCurrentRbp());
-
             delete newSrc;
-
             return;
         }
 
         codeBuffer.emitAssign(&dst, &exp, symbolTable->getCurrentRbp());
+    }
+
+    Exp_t* boolToExp(Exp_t exp){
+        string tl, fl, nl;
+        NextList nextList;
+        int n1, n2;
+        Exp_t* newSrc = new Exp_t(E_bool);
+
+        tl = getNewLabel("PHI_TRUE_LABEL");
+        codeBuffer.emit(tl+":");
+        n1 = codeBuffer.emitUnconditinalJump("@");
+
+        fl = getNewLabel("PHI_FALSE_LABEL");
+        codeBuffer.emit(fl+":");
+        n2 = codeBuffer.emitUnconditinalJump("@");
+
+        nl = getNewLabel("PHI_NEXT_LABEL");
+        codeBuffer.emit(nl+":");
+
+        nextList = codeBuffer.merge(
+                codeBuffer.makelist(pair<int, BranchLabelIndex >(n1, FIRST)),
+                codeBuffer.makelist(pair<int, BranchLabelIndex >(n2, FIRST))
+        );
+
+        codeBuffer.bpatch(exp.trueList, tl);
+        codeBuffer.bpatch(exp.falseList, fl);
+        codeBuffer.bpatch(nextList, nl);
+
+        codeBuffer.emitPhi(newSrc, tl, fl);
+
+        return newSrc;
     }
 
     Exp_t* ruleLoadExpById(IDtype id){
@@ -138,7 +142,11 @@ public:
         output::printLog("ruleCallFunc " + funcName.id);
         ExpList reversedArgs;
         for (int i = arguments.expList.size() - 1; i >= 0 ; i--){
+            if (arguments.expList[i].t.t == E_bool){
+                ;
+            }
             reversedArgs.insert(arguments.expList[i]);
+
         }
 
         for (auto arg : reversedArgs.expList){
@@ -152,6 +160,12 @@ public:
 
     void ruleReturn(Exp_t exp){
         symbolTable->checkReturnType(exp);
+        if (exp.t == E_bool){
+            Exp_t* newExp = boolToExp(exp);
+            codeBuffer.emitReturn(&exp);
+            delete newExp;
+            return;
+        }
         codeBuffer.emitReturn(&exp);
     }
 
