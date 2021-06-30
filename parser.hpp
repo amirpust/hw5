@@ -324,7 +324,7 @@ public:
         for(auto Case : caseList.caseList){
             toEmit += "i32 " + to_string(Case.second) + ", label %" + Case.first;
             if (Case.first != caseList.caseList.back().first){
-                toEmit += " ,";
+                toEmit += "\n";
             }
         }
         toEmit += "]";
