@@ -4,7 +4,7 @@ int sum(int a, int c){
 
 void main(){
     bool check = (3 <= 0);
-	if (true) {
+	if (check) {
 	    print("T1");
 	} else {
         print("F1");
