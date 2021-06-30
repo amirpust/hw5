@@ -348,10 +348,10 @@ public:
     }
 
     Exp_t* ruleDefaultInit(Type t){
-        if(t == E_bool){
+        if(t.t == E_bool){
             return ruleInitBool(false);
         }
-        return ruleInitNum(t, Num(0));
+        return ruleInitNum(t.t, Num(0));
     }
 };
 
