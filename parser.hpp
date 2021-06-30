@@ -285,11 +285,11 @@ public:
     //CaseList
     void ruleAddCase(CaseList* caseList, Num num, Statement statement){
         output::printLog("--------START ruleAddCase-------- ");
-        string caseLabel = getNewLabel("CASE");
-        codeBuffer.emit(caseLabel + ":");
-        caseList->caseList.emplace_back(caseLabel, num.val);
+        String* caseLabel = ruleGenLabel("CASE");
+        caseList->caseList.emplace_back(caseLabel->val, num.val);
         caseList->contList = codeBuffer.merge(caseList->contList, statement.contList);
         caseList->breakList = codeBuffer.merge(caseList->breakList, statement.breakList);
+        delete caseLabel;
         output::printLog("--------START ruleAddCase-------- ");
     }
     void ruleSeenDefault(CaseList* caseList, Statement statement){
