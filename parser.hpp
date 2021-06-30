@@ -318,7 +318,7 @@ public:
         //switch <intty> <value>, label <defaultdest> [ <intty> <val>, label <dest> ... ]
 
         output::printLog("--------START ruleSwitch-------- ");
-        //placeBreak(switchStatement);
+        placeBreak(switchStatement);
         String* startLabel = ruleGenLabel("START_SWITCH");
         output::printLog("--------before BP ruleSwitch-------- ");
         codeBuffer.bpatch(switchStatement->switchLabel, startLabel->val);
@@ -339,6 +339,7 @@ public:
         codeBuffer.emitUnconditinalJump(nextLabel);
         codeBuffer.emit(nextLabel + ":");
         codeBuffer.bpatch(caseList.breakList, nextLabel);
+        codeBuffer.bpatch(switchStatement->breakList, nextLabel);
         switchStatement->contList = codeBuffer.merge(switchStatement->contList, caseList.contList);
         delete startLabel;
         output::printLog("--------END ruleSwitch-------- ");
