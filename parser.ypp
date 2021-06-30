@@ -88,7 +88,7 @@ FuncDecl:       RetType ID LPAREN Formals RPAREN LBRACE
                                     }
                                     Statements
                                     {
-                                        parser.ruleCloseFunc();
+                                        parser.ruleCloseFunc(castType($1));
                                     }
                                     RBRACE                                  {output::printProductionRule(4);}
 ;
