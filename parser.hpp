@@ -104,6 +104,7 @@ public:
         Exp_t* newSrc = new Exp_t(E_bool);
 
         tl = getNewLabel("PHI_TRUE_LABEL");
+        codeBuffer.emitUnconditinalJump(tl);
         codeBuffer.emit(tl+":");
         n1 = codeBuffer.emitUnconditinalJump("@");
 
