@@ -320,9 +320,9 @@ public:
         if(!caseList.seenDefault){
             caseList.DefaultLabel = nextLabel->val;
         }
-        string toEmit = " = switch i32 " + exp.regName + ", label " + caseList.DefaultLabel + "[ ";
+        string toEmit = " = switch i32 " + exp.regName + ", label %" + caseList.DefaultLabel + "[ ";
         for(auto Case : caseList.caseList){
-            toEmit += "i32 " + to_string(Case.second) + ", label " + Case.first;
+            toEmit += "i32 " + to_string(Case.second) + ", label %" + Case.first;
             if (Case.first != caseList.caseList.back().first){
                 toEmit += " ,";
             }
