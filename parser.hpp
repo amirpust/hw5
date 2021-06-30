@@ -290,14 +290,12 @@ public:
         caseList->breakList = codeBuffer.merge(caseList->breakList, statement.breakList);
         output::printLog("--------START ruleAddCase-------- ");
     }
-    void ruleSeenDefault(CaseList* caseList, Statement statement){
+    void ruleSeenDefault(CaseList* caseList, Statement statement,String defaultLabel){
         output::printLog("--------START ruleSeenDefault-------- ");
         caseList->seenDefault = true;
-        String* defaultLabel = ruleGenLabel("DEFAULT");
-        caseList->DefaultLabel = defaultLabel->val;
+        caseList->DefaultLabel = defaultLabel.val;
         caseList->contList = codeBuffer.merge(caseList->contList, statement.contList);
         caseList->breakList = codeBuffer.merge(caseList->breakList, statement.breakList);
-        delete defaultLabel;
         output::printLog("--------END ruleSeenDefault-------- ");
     }
     CaseList* ruleMergeCaseLists(CaseList caseList1, CaseList caseList2){
@@ -327,9 +325,9 @@ public:
         }
         string toEmit = "switch i32 " + exp.regName + ", label %" + caseList.DefaultLabel + " [ ";
         for(auto Case : caseList.caseList){
-            if (Case.first != caseList.caseList.back().first){
-                toEmit += "\n";
-            }
+
+            toEmit += "\n";
+
             toEmit += "i32 " + to_string(Case.second) + ", label %" + Case.first;
         }
         toEmit += "]";
