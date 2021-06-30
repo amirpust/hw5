@@ -57,8 +57,7 @@ public:
             exit(1);
         }
 
-        if (newT == E_int && t == E_byte){
-            t = E_int;
+        if (newT == E_byte && t == E_int){
             return true;
         }
 
