@@ -91,11 +91,11 @@ public:
             NextList nextList;
             int n1, n2;
             Exp_t* newSrc = new Exp_t(E_bool);
-            tl = ruleGenLabel();
+            tl = ruleGenLabel("PHI_TRUE_LABEL");
             n1 = codeBuffer.emitUnconditinalJump("@");
-            fl = ruleGenLabel();
+            fl = ruleGenLabel("PHI_FALSE_LABEL");
             n2 = codeBuffer.emitUnconditinalJump("@");
-            nl = ruleGenLabel();
+            nl = ruleGenLabel("PHI_NEXT_LABEL");
 
             nextList = codeBuffer.merge(
                         codeBuffer.makelist(pair<int, BranchLabelIndex >(n1, FIRST)),
