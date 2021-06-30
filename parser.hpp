@@ -346,6 +346,13 @@ public:
         int switchAddr = codeBuffer.emitUnconditinalJump("@");
         statement->switchLabel = codeBuffer.makelist(pair<int, BranchLabelIndex>(switchAddr, FIRST));
     }
+
+    Exp_t* ruleDefaultInit(TYPE t){
+        if(t == E_bool){
+            return ruleInitBool(false);
+        }
+        return ruleInitNum(t, Num(0));
+    }
 };
 
 #endif

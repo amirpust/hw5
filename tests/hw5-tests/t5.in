@@ -1,7 +1,7 @@
 //basic arithmetic (int)
 void main() {
     int x;
-    printi(x); //should be 0.
+    printi(x``); //should be 0.
     //aritmethic with a single operand.
     printi(x*2);
     printi(x+1);
