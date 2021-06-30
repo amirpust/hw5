@@ -318,7 +318,7 @@ public:
         //switch <intty> <value>, label <defaultdest> [ <intty> <val>, label <dest> ... ]
 
         output::printLog("--------START ruleSwitch-------- ");
-        placeBreak(switchStatement);
+        //placeBreak(switchStatement);
         String* startLabel = ruleGenLabel("START_SWITCH");
         codeBuffer.bpatch(switchStatement->switchLabel, startLabel->val);
         string nextLabel = getNewLabel("NEXT_SWITCH");
