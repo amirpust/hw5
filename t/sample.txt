@@ -4,13 +4,13 @@ int sum(int a, int c){
 
 void main(){
     bool check = (3 >= 0);
-	if (check) {
+	if (true) {
 	    print("T1");
 	} else {
         print("F1");
 	}
 
-	if (4 < 2) {
+	if (false) {
         print("F2");
     } else {
          print("T2");
