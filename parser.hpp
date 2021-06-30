@@ -173,7 +173,7 @@ public:
         symbolTable->checkReturnType(exp);
         if (exp.t == E_bool){
             Exp_t* newExp = boolToExp(exp);
-            codeBuffer.emitReturn(&exp);
+            codeBuffer.emitReturn(newExp);
             delete newExp;
             return;
         }
