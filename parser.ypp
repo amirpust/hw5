@@ -329,11 +329,11 @@ CaseList:       CaseDecl CaseList                                           {
                                                                                 $$ = $1;
                                                                                 output::printProductionRule(49);
                                                                             }
-                | DEFAULT COLON Statements                                  {
+                | DEFAULT COLON GENLABEL Statements                                  {
                                                                                 output::printLog("PARSER: CaseList start 3");
                                                                                 $$ = new CaseList();
-                                                                                parser.ruleSeenDefault(&castCaseList($$), castStatement($3));
-                                                                                delete $3;
+                                                                                parser.ruleSeenDefault(&castCaseList($$), castStatement($4), castString($3));
+                                                                                delete $3; delete $4;
                                                                                 output::printProductionRule(50);
                                                                             }
 ;
