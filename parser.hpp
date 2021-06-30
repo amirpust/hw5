@@ -295,9 +295,11 @@ public:
     void ruleSeenDefault(CaseList* caseList, Statement statement){
         output::printLog("--------START ruleSeenDefault-------- ");
         caseList->seenDefault = true;
-        caseList->DefaultLabel = getNewLabel("DEFAULT");
+        String* defaultLabel = ruleGenLabel("DEFAULT");
+        caseList->DefaultLabel = defaultLabel->val;
         caseList->contList = codeBuffer.merge(caseList->contList, statement.contList);
         caseList->breakList = codeBuffer.merge(caseList->breakList, statement.breakList);
+        delete defaultLabel;
         output::printLog("--------END ruleSeenDefault-------- ");
     }
     CaseList* ruleMergeCaseLists(CaseList caseList1, CaseList caseList2){
@@ -316,9 +318,12 @@ public:
         //switch <intty> <value>, label <defaultdest> [ <intty> <val>, label <dest> ... ]
 
         output::printLog("--------START ruleSwitch-------- ");
-        String* nextLabel = ruleGenLabel("NEXT_SWITCH");
+        placeBreak(switchStatement);
+        String* startLabel = ruleGenLabel("START_SWITCH");
+        codeBuffer.bpatch(switchStatement->switchLabel, startLabel->val);
+        string nextLabel = getNewLabel("NEXT_SWITCH");
         if(!caseList.seenDefault){
-            caseList.DefaultLabel = nextLabel->val;
+            caseList.DefaultLabel = nextLabel;
         }
         string toEmit = "switch i32 " + exp.regName + ", label %" + caseList.DefaultLabel + " [ ";
         for(auto Case : caseList.caseList){
@@ -330,16 +335,17 @@ public:
         toEmit += "]";
 
         codeBuffer.emit(toEmit);
-
-        codeBuffer.bpatch(caseList.breakList, nextLabel->val);
+        codeBuffer.emitUnconditinalJump(nextLabel);
+        codeBuffer.emit(nextLabel + ":");
+        codeBuffer.bpatch(caseList.breakList, nextLabel);
         switchStatement->contList = codeBuffer.merge(switchStatement->contList, caseList.contList);
-        delete nextLabel;
+        delete startLabel;
         output::printLog("--------END ruleSwitch-------- ");
     }
 
-    void ruleBrSwitch(Statement* statement){
+    void ruleInitSwitch(Statement* statement){
         int switchAddr = codeBuffer.emitUnconditinalJump("@");
-        statement.
+        statement->switchLabel = codeBuffer.makelist(pair<int, BranchLabelIndex>(switchAddr, FIRST));
     }
 };
 
