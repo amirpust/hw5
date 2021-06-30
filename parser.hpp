@@ -168,9 +168,13 @@ public:
 
         codeBuffer.emitCallFunc(retVal, funcName, reversedArgs);
         if(retVal->t == E_bool){
-           Exp_t* newRetVal = boolToExp(*retVal);
-           delete retVal;
-           return newRetVal;
+           Exp_t* newRetVal = new Exp_t(E_bool);
+           codeBuffer.emit(newRetVal->regName + " = icmp ne i32 0, " + retVal->regName);
+           int address = codeBuffer.emitConditinalJump(newRetVal->regName, "@", "@");
+           newRetVal->trueList = codeBuffer.makelist(pair<int,BranchLabelIndex>(address, FIRST));
+           newRetVal->falseList = codeBuffer.makelist(pair<int,BranchLabelIndex>(address, SECOND));
+            delete retVal;
+            return newRetVal;
         }
         return retVal;
     }
