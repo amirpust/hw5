@@ -1,7 +1,3 @@
-int sum(int a, int c){
-    return a + c;
-}
-
 void main(){
     bool check = (3 <= 0);
 	if (check) {
@@ -10,39 +6,4 @@ void main(){
         print("F1");
 	}
 
-	if (false) {
-        print("F2");
-    } else {
-         print("T2");
-    }
-
-    if (1 < 0 b) {
-        print("F3");
-    } else {
-        print("T3");
-    }
-
-    if ( 2 b < 5 ) { // // -5 -> syntax error
-        print("T4");
-    } else {
-        print("F4");
-    }
-
-    if (0 == 0 or (1 > 1/0)) {
-        print("T5");
-    } else {
-        print("F5");
-    }
-
-    if (not true) {  //!true - lexical error
-        print("F6");
-    } else {
-        print("T6");
-    }
-
-
-
-    //Comment
-
-	return;
 }
