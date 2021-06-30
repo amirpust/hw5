@@ -87,30 +87,34 @@ public:
         symbolTable->assign(id, exp);
 
         if (exp.t == E_bool){
-            String *tl, *fl, *nl;
+            string tl, fl, nl;
             NextList nextList;
             int n1, n2;
             Exp_t* newSrc = new Exp_t(E_bool);
-            tl = ruleGenLabel("PHI_TRUE_LABEL");
+
+            tl = getNewLabel("PHI_TRUE_LABEL");
+            codeBuffer.emit(tl+":");
             n1 = codeBuffer.emitUnconditinalJump("@");
-            fl = ruleGenLabel("PHI_FALSE_LABEL");
+
+            fl = getNewLabel("PHI_FALSE_LABEL");
+            codeBuffer.emit(fl+":");
             n2 = codeBuffer.emitUnconditinalJump("@");
-            nl = ruleGenLabel("PHI_NEXT_LABEL");
+
+            nl = getNewLabel("PHI_NEXT_LABEL");
+            codeBuffer.emit(nl+":");
 
             nextList = codeBuffer.merge(
                         codeBuffer.makelist(pair<int, BranchLabelIndex >(n1, FIRST)),
                         codeBuffer.makelist(pair<int, BranchLabelIndex >(n2, FIRST))
                     );
 
-            codeBuffer.bpatch(exp.trueList, tl->val);
-            codeBuffer.bpatch(exp.falseList, fl->val);
-            codeBuffer.bpatch(nextList, nl->val);
+            codeBuffer.bpatch(exp.trueList, tl);
+            codeBuffer.bpatch(exp.falseList, fl);
+            codeBuffer.bpatch(nextList, nl);
 
-            codeBuffer.emitPhi(newSrc, tl->val, fl->val);
+            codeBuffer.emitPhi(newSrc, tl, fl);
             codeBuffer.emitAssign(&dst, newSrc, symbolTable->getCurrentRbp());
-            delete tl;
-            delete fl;
-            delete nl;
+
             delete newSrc;
 
             return;
