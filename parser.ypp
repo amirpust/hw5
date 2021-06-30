@@ -132,7 +132,10 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                                                                             }
                 | Type ID SC                                                {
                                                                                 $$ = new Statement(); 
-                                                                                parser.ruleAddSymbol(castType($1), castID($2), Exp_t(castType($1))); 
+                                                                                Exp_t * exp = parser.ruleDefaultInit(castType($1));
+                                                                                parser.ruleAddSymbol(castType($1), castID($2), (*exp)); 
+
+                                                                                delete $1; delete $2; delete exp;
                                                                                 output::printProductionRule(15);
                                                                             }
                 | Type ID ASSIGN Exp SC                                     {
