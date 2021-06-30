@@ -10,6 +10,7 @@
 #include "Statement.hpp"
 #include "Table.hpp"
 #include "bp.hpp"
+#include "CaseList.hpp"
 using namespace std;
 #define codeBuffer (CodeBuffer::instance())
 
@@ -279,6 +280,53 @@ public:
     void placeCont(Statement* parent){
         int address = codeBuffer.emitUnconditinalJump("@");
         parent->contList = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, FIRST));
+    }
+
+    //CaseList
+    void ruleAddCase(CaseList* caseList, Num num, Statement statement){
+        string caseLabel = getNewLabel("CASE");
+        codeBuffer.emit(caseLabel + ":");
+        caseList->caseList.emplace_back(caseLabel, num.val);
+        caseList->contList = codeBuffer.merge(caseList->contList, statement.contList);
+        caseList->breakList = codeBuffer.merge(caseList->breakList, statement.breakList);
+    }
+    void ruleSeenDefault(CaseList* caseList, Statement statement){
+        caseList->seenDefault = true;
+        caseList->DefaultLabel = getNewLabel("DEFAULT");
+        caseList->contList = codeBuffer.merge(caseList->contList, statement.contList);
+        caseList->breakList = codeBuffer.merge(caseList->breakList, statement.breakList);
+    }
+    CaseList* ruleMergeCaseLists(CaseList caseList1, CaseList caseList2){
+        CaseList* newCaseList = new CaseList();
+        newCaseList->seenDefault = caseList1.seenDefault || caseList2.seenDefault;
+        newCaseList->DefaultLabel = caseList1.DefaultLabel + caseList2.DefaultLabel;
+        newCaseList->contList = codeBuffer.merge(caseList1.contList, caseList2.contList);
+        newCaseList->breakList = codeBuffer.merge(caseList1.breakList, caseList2.breakList);
+        newCaseList->caseList.insert(newCaseList->caseList.end(), caseList1.caseList.begin(), caseList1.caseList.end());
+        newCaseList->caseList.insert(newCaseList->caseList.end(), caseList2.caseList.begin(), caseList2.caseList.end());
+        return newCaseList;
+    }
+    void ruleSwitch(Statement* switchStatement, Exp_t exp, CaseList caseList){
+        //switch <intty> <value>, label <defaultdest> [ <intty> <val>, label <dest> ... ]
+        String* nextLabel = ruleGenLabel("NEXT_SWITCH");
+        if(!caseList.seenDefault){
+            caseList.DefaultLabel = nextLabel->val;
+        }
+        string toEmit = " = switch i32 " + exp.regName + ", label " + caseList.DefaultLabel + "[ ";
+        for(auto Case : caseList.caseList){
+            toEmit += "i32 " + to_string(Case.second) + ", label " + Case.first;
+            if (Case.first != caseList.caseList.back().first){
+                toEmit += " ,";
+            }
+        }
+        toEmit += "]";
+
+        codeBuffer.emit(switchStatement->regName + toEmit);
+
+        codeBuffer.bpatch(caseList.breakList, nextLabel->val);
+        switchStatement->contList = codeBuffer.merge(switchStatement->contList, caseList.contList);
+        delete nextLabel;
+
     }
 };
 
