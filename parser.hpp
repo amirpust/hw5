@@ -333,7 +333,7 @@ public:
             }
         }
         toEmit += "]";
-
+        output::printLog("--------before emit ruleSwitch-------- ");
         codeBuffer.emit(toEmit);
         codeBuffer.emitUnconditinalJump(nextLabel);
         codeBuffer.emit(nextLabel + ":");
