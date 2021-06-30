@@ -340,6 +340,7 @@ public:
         codeBuffer.emit(nextLabel + ":");
         codeBuffer.bpatch(caseList.breakList, nextLabel);
         codeBuffer.bpatch(switchStatement->breakList, nextLabel);
+        switchStatement->breakList = BreakList();
         switchStatement->contList = codeBuffer.merge(switchStatement->contList, caseList.contList);
         delete startLabel;
         output::printLog("--------END ruleSwitch-------- ");
