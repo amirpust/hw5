@@ -347,7 +347,7 @@ public:
         statement->switchLabel = codeBuffer.makelist(pair<int, BranchLabelIndex>(switchAddr, FIRST));
     }
 
-    Exp_t* ruleDefaultInit(TYPE t){
+    Exp_t* ruleDefaultInit(Type t){
         if(t == E_bool){
             return ruleInitBool(false);
         }
