@@ -193,10 +193,9 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                                                                             }
                 | SWITCH LPAREN Exp RPAREN
                             {
-                                Statement* s = new Statement();
+                                $$ = new Statement();
                                 parser.ruleInitSwitch(&castStatement($$));
                                 symbolTable.openSwitchScope(castExp($3));
-                                return s;
                             }
                             LBRACE CaseList RBRACE
                             {
