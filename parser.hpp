@@ -69,9 +69,10 @@ public:
         output::printLog("ruleOpenFunctionScope - end");
     }
 
-    void ruleCloseFunc(){
+    void ruleCloseFunc(Type t){
         symbolTable->closeCurrentScope();
-        codeBuffer.emitCloseFunc();
+
+        codeBuffer.emitCloseFunc(t);
     }
 
     void ruleAddSymbol(Type t, IDtype id, Exp_t exp){

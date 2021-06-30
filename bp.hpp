@@ -156,7 +156,13 @@ public:
         emit("define " + getLlvmType(retType) + " @" + id.id + "(" + llvmArgs+"){");
     }
 
-    void emitCloseFunc(){
+    void emitCloseFunc(Type t){
+	    if (t.t = E_void){
+	        emit("ret void");
+	    }else{
+	        emit("ret i32 0");
+	    }
+
 	    emit("}");
 	}
 
