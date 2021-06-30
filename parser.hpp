@@ -78,12 +78,43 @@ public:
         output::printLog("Add Symbol Rule | id: " + id.id + " | exp: " + exp.regName);
         Exp_t newExp(t);
         symbolTable->addSymbol(id, &newExp);
-        symbolTable->assign(id, exp);
-        codeBuffer.emitAssign(&newExp, &exp, symbolTable->getCurrentRbp());
+        ruleAssign(id, exp);
     }
 
     void ruleAssign(IDtype id, Exp_t exp){
         Exp_t dst = symbolTable->getExpByID(id);
+        symbolTable->assign(id, exp);
+
+        if (exp.t == E_bool){
+            String *tl, *fl, *nl;
+            NextList nextList;
+            int n1, n2;
+            Exp_t* newSrc = new Exp_t(E_bool);
+            tl = ruleGenLabel();
+            n1 = codeBuffer.emitUnconditinalJump("@");
+            fl = ruleGenLabel();
+            n2 = codeBuffer.emitUnconditinalJump("@");
+            nl = ruleGenLabel();
+
+            nextList = codeBuffer.merge(
+                        codeBuffer.makelist(pair<int, BranchLabelIndex >(n1, FIRST)),
+                        codeBuffer.makelist(pair<int, BranchLabelIndex >(n2, FIRST))
+                    );
+
+            codeBuffer.bpatch(exp.trueList, tl->val);
+            codeBuffer.bpatch(exp.falseList, fl->val);
+            codeBuffer.bpatch(nextList, nl->val);
+
+            codeBuffer.emitPhi(newSrc, tl->val, fl->val);
+            codeBuffer.emitAssign(&dst, newSrc, symbolTable->getCurrentRbp());
+            delete tl;
+            delete fl;
+            delete nl;
+            delete newSrc;
+
+            return;
+        }
+
         codeBuffer.emitAssign(&dst, &exp, symbolTable->getCurrentRbp());
     }
 

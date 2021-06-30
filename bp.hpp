@@ -226,6 +226,10 @@ public:
     void emitRelop(Exp_t* parent, Exp_t expLeft, Exp_t expRight, RelopAUX relop){
         emit(parent->regName + " = icmp " + relop.getLLVMRelop() + " i32 " + expLeft.regName + ", " + expRight.regName);
 	}
+
+	void emitPhi(Exp_t* exp, string tLabel, string fLabel){
+        emit(exp->regName + " = phi i32 [ 1, %" +tLabel+"], [0, %" + fLabel +"]");
+	}
 private:
     string getLlvmType(Type t){
         if (t == E_void)
