@@ -55,4 +55,5 @@ typedef vector<pair<int,BranchLabelIndex>> FalseList;
 typedef vector<pair<int,BranchLabelIndex>> NextList;
 typedef vector<pair<int,BranchLabelIndex>> ContList;
 typedef vector<pair<int,BranchLabelIndex>> BreakList;
+typedef vector<pair<int,BranchLabelIndex>> SwitchLabelList;
 #endif //HW3_ENUMS_HPP
