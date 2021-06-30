@@ -283,13 +283,11 @@ public:
     }
 
     //CaseList
-    void ruleAddCase(CaseList* caseList, Num num, Statement statement){
+    void ruleAddCase(CaseList* caseList, Num num, Statement statement, String caseLabel){
         output::printLog("--------START ruleAddCase-------- ");
-        String* caseLabel = ruleGenLabel("CASE");
-        caseList->caseList.emplace_back(caseLabel->val, num.val);
+        caseList->caseList.emplace_back(caseLabel.val, num.val);
         caseList->contList = codeBuffer.merge(caseList->contList, statement.contList);
         caseList->breakList = codeBuffer.merge(caseList->breakList, statement.breakList);
-        delete caseLabel;
         output::printLog("--------START ruleAddCase-------- ");
     }
     void ruleSeenDefault(CaseList* caseList, Statement statement){
@@ -329,10 +327,10 @@ public:
         }
         string toEmit = "switch i32 " + exp.regName + ", label %" + caseList.DefaultLabel + " [ ";
         for(auto Case : caseList.caseList){
-            toEmit += "i32 " + to_string(Case.second) + ", label %" + Case.first;
             if (Case.first != caseList.caseList.back().first){
                 toEmit += "\n";
             }
+            toEmit += "i32 " + to_string(Case.second) + ", label %" + Case.first;
         }
         toEmit += "]";
         codeBuffer.emit(toEmit);
