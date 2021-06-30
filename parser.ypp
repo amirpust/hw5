@@ -315,15 +315,18 @@ Exp:            LPAREN Exp RPAREN                                           {$$ 
                                                                             };
 ;
 CaseList:       CaseDecl CaseList                                           {
+                                                                                output::printLog("PARSER: CaseList start 1");
                                                                                 $$ = parser.ruleMergeCaseLists(castCaseList($1), castCaseList($2));
                                                                                 delete $1; delete $2;
                                                                                 output::printProductionRule(48);
                                                                             }
                 | CaseDecl                                                  {
+                                                                                output::printLog("PARSER: CaseList start 2");
                                                                                 $$ = $1;
                                                                                 output::printProductionRule(49);
                                                                             }
                 | DEFAULT COLON Statements                                  {
+                                                                                output::printLog("PARSER: CaseList start 3");
                                                                                 $$ = new CaseList();
                                                                                 parser.ruleSeenDefault(&castCaseList($$), castStatement($3));
                                                                                 delete $3;
@@ -332,6 +335,7 @@ CaseList:       CaseDecl CaseList                                           {
 ;
 CaseDecl:       CASE NUM COLON  {symbolTable.triggerCase();}
                             Statements                                      {
+                                                                                output::printLog("PARSER: CaseDecl");
                                                                                 $$ = new CaseList();
                                                                                 parser.ruleAddCase(&castCaseList($$), castNum($2), castStatement($4));
                                                                                 output::printProductionRule(51);
