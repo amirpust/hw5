@@ -1,9 +1,4 @@
-void main(){
-    bool check = (3 <= 0);
-	if (check) {
-	    print("T1");
-	} else {
-        print("F1");
-	}
-
+void main() {
+    int y = 10b + 20b;
+    printi(y);
 }
