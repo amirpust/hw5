@@ -136,7 +136,7 @@ public:
         }
 
         if(exp->t == E_bool){
-             string cmp = getNewLabel("CMP");
+             string cmp = getNewRegister("CMP");
              codeBuffer.emit(cmp + " = icmp ne i32 0, %" + exp->regName);
              int address = codeBuffer.emitConditinalJump(cmp, "@", "@");
              exp->trueList = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, FIRST));
