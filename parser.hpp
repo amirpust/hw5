@@ -336,6 +336,11 @@ public:
         delete nextLabel;
         output::printLog("--------END ruleSwitch-------- ");
     }
+
+    void ruleBrSwitch(Statement* statement){
+        int switchAddr = codeBuffer.emitUnconditinalJump("@");
+        statement.
+    }
 };
 
 #endif
