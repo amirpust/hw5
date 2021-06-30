@@ -1,0 +1,377 @@
+%{
+    #include <iostream>
+
+    #include "hw3_output.hpp"
+    #include "Enums.hpp"
+    #include "RelopAUX.hpp"
+    #include "Exp_t.hpp"
+    #include "Table.hpp"
+    #include "BaseObj.hpp"
+    #include "Symbol.hpp"
+    #include "Statement.hpp"
+    #include "CaseList.hpp"
+    #include "bp.hpp"
+
+    #define castType(toCast) (*(static_cast<Type*>(toCast)))
+    #define castID(toCast) (*(static_cast<IDtype*>(toCast)))
+    #define castSymList(toCast) (*(static_cast<SymList*>(toCast)))
+    #define castSymbol(toCast) (*(static_cast<Symbol*>(toCast)))
+    #define castExp(toCast) (*(static_cast<Exp_t*>(toCast)))
+    #define castExpList(toCast) (*(static_cast<ExpList*>(toCast)))
+    #define castNum(toCast) (*(static_cast<Num*>(toCast)))
+    #define castString(toCast) (*(static_cast<String*>(toCast)))
+    #define castRelopAUX(toCast) (*(static_cast<RelopAUX*>(toCast)))
+    #define castStatement(toCast) (*(static_cast<Statement*>(toCast)))
+    #define castCaseList(toCast) (*(static_cast<CaseList*>(toCast)))
+
+
+    int yylex();
+    void output::printProductionRule(int ruleno);
+    void output::errorLex(int lineno);
+    void output::errorSyn(int lineno);
+    void yyerror(const char*);
+
+    SymbolTable* symbolTablePtr;
+    #define parser (*parserPtr)
+    #include "parser.hpp"
+    Parser* parserPtr;
+    #define symbolTable (*symbolTablePtr)
+
+
+%}
+
+%token VOID
+%token INT
+%nonassoc BYTE
+%nonassoc B
+%nonassoc BOOL
+%left OR
+%left AND
+%right NOT
+%nonassoc TRUE
+%nonassoc FALSE
+%nonassoc RETURN
+%nonassoc IF
+%nonassoc WHILE
+%nonassoc BREAK
+%nonassoc CONTINUE
+%nonassoc SWITCH
+%nonassoc CASE
+%nonassoc DEFAULT
+%nonassoc COLON
+%nonassoc SC
+%nonassoc COMMA
+%left LPAREN
+%left RPAREN
+%left LBRACE
+%left RBRACE
+%right ASSIGN
+%left EQUALITY
+%nonassoc RELOP
+%left BINOP_PLUS
+%left BINOP_MINUS
+%left BINOP_MUL
+%left BINOP_DIV
+%token ID
+%nonassoc NUM
+%nonassoc STRING
+%right ELSE
+
+
+%%
+
+Program:        Funcs                                                       {output::printProductionRule(1);}
+;
+Funcs:          /*epsilon*/                                                 {output::printProductionRule(2);}
+                | FuncDecl Funcs                                            {output::printProductionRule(3);}
+;
+FuncDecl:       RetType ID LPAREN Formals RPAREN LBRACE
+                                    {
+                                        parser.ruleOpenFunctionScope(castID($2), castSymList($4), castType($1));
+                                        
+                                    }
+                                    Statements
+                                    {
+                                        parser.ruleCloseFunc(castType($1));
+                                        delete $1; delete $2; delete $4; delete $8;
+                                    }
+                                    RBRACE                                  {output::printProductionRule(4);}
+;
+RetType:        Type                                                        {$$ = $1; output::printProductionRule(5);}
+                | VOID                                                      {$$ = new Type(E_void); output::printProductionRule(6);}
+;
+Formals:        /*epsilon*/                                                 {$$ = new SymList() ; output::printProductionRule(7);}
+                | FormalsList                                               {$$ = $1 ; output::printProductionRule(8);}
+;
+FormalsList:    FormalDecl                                                  {output::printProductionRule(9); $$ = new SymList() ; castSymList($$).insert(castSymbol($1));}
+                |FormalDecl COMMA FormalsList                               {output::printProductionRule(10); $$ = $3 ; castSymList($$).insert(castSymbol($1)); }
+;
+FormalDecl:     Type ID                                                     {$$ = new Symbol(castID($2), castType($1)) ; delete $1; delete $2;output::printProductionRule(11);}
+;
+Statements:     Statement                                                   {
+                                                                                $$ = new Statement(); 
+                                                                                parser.mergeStatement(&castStatement($$), castStatement($1));
+                                                                                delete $1;
+                                                                                output::printProductionRule(12);
+                                                                            }
+                |Statements Statement                                       {
+                                                                                $$ = new Statement(); 
+                                                                                parser.mergeStatement(&castStatement($$), castStatement($1));
+                                                                                parser.mergeStatement(&castStatement($$), castStatement($2));
+                                                                                delete $1; delete $2;
+                                                                                output::printProductionRule(13);
+                                                                            }
+;
+Statement:      LBRACE {symbolTable.openNewScope(); }
+                        Statements
+                        RBRACE {symbolTable.closeCurrentScope();}           {
+                                                                                $$ = new Statement(); 
+                                                                                parser.mergeStatement(&castStatement($$), castStatement($3));
+                                                                                delete $3;
+                                                                                output::printProductionRule(14);
+                                                                            }
+                | Type ID SC                                                {
+                                                                                $$ = new Statement(); 
+                                                                                Exp_t * exp = parser.ruleDefaultInit(castType($1));
+                                                                                parser.ruleAddSymbol(castType($1), castID($2), (*exp)); 
+
+                                                                                delete $1; delete $2; delete exp;
+                                                                                output::printProductionRule(15);
+                                                                            }
+                | Type ID ASSIGN Exp SC                                     {
+                                                                                $$ = new Statement(); 
+                                                                                parser.ruleAddSymbol(castType($1), castID($2), castExp($4));
+                                                                                output::printProductionRule(16);
+                                                                            }
+                | ID ASSIGN Exp SC                                          {
+                                                                                $$ = new Statement();
+                                                                                parser.ruleAssign(castID($1), castExp($3));
+                                                                                output::printProductionRule(17);
+                                                                            }
+                | Call SC                                                   {$$ = new Statement(); delete parser.boolToExp(castExp($1)); delete $1; output::printProductionRule(18);}
+                | RETURN SC                                                 {$$ = new Statement(); parser.ruleReturn(Exp_t(E_void)) ; output::printProductionRule(19);}
+                | RETURN Exp SC                                             {$$ = new Statement(); parser.ruleReturn(castExp($2)) ; delete $2 ; output::printProductionRule(20);}
+                | IF LPAREN BOOLEXP STARTSCOPE RPAREN GENLABEL Statement    
+                {
+                    $$ = new Statement();
+                    parser.mergeStatement(&castStatement($$), castStatement($7));
+                    parser.ruleIf(castExp($3), castString($6));
+                    symbolTable.closeCurrentScope();
+                    delete $7;
+                }
+                | IF LPAREN BOOLEXP STARTSCOPE RPAREN
+                GENLABEL Statement ELSE {parser.ruleGenNextLabel(&castExp($3)); symbolTable.closeCurrentScope();}
+                STARTSCOPE GENLABEL Statement 
+                    {
+                        $$ = new Statement();
+                        parser.mergeStatement(&castStatement($$), castStatement($7));
+                        parser.mergeStatement(&castStatement($$), castStatement($12));
+                        parser.ruleIf(castExp($3), castString($6), castString($11));
+                        delete $3; delete $6;  delete $7;  delete $11; delete $12; 
+                        symbolTable.closeCurrentScope();
+                    }
+                | WHILE LPAREN GENLABEL BOOLEXP RPAREN GENLABEL
+                    {symbolTable.openLoopScope();}
+                    Statement
+                    {
+                        output::printLog("Start While Rule");
+                        parser.ruleWhile(castExp($4), castString($3), castString($6), castStatement($8));
+                        output::printLog("End While Rule");
+
+                        delete $3; delete $4; delete $6;  delete $8; 
+                        $$ = new Statement();
+                        symbolTable.closeCurrentScope();
+                    }
+                | BREAK SC                                                  {
+                                                                                symbolTable.triggerBreak(); 
+                                                                                $$ = new Statement();
+                                                                                parser.placeBreak(&castStatement($$));
+                                                                                output::printProductionRule(24);
+                                                                            }
+                | CONTINUE SC                                               {   
+                                                                                symbolTable.triggerContinue(); 
+                                                                                $$ = new Statement();
+                                                                                parser.placeCont(&castStatement($$));
+                                                                                output::printProductionRule(25);
+                                                                            }
+                | SWITCH LPAREN Exp RPAREN
+                            {
+                                $$ = new Statement();
+                                parser.ruleInitSwitch(&castStatement($$));
+                                symbolTable.openSwitchScope(castExp($3));
+                            }
+                            LBRACE CaseList RBRACE
+                            {
+                                $$ = $5;
+                                output::printLog("PARSER: switch start");
+                                symbolTable.closeCurrentScope();
+                                parser.ruleSwitch(&castStatement($$), castExp($3), castCaseList($7));
+                                delete $3; delete $7;
+                                output::printProductionRule(26);
+                            }
+;
+
+GENLABEL:       /*epsilon*/                                                 {$$ = parser.ruleGenLabel();}
+
+BOOLEXP:        Exp                                                         {if (castExp($1).t != Type(E_bool)) {output::errorMismatch(yylineno); output::printLog("BOOLEXP"); exit(1);} $$ = $1;}
+
+STARTSCOPE:     /*epsilon*/                                                 {symbolTable.openNewScope();}
+
+Call :          ID LPAREN ExpList RPAREN                                    {$$ = parser.ruleCallFunc(castID($1), castExpList($3)); delete $1; delete $3; output::printProductionRule(27);}
+                | ID LPAREN RPAREN                                          {$$ = parser.ruleCallFunc(castID($1), ExpList()); delete $1; output::printProductionRule(28);}
+;
+ExpList:        Exp                                                         {$$ = new ExpList(); castExpList($$).insert(castExp($1)); output::printProductionRule(29);}
+                | Exp COMMA ExpList                                         {$$ = $3; castExpList($$).insert(castExp($1)); output::printProductionRule(30);}
+;
+Type :          INT                                                         {$$ = new Type(E_int) ;output::printProductionRule(31);}
+                | BYTE                                                      {$$ = new Type(E_byte) ;output::printProductionRule(32);}
+                | BOOL                                                      {$$ = new Type(E_bool) ;output::printProductionRule(33);}
+;
+Exp:            LPAREN Exp RPAREN                                           {$$ = $2 ; output::printProductionRule(34);}
+                | Exp BINOP_MUL Exp                                          {
+                                                                                output::printLog("start mul");
+                                                                                $$ = parser.ruleOP(&castExp($1), &castExp($3), "mul");
+                                                                                output::printProductionRule(35);
+                                                                                output::printLog("end mul");}
+                | Exp BINOP_DIV Exp                                          {
+                                                                                output::printLog("start div");
+                                                                                $$ = parser.ruleOP(&castExp($1), &castExp($3), "div");
+                                                                                output::printProductionRule(35);
+                                                                                output::printLog("end div");
+                                                                                }
+                | Exp BINOP_PLUS Exp                                          {
+                                                                                output::printLog("start plus");
+                                                                                $$ = parser.ruleOP(&castExp($1), &castExp($3), "add");
+                                                                                output::printProductionRule(35);
+                                                                                output::printLog("end plus");
+                                                                                }
+                | Exp BINOP_MINUS Exp                                          {
+                                                                                output::printLog("start minus");
+                                                                                $$ = parser.ruleOP(&castExp($1), &castExp($3), "sub");
+                                                                                output::printProductionRule(35);
+                                                                                output::printLog("end minus");
+                                                                                }
+
+                | ID                                                            {
+                                                                                $$ = parser.ruleLoadExpById(castID($1));
+                                                                                output::printProductionRule(36);
+                                                                                }
+                | Call                                                      {$$ = $1 ; output::printProductionRule(37);}
+                | NUM                                                       {
+                                                                            output::printLog("NUM");
+                                                                            $$ = parser.ruleInitNum(E_int, castNum($1));
+                                                                            output::printProductionRule(38);}
+                | NUM B                                                     {output::printLog("NUM Byte");
+                                                                            if(castNum($1).val > 255) {output::errorByteTooLarge(yylineno, castNum($1).val); exit(1);}
+                                                                            $$ = parser.ruleInitNum(E_byte,castNum($1)) ;
+                                                                            output::printProductionRule(39);}
+                | STRING                                                    {$$ = parser.ruleInitString(castString($1)); ; output::printProductionRule(40);}
+                | TRUE                                                      {
+                                                                            $$ = parser.ruleInitBool(true);
+                                                                            output::printProductionRule(41);}
+                | FALSE                                                     {$$ =  parser.ruleInitBool(false);
+                                                                            output::printProductionRule(42);}
+                | Exp AND GENLABEL Exp                                               
+                {
+                    if (castExp($1).t != Type(E_bool) || castExp($4).t != Type(E_bool)){
+                        output::errorMismatch(yylineno); exit(1);
+                    }
+                    $$ = new Exp_t(Type(E_bool)); 
+                    parser.ruleLogicalAnd(&castExp($$), castExp($1), castExp($4), castString($3));
+                    delete $1; delete $3; delete $4;output::printProductionRule(44);
+                }
+                | Exp OR GENLABEL Exp
+                {   
+                    if (castExp($1).t != Type(E_bool) || castExp($4).t != Type(E_bool)) {
+                        output::errorMismatch(yylineno); exit(1);
+                    } 
+                $$ = new Exp_t(Type(E_bool));
+                parser.ruleLogicalOr(&castExp($$), castExp($1), castExp($4), castString($3));
+                delete $1; delete $3;delete $4; output::printProductionRule(45);
+                }
+                | NOT Exp                                                   {
+                                                                            if (castExp($2).t != Type(E_bool)) {
+                                                                            output::errorMismatch(yylineno);
+                                                                            exit(1);
+                                                                            }
+                                                                            $$ = new Exp_t(Type(E_bool));
+                                                                            parser.ruleLogicalNot(&castExp($$),castExp($2));
+                                                                            delete $2;
+                                                                            output::printProductionRule(43);
+                                                                            }
+                | Exp EQUALITY Exp                                          {
+                                                                                if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
+                                                                                    output::errorMismatch(yylineno);
+                                                                                    exit(12);
+                                                                                }
+                                                                                $$ = new Exp_t(Type(E_bool));
+                                                                                parser.ruleRelop(&castExp($$), castExp($1), castExp($3), castRelopAUX($2));
+                                                                                delete $1;
+                                                                                delete $3;
+                                                                            }
+                | Exp RELOP Exp                                             {
+                                                                                if(!castExp($1).isNumerical() || !castExp($3).isNumerical()){
+                                                                                    output::errorMismatch(yylineno);
+                                                                                    exit(12);
+                                                                                }
+                                                                                $$ = new Exp_t(Type(E_bool));
+                                                                                parser.ruleRelop(&castExp($$), castExp($1), castExp($3), castRelopAUX($2));
+                                                                                delete $1;
+                                                                                delete $2;
+                                                                                delete $3;
+                                                                            };
+;
+CaseList:       CaseDecl CaseList                                           {
+                                                                                output::printLog("PARSER: CaseList start 1");
+                                                                                $$ = parser.ruleMergeCaseLists(castCaseList($1), castCaseList($2));
+                                                                                delete $1; delete $2;
+                                                                                output::printProductionRule(48);
+                                                                            }
+                | CaseDecl                                                  {
+                                                                                output::printLog("PARSER: CaseList start 2");
+                                                                                $$ = $1;
+                                                                                output::printProductionRule(49);
+                                                                            }
+                | DEFAULT COLON GENLABEL Statements                                  {
+                                                                                output::printLog("PARSER: CaseList start 3");
+                                                                                $$ = new CaseList();
+                                                                                parser.ruleSeenDefault(&castCaseList($$), castStatement($4), castString($3));
+                                                                                delete $3; delete $4;
+                                                                                output::printProductionRule(50);
+                                                                            }
+;
+CaseDecl:       CASE NUM COLON  {symbolTable.triggerCase();}
+                    GENLABEL Statements                                      {
+                                                                                output::printLog("PARSER: CaseDecl");
+                                                                                $$ = new CaseList();
+                                                                                parser.ruleAddCase(&castCaseList($$), castNum($2), castStatement($6), castString($5));
+                                                                                delete $2; delete $5; delete $6;
+                                                                                output::printProductionRule(51);
+                                                                            }
+;
+
+%%
+
+void yyerror(const char* e){
+    output::errorSyn(yylineno);
+    output::printLog("error");
+    exit(-1);
+}
+
+int main(){
+    output::init();
+    output::printLog("Start");
+    symbolTablePtr = new SymbolTable();
+    parserPtr = new Parser(symbolTablePtr);
+
+    int res = yyparse();
+    symbolTable.gg();
+
+    delete symbolTablePtr;
+    delete parserPtr;
+    output::printLog("End");
+    output::close();
+    codeBuffer.printGlobalBuffer();
+    codeBuffer.printCodeBuffer();
+    return res;
+}
