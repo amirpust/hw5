@@ -344,7 +344,7 @@ CaseDecl:       CASE NUM COLON  {symbolTable.triggerCase();}
                                                                                 $$ = new CaseList();
                                                                                 castCaseList($$);
                                                                                 output::printLog("PARSER: CaseDecl END");
-                                                                                parser.ruleAddCase(&castCaseList($$), castNum($2), castStatement($4));
+                                                                                parser.ruleAddCase(&castCaseList($$), castNum($2), castStatement($5));
                                                                                 output::printProductionRule(51);
                                                                             }
 ;
