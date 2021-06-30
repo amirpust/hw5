@@ -3,7 +3,7 @@ int sum(int a, int c){
 }
 
 void main(){
-    bool check = (3 >= 0);
+    bool check = (3 <= 0);
 	if (true) {
 	    print("T1");
 	} else {
