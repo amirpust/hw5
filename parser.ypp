@@ -148,7 +148,7 @@ Statement:      LBRACE {symbolTable.openNewScope(); }
                                                                                 parser.ruleAssign(castID($1), castExp($3));
                                                                                 output::printProductionRule(17);
                                                                             }
-                | Call SC                                                   {$$ = new Statement(); output::printProductionRule(18);}
+                | Call SC                                                   {$$ = new Statement(); delete parser.boolToExp($1); delete $1; output::printProductionRule(18);}
                 | RETURN SC                                                 {$$ = new Statement(); parser.ruleReturn(Exp_t(E_void)) ; output::printProductionRule(19);}
                 | RETURN Exp SC                                             {$$ = new Statement(); parser.ruleReturn(castExp($2)) ; delete $2 ; output::printProductionRule(20);}
                 | IF LPAREN BOOLEXP STARTSCOPE RPAREN GENLABEL Statement    
