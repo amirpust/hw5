@@ -320,7 +320,9 @@ public:
         output::printLog("--------START ruleSwitch-------- ");
         //placeBreak(switchStatement);
         String* startLabel = ruleGenLabel("START_SWITCH");
+        output::printLog("--------before BP ruleSwitch-------- ");
         codeBuffer.bpatch(switchStatement->switchLabel, startLabel->val);
+        output::printLog("--------after BP ruleSwitch-------- ");
         string nextLabel = getNewLabel("NEXT_SWITCH");
         if(!caseList.seenDefault){
             caseList.DefaultLabel = nextLabel;
@@ -333,7 +335,6 @@ public:
             }
         }
         toEmit += "]";
-        output::printLog("--------before emit ruleSwitch-------- ");
         codeBuffer.emit(toEmit);
         codeBuffer.emitUnconditinalJump(nextLabel);
         codeBuffer.emit(nextLabel + ":");
