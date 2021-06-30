@@ -131,9 +131,15 @@ public:
         Exp_t* exp = new Exp_t(symbolTable->getExpByID(id));
         if (exp->offset < 0){
             exp->regName = "%" + to_string(((-1)*exp->offset) - 1);
-            return exp;
+        }else{
+            codeBuffer.emitLoad(exp, symbolTable->getCurrentRbp());
         }
-        codeBuffer.emitLoad(exp, symbolTable->getCurrentRbp());
+
+        if(exp->t == E_bool){
+             int address = codeBuffer.emitConditinalJump(exp->regName, "@", "@");
+             exp->trueList = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, FIRST));
+             exp->falseList = codeBuffer.makelist(pair<int, BranchLabelIndex>(address, SECOND));
+        }
         return exp;
     }
 
