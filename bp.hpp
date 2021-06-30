@@ -157,7 +157,7 @@ public:
     }
 
     void emitCloseFunc(Type t){
-	    if (t.t = E_void){
+	    if (t.t == E_void){
 	        emit("ret void");
 	    }else{
 	        emit("ret i32 0");
