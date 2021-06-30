@@ -284,19 +284,24 @@ public:
 
     //CaseList
     void ruleAddCase(CaseList* caseList, Num num, Statement statement){
+        output::printLog("--------START ruleAddCase-------- ");
         string caseLabel = getNewLabel("CASE");
         codeBuffer.emit(caseLabel + ":");
         caseList->caseList.emplace_back(caseLabel, num.val);
         caseList->contList = codeBuffer.merge(caseList->contList, statement.contList);
         caseList->breakList = codeBuffer.merge(caseList->breakList, statement.breakList);
+        output::printLog("--------START ruleAddCase-------- ");
     }
     void ruleSeenDefault(CaseList* caseList, Statement statement){
+        output::printLog("--------START ruleSeenDefault-------- ");
         caseList->seenDefault = true;
         caseList->DefaultLabel = getNewLabel("DEFAULT");
         caseList->contList = codeBuffer.merge(caseList->contList, statement.contList);
         caseList->breakList = codeBuffer.merge(caseList->breakList, statement.breakList);
+        output::printLog("--------END ruleSeenDefault-------- ");
     }
     CaseList* ruleMergeCaseLists(CaseList caseList1, CaseList caseList2){
+        output::printLog("--------START ruleSeenDefault-------- ");
         CaseList* newCaseList = new CaseList();
         newCaseList->seenDefault = caseList1.seenDefault || caseList2.seenDefault;
         newCaseList->DefaultLabel = caseList1.DefaultLabel + caseList2.DefaultLabel;
@@ -304,10 +309,13 @@ public:
         newCaseList->breakList = codeBuffer.merge(caseList1.breakList, caseList2.breakList);
         newCaseList->caseList.insert(newCaseList->caseList.end(), caseList1.caseList.begin(), caseList1.caseList.end());
         newCaseList->caseList.insert(newCaseList->caseList.end(), caseList2.caseList.begin(), caseList2.caseList.end());
+        output::printLog("--------END ruleMergeCaseLists-------- ");
         return newCaseList;
     }
     void ruleSwitch(Statement* switchStatement, Exp_t exp, CaseList caseList){
         //switch <intty> <value>, label <defaultdest> [ <intty> <val>, label <dest> ... ]
+
+        output::printLog("--------START ruleSwitch-------- ");
         String* nextLabel = ruleGenLabel("NEXT_SWITCH");
         if(!caseList.seenDefault){
             caseList.DefaultLabel = nextLabel->val;
@@ -326,7 +334,7 @@ public:
         codeBuffer.bpatch(caseList.breakList, nextLabel->val);
         switchStatement->contList = codeBuffer.merge(switchStatement->contList, caseList.contList);
         delete nextLabel;
-
+        output::printLog("--------END ruleSwitch-------- ");
     }
 };
 
