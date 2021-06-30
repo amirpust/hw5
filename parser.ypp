@@ -332,7 +332,7 @@ CaseList:       CaseDecl CaseList                                           {
 CaseDecl:       CASE NUM COLON  {symbolTable.triggerCase();}
                             Statements                                      {
                                                                                 $$ = new CaseList();
-                                                                                parser.addCase(&castCaseList($$), castNum($2), castStatement($4));
+                                                                                parser.ruleAddCase(&castCaseList($$), castNum($2), castStatement($4));
                                                                                 output::printProductionRule(51);
                                                                             }
 ;
