@@ -98,6 +98,9 @@ public:
     }
 
     Exp_t* boolToExp(Exp_t exp){
+        if(exp.t != E_bool){
+            return new Exp_t(exp);
+        }
         string tl, fl, nl;
         NextList nextList;
         int n1, n2;
