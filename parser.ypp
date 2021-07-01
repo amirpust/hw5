@@ -220,8 +220,12 @@ STARTSCOPE:     /*epsilon*/                                                 {sym
 Call :          ID LPAREN ExpList RPAREN                                    {$$ = parser.ruleCallFunc(castID($1), castExpList($3)); delete $1; delete $3; output::printProductionRule(27);}
                 | ID LPAREN RPAREN                                          {$$ = parser.ruleCallFunc(castID($1), ExpList()); delete $1; output::printProductionRule(28);}
 ;
-ExpList:        Exp                                                         {$$ = new ExpList(); castExpList($$).insert(castExp($1)); output::printProductionRule(29);}
-                | Exp COMMA ExpList                                         {$$ = $3; castExpList($$).insert(castExp($1)); output::printProductionRule(30);}
+ExpList:        Exp                                                         {$$ = new ExpList();
+                                                                            Exp_t* exp = parser.boolToExp(castExp($1));
+                                                                            castExpList($$).insert(exp);
+                                                                            output::printProductionRule(29);}
+                | Exp {$$ = parser.boolToExp(castExp($1)); } COMMA ExpList
+                                                        {$$ = $4; castExpList($$).insert(castExp($2)); output::printProductionRule(30);}
 ;
 Type :          INT                                                         {$$ = new Type(E_int) ;output::printProductionRule(31);}
                 | BYTE                                                      {$$ = new Type(E_byte) ;output::printProductionRule(32);}
