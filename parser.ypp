@@ -222,15 +222,13 @@ Call :          ID LPAREN ExpList RPAREN                                    {$$ 
 ;
 ExpList:        Exp                                                         {
                                                                             $$ = new ExpList();
-                                                                            $1 = parser.boolToExp(&castExp($1));
-                                                                            castExpList($$).insert(castExp($1));
-                                                                            delete $1;
+                                                                            Exp_t* exp = parser.boolToExp(&castExp($1));
+                                                                            castExpList($$).insert(castExp(exp));
                                                                             output::printProductionRule(29);}
                 | Exp COMMA ExpList                                         {
                                                                              $$ = $3;
-                                                                             $1 = parser.boolToExp(&castExp($1));
-                                                                             castExpList($$).insert(castExp($1));
-                                                                             delete $1;
+                                                                             Exp_t* exp = parser.boolToExp(&castExp($1));
+                                                                             castExpList($$).insert(castExp(exp));
                                                                              output::printProductionRule(30);}
 ;
 Type :          INT                                                         {$$ = new Type(E_int) ;output::printProductionRule(31);}
