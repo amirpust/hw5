@@ -222,7 +222,7 @@ Call :          ID LPAREN ExpList RPAREN                                    {$$ 
 ;
 ExpList:        Exp                                                         {$$ = new ExpList();
                                                                             Exp_t* exp = parser.boolToExp(castExp($1));
-                                                                            castExpList($$).insert(exp);
+                                                                            castExpList($$).insert(*exp);
                                                                             output::printProductionRule(29);}
                 | Exp {$$ = parser.boolToExp(castExp($1)); } COMMA ExpList
                                                         {$$ = $4; castExpList($$).insert(castExp($2)); output::printProductionRule(30);}
