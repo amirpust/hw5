@@ -88,7 +88,7 @@ public:
         symbolTable->assign(id, exp);
 
         if (exp.t == E_bool){
-            Exp_t* newSrc = boolToExp(exp);
+            Exp_t* newSrc = boolToExp(&exp);
             codeBuffer.emitAssign(&dst, newSrc, symbolTable->getCurrentRbp());
             delete newSrc;
             return;
@@ -97,7 +97,10 @@ public:
         codeBuffer.emitAssign(&dst, &exp, symbolTable->getCurrentRbp());
     }
 
-    Exp_t* boolToExp(Exp_t exp){
+    Exp_t* boolToExp(Exp_t* exp){
+        if(exp->t != E_bool){
+            return exp;
+        }
         string tl, fl, nl;
         NextList nextList;
         int n1, n2;
@@ -120,12 +123,12 @@ public:
                 codeBuffer.makelist(pair<int, BranchLabelIndex >(n2, FIRST))
         );
 
-        codeBuffer.bpatch(exp.trueList, tl);
-        codeBuffer.bpatch(exp.falseList, fl);
+        codeBuffer.bpatch(exp->trueList, tl);
+        codeBuffer.bpatch(exp->falseList, fl);
         codeBuffer.bpatch(nextList, nl);
 
         codeBuffer.emitPhi(newSrc, tl, fl);
-
+        delete exp;
         return newSrc;
     }
 
@@ -152,11 +155,6 @@ public:
         output::printLog("ruleCallFunc " + funcName.id);
         ExpList reversedArgs;
         for (int i = arguments.expList.size() - 1; i >= 0 ; i--){
-            if (arguments.expList[i].t.t == E_bool){
-                Exp_t* newExp = boolToExp(arguments.expList[i]);
-                arguments.expList[i] = Exp_t(*newExp);
-                delete newExp;
-            }
             reversedArgs.insert(arguments.expList[i]);
 
         }
@@ -182,7 +180,7 @@ public:
     void ruleReturn(Exp_t exp){
         symbolTable->checkReturnType(exp);
         if (exp.t == E_bool){
-            Exp_t* newExp = boolToExp(exp);
+            Exp_t* newExp = boolToExp(&exp);
             codeBuffer.emitReturn(newExp);
             delete newExp;
             return;
@@ -208,6 +206,7 @@ public:
     Exp_t* ruleInitBool(bool val){
         Exp_t* exp =  new Exp_t(E_bool);
         int address = codeBuffer.emit("br label @");
+
         if (val){
             exp->trueList = codeBuffer.makelist(pair<int, BranchLabelIndex >(address, FIRST));
         }else{

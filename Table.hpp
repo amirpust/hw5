@@ -245,7 +245,6 @@ public:
 
         output::printLog("###### funcName: " + funcList.funcList.back().id.id + " ret Val: " + funcList.funcList.back().retType.getStr() + "######");
         output::printLog("###### expType: " + exp.t.getStr() + "######");
-        //TODO: explain Jonathan
         Exp_t retType = Exp_t(funcList.funcList.back().retType);
         if(!retType.castType(exp.t)){
             output::errorMismatch(yylineno);
