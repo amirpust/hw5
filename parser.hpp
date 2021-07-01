@@ -128,7 +128,6 @@ public:
         codeBuffer.bpatch(nextList, nl);
 
         codeBuffer.emitPhi(newSrc, tl, fl);
-        delete exp;
         return newSrc;
     }
 
