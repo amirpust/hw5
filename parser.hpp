@@ -156,11 +156,7 @@ public:
         output::printLog("ruleCallFunc " + funcName.id);
         ExpList reversedArgs;
         for (int i = arguments.expList.size() - 1; i >= 0 ; i--){
-            if (arguments.expList[i].t.t == E_bool){
-                Exp_t* newExp = boolToExp(arguments.expList[i]);
-                arguments.expList[i] = Exp_t(*newExp);
-                delete newExp;
-            }
+
             reversedArgs.insert(arguments.expList[i]);
 
         }
