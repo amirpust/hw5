@@ -98,6 +98,10 @@ public:
     }
 
     Exp_t* boolToExp(Exp_t exp){
+        if(exp.t != E_bool){
+            return new Exp_t(exp);
+        }
+
         string tl, fl, nl;
         NextList nextList;
         int n1, n2;
@@ -152,11 +156,7 @@ public:
         output::printLog("ruleCallFunc " + funcName.id);
         ExpList reversedArgs;
         for (int i = arguments.expList.size() - 1; i >= 0 ; i--){
-            if (arguments.expList[i].t.t == E_bool){
-                Exp_t* newExp = boolToExp(arguments.expList[i]);
-                arguments.expList[i] = Exp_t(*newExp);
-                delete newExp;
-            }
+
             reversedArgs.insert(arguments.expList[i]);
 
         }
@@ -294,22 +294,22 @@ public:
 
     //CaseList
     void ruleAddCase(CaseList* caseList, Num num, Statement statement, String caseLabel){
-        output::printLog("--------START ruleAddCase-------- ");
+        //output::printLog("--------START ruleAddCase-------- ");
         caseList->caseList.emplace_back(caseLabel.val, num.val);
         caseList->contList = codeBuffer.merge(caseList->contList, statement.contList);
         caseList->breakList = codeBuffer.merge(caseList->breakList, statement.breakList);
-        output::printLog("--------START ruleAddCase-------- ");
+        //output::printLog("--------START ruleAddCase-------- ");
     }
     void ruleSeenDefault(CaseList* caseList, Statement statement,String defaultLabel){
-        output::printLog("--------START ruleSeenDefault-------- ");
+        //output::printLog("--------START ruleSeenDefault-------- ");
         caseList->seenDefault = true;
         caseList->DefaultLabel = defaultLabel.val;
         caseList->contList = codeBuffer.merge(caseList->contList, statement.contList);
         caseList->breakList = codeBuffer.merge(caseList->breakList, statement.breakList);
-        output::printLog("--------END ruleSeenDefault-------- ");
+        //output::printLog("--------END ruleSeenDefault-------- ");
     }
     CaseList* ruleMergeCaseLists(CaseList caseList1, CaseList caseList2){
-        output::printLog("--------START ruleSeenDefault-------- ");
+       // output::printLog("--------START ruleSeenDefault-------- ");
         CaseList* newCaseList = new CaseList();
         newCaseList->seenDefault = caseList1.seenDefault || caseList2.seenDefault;
         newCaseList->DefaultLabel = caseList1.DefaultLabel + caseList2.DefaultLabel;
@@ -317,18 +317,18 @@ public:
         newCaseList->breakList = codeBuffer.merge(caseList1.breakList, caseList2.breakList);
         newCaseList->caseList.insert(newCaseList->caseList.end(), caseList1.caseList.begin(), caseList1.caseList.end());
         newCaseList->caseList.insert(newCaseList->caseList.end(), caseList2.caseList.begin(), caseList2.caseList.end());
-        output::printLog("--------END ruleMergeCaseLists-------- ");
+       // output::printLog("--------END ruleMergeCaseLists-------- ");
         return newCaseList;
     }
     void ruleSwitch(Statement* switchStatement, Exp_t exp, CaseList caseList){
         //switch <intty> <value>, label <defaultdest> [ <intty> <val>, label <dest> ... ]
 
-        output::printLog("--------START ruleSwitch-------- ");
+        //output::printLog("--------START ruleSwitch-------- ");
         placeBreak(switchStatement);
         String* startLabel = ruleGenLabel("START_SWITCH");
-        output::printLog("--------before BP ruleSwitch-------- ");
+        //output::printLog("--------before BP ruleSwitch-------- ");
         codeBuffer.bpatch(switchStatement->switchLabel, startLabel->val);
-        output::printLog("--------after BP ruleSwitch-------- ");
+        //output::printLog("--------after BP ruleSwitch-------- ");
         string nextLabel = getNewLabel("NEXT_SWITCH");
         if(!caseList.seenDefault){
             caseList.DefaultLabel = nextLabel;
@@ -349,7 +349,7 @@ public:
         switchStatement->breakList = BreakList();
         switchStatement->contList = codeBuffer.merge(switchStatement->contList, caseList.contList);
         delete startLabel;
-        output::printLog("--------END ruleSwitch-------- ");
+        //output::printLog("--------END ruleSwitch-------- ");
     }
 
     void ruleInitSwitch(Statement* statement){

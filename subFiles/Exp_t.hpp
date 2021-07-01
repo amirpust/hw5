@@ -66,7 +66,6 @@ public:
             return true;
         }
         output::errorMismatch(yylineno);
-        output::printLog("Casting void");
         exit(1);
     }
 
