@@ -126,8 +126,8 @@ public:
         codeBuffer.bpatch(exp->trueList, tl);
         codeBuffer.bpatch(exp->falseList, fl);
         codeBuffer.bpatch(nextList, nl);
-
         codeBuffer.emitPhi(newSrc, tl, fl);
+
         return newSrc;
     }
 
@@ -181,7 +181,7 @@ public:
         if (exp.t == E_bool){
             Exp_t* newExp = boolToExp(&exp);
             codeBuffer.emitReturn(newExp);
-            delete newExp;
+            //delete newExp;
             return;
         }
         codeBuffer.emitReturn(&exp);
