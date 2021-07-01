@@ -242,6 +242,9 @@ public:
     }
 
     void checkReturnType(Exp_t exp){
+
+        output::printLog("###### funcName: " + funcList.funcList.back().id.id + " ret Val: " + funcList.funcList.back().retType.getStr() + "######");
+        output::printLog("###### expType: " + exp.t.getStr() + "######");
         if(!exp.castType(funcList.funcList.back().retType)){
             output::errorMismatch(yylineno);
             output::printLog("checkReturnType");
